@@ -1,0 +1,22 @@
+Package: betaselectr
+Title: Selective Standardization in Structural Equation Models
+Version: 0.0.0.9000
+Authors@R:
+    c(person(given = "Shu Fai",
+             family = "Cheung",
+             role = c("aut", "cre"),
+             email = "shufai.cheung@gmail.com",
+             comment = c(ORCID = "0000-0002-9871-9448")))
+Description: It computes Beta_Select, standardization in
+  structural equation models with only selected variables
+  standardized. It supports models with moderation, as well
+  as regression models. It can form confidence intervals
+  that takes into account the standardization appropriately.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Config/testthat/parallel: true

@@ -2,3 +2,6 @@
 ^\.github$
 ^LICENSE
 ^\.lintr
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

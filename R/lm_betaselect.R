@@ -1,3 +1,5 @@
+# WIP
+
 #' @title Standardize Coefficients in a Regression Model
 #'
 #' @description Can standardize selected
@@ -273,29 +275,29 @@
 #' # TO ADD
 #' }
 #'
-#' @export
+#' @noRd
 #'
 
 lm_betaselect <- function(object,
-                           to_standardize = NULL,
-                           not_to_standardize = NULL,
-                           skip_categorical_x = TRUE,
-                           std_se = c("none", "delta", "bootstrap"),
-                           std_z = TRUE,
-                           std_pvalue = TRUE,
-                           std_ci = TRUE,
-                           level = .95,
-                           progress = TRUE,
-                           boot_out = NULL,
-                           bootstrap = 100L,
-                           store_boot_est = TRUE,
-                           parallel = c("no", "snow", "multicore"),
-                           ncpus = parallel::detectCores(logical = FALSE) - 1,
-                           cl = NULL,
-                           iseed = NULL,
-                           ...,
-                           delta_method = c("lavaan", "numDeriv"),
-                           vector_form = TRUE) {
+                          to_standardize = NULL,
+                          not_to_standardize = NULL,
+                          skip_categorical_x = TRUE,
+                          std_se = c("none", "delta", "bootstrap"),
+                          std_z = TRUE,
+                          std_pvalue = TRUE,
+                          std_ci = TRUE,
+                          level = .95,
+                          progress = TRUE,
+                          boot_out = NULL,
+                          bootstrap = 100L,
+                          store_boot_est = TRUE,
+                          parallel = c("no", "snow", "multicore"),
+                          ncpus = parallel::detectCores(logical = FALSE) - 1,
+                          cl = NULL,
+                          iseed = NULL,
+                          ...,
+                          delta_method = c("lavaan", "numDeriv"),
+                          vector_form = TRUE) {
 
     # TODO:
     # - Revise for lm-class object.
@@ -312,233 +314,49 @@ lm_betaselect <- function(object,
         !interactive()) {
         progress <- FALSE
       }
-
     # Check whether the object is supported
-    lav_betaselect_check_fit(object)
+    lm_betaselect_check_fit(object)
 
-    output <- match.arg(output)
+    # output <- match.arg(output)
     parallel <- match.arg(parallel)
     delta_method <- match.arg(delta_method)
     std_se <- tolower(match.arg(std_se))
     has_se <- !identical("none", std_se)
-    ngroups <- lavaan::lavTech(object, what = "ngroups")
+    # ngroups <- lavaan::lavTech(object, what = "ngroups")
 
     # Get the variables to be standardized
-    prods <- find_all_products(object)
-    to_standardize <- fix_to_standardize(object = object,
-                                         to_standardize = to_standardize,
-                                         not_to_standardize = not_to_standardize,
-                                         skip_categorical_x = skip_categorical_x,
-                                         prods = prods)
+    # prods <- find_all_products(object)
+    if (is.null(to_standardize)) {
+        to_standardize <- ".all."
+      }
+    to_standardize <- fix_to_standardize_lm(object = object,
+                                            to_standardize = to_standardize,
+                                            not_to_standardize = not_to_standardize,
+                                            skip_categorical_x = skip_categorical_x,
+                                            prods = prods)
 
-    # Prepare the tables for the results
-    ptable <- lavaan::parameterTable(object)
-    est <- lavaan::parameterEstimates(object,
-                                      ...,
-                                      level = level,
-                                      output = output)
-    est[, "std.lv"] <- NULL
-    est[, "std.nox"] <- NULL
-    std <- lavaan::standardizedSolution(object,
-                                        se = TRUE,
-                                        zstat = TRUE,
-                                        pvalue = TRUE,
-                                        ci = TRUE,
-                                        partable = ptable)
-    if (is.null(std$group)) {
-        std$group <- ptable$group
+    # Do standardization
+    dat <- stats::model.frame(object)
+    datz <- dat
+    for (xx in to_standardize) {
+        datz[, xx] <- scale(dat[, xx])[, 1]
       }
-    # Generate the function for each parameter with
-    # a standardized solution.
-    i <- which(!(std$op %in% c("~1", "==", ":=")))
-    # If vector_form is TRUE:
-    #   std_fct is a list of gen_std_i_internal() output
-    std_fct <- gen_std(object = object,
-                       i = i,
-                       to_standardize = to_standardize,
-                       prods = prods,
-                       internal_only = vector_form)
-    if (vector_form) {
-        std_fct_v <- gen_std_vector(fit = object,
-                                    i_vector = i,
-                                    std_fct_vector = std_fct)
-      } else {
-        std_fct_v <- NULL
-      }
-
-    # Compute the standardized solution
-    fit_est <- methods::getMethod("coef",
-                  signature = "lavaan",
-                  where = asNamespace("lavaan"))(object)
-    fit_vcov <- lavaan::lavInspect(object, what = "vcov")
-    if (vector_form) {
-        est_std_full <- std_fct_v(fit_est)
-      } else {
-        est_std_full <- lapply(std_fct, function(xx) xx(fit_est))
-      }
-    est_std <- unlist(est_std_full)
-    if (vector_form) {
-        est_std_by <- attr(est_std_full,
-                           which = "std_by",
-                           exact = TRUE)
-      } else {
-        est_std_by <- lapply(est_std_full,
-                            FUN = attr,
-                            which = "std_by",
-                            exact = TRUE)
-      }
-    est_std_by <- sapply(est_std_by,
-                         function(x) {paste0(x, collapse = ",")})
-    std[i, "std.p"] <- est_std
-    std[i, "std.p.by"] <- est_std_by
-
-    # User-parameters
-    def.function <- object@Model@def.function
-    has_def <- ":=" %in% ptable$op
-
-    if (has_def) {
-        std_def <- def_std(std = std,
-                           ptable = ptable,
-                           def.function = def.function)
-        i_def <- match(names(std_def), std$label)
-        std[i_def, "std.p"] <- std_def
-      } else {
-        std_def <- numeric(0)
-        i_def <- numeric(0)
-      }
-    i0 <- c(i, i_def)
+    objectz <- stats::update(object,
+                             data = datz)
 
     # Standard errors
-    if (has_se) {
-        if ("bootstrap" %in% std_se) {
-            boot_est <- std_boot(object = object,
-                                 std_fct = std_fct,
-                                 std_fct_v = std_fct_v,
-                                 boot_out = boot_out,
-                                 progress = progress,
-                                 bootstrap = bootstrap,
-                                 parallel = parallel,
-                                 ncpus = ncpus,
-                                 cl = cl,
-                                 iseed = iseed)
-            std_labels <- lavaan::lav_partable_labels(std)
-            colnames(boot_est) <- std_labels[i]
-            est_std_se <- std_se_boot_all(boot_est)
-            if (has_def) {
-                boot_est_user <- std_boot_user(std = std,
-                                               ptable = ptable,
-                                               i = i,
-                                               def.function = def.function,
-                                               boot_est = boot_est)
-                est_std_user_se <- std_se_boot_all(boot_est_user)
-              } else {
-                boot_est_user <- NULL
-                est_std_user_se <- numeric(0)
-              }
-          }
-        if ("delta" %in% std_se) {
-            est_std_se <- std_se_delta_all(std_fct = std_fct,
-                                          std_fct_v = std_fct_v,
-                                          fit_est = fit_est,
-                                          fit_vcov = fit_vcov,
-                                          method = delta_method,
-                                          progress = progress)
-            std_vcov <- attr(est_std_se,
-                             which = "std_vcov",
-                             exact = TRUE)
-            if (has_def) {
-                est_std_user_se <- std_se_delta_user(std = std,
-                                                     ptable = ptable,
-                                                     i = i,
-                                                     def.function = def.function,
-                                                     std_fct = std_fct,
-                                                     std_fct_v = std_fct_v,
-                                                     fit_vcov = fit_vcov,
-                                                     std_vcov = std_vcov,
-                                                     method = delta_method,
-                                                     progress = progress)
-              } else {
-                est_std_user_se <- numeric(0)
-              }
-          }
-        std[i, "std.p.se"] <- est_std_se
-        if (has_def) {
-            std[i_def, "std.p.se"] <- est_std_user_se
-          }
-      }
 
     # z statistic
-    if (has_se && std_z) {
-        # Same for delta and bootstrap
-        est_std_z <- std[i0, "std.p"] / std[i0, "std.p.se"]
-        est_std_z[std[i0, "std.p.se"] < sqrt(.Machine$double.eps)] <- NA
-        std[i0, "std.p.z"] <- est_std_z
-      }
 
     # p-values
-    if (has_se && std_pvalue && std_z) {
-        if ("bootstrap" %in% std_se) {
-            est_pvalue <- std_pvalue_boot_all(cbind(boot_est, boot_est_user))
-          }
-        if ("delta" %in% std_se) {
-            est_pvalue <- std_pvalue_delta_all(est_std_z)
-          }
-        std[i0, "std.p.pvalue"] <- est_pvalue
-      }
 
     # Confidence intervals
-    if (has_se && std_ci) {
-        if ("bootstrap" %in% std_se) {
-            ci <- std_ci_boot_all(x_est = c(est_std, std_def),
-                                  x_est_boot = cbind(boot_est, boot_est_user),
-                                  level = level)
-          }
-        if ("delta" %in% std_se) {
-            ci <- std_ci_delta_all(x_est = c(est_std, std_def),
-                                   x_se = c(est_std_se, est_std_user_se),
-                                   level = level)
-          }
-        std[i0, "std.p.ci.lower"] <- ci[, "ci.lower"]
-        std[i0, "std.p.ci.upper"] <- ci[, "ci.upper"]
-      }
 
-    # Store results in the parameter estimates table
-    if (is.null(est$group)) {
-        est$group <- 1
-        est[est$op %in% c("==", ":="), "group"] <- 0
-      }
-    std_names <- colnames(std)
-    std_to_keep <- std_names[startsWith(std_names, "std.p")]
-    est$est_id <- seq_len(nrow(est))
-    out <- merge(est,
-                 std[, c("lhs", "op", "rhs", "group", std_to_keep)],
-                 all.x = TRUE,
-                 all.y = FALSE,
-                 sort = FALSE)
-    out <- out[order(out$est_id), ]
-    est[out$est_id, std_to_keep] <- out[, std_to_keep]
-    est$est_id <- NULL
-    if (ngroups == 1) {
-        est$group <- NULL
-      }
-    class(est) <- c("lav_betaselect", class(est))
-    attr(est, "call") <- match.call()
-    if(store_boot_est && ("bootstrap" %in% std_se)) {
-        attr(est, "boot_est") <- boot_est
-      }
+    class(objectz) <- c("lm_betaselect", class(object))
 
-    # Adapted from semhelpinghands::standardizedSolution_boot_ci()
-    fit_summary <- lavaan::summary(object)
-    attr(est, "pe_attrib") <- attributes(fit_summary$pe)
-    attr(est, "partable") <- lavaan::parameterTable(object)
-    attr(est, "est") <- lavaan::parameterEstimates(object)
-    attr(est, "level") <- level
-    attr(est, "std_se") <- std_se
-    attr(est, "R") <- ifelse("bootstrap" %in% std_se,
-                             nrow(boot_est),
-                             NA)
-    attr(est, "prods") <- prods
-    attr(est, "categorical") <- find_categorical(object)
-    est
+    objectz$standardized_terms <- to_standardize
+    objectz$lm_betaselect <- match.call()
+    objectz$lm_call <- stats::getCall(object)
+    objectz
   }
 

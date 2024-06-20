@@ -278,7 +278,7 @@
 #' @noRd
 #'
 
-lm_betaselect <- function(object,
+lm_betaselect <- function(...,
                           to_standardize = NULL,
                           not_to_standardize = NULL,
                           skip_categorical_x = TRUE,
@@ -295,7 +295,6 @@ lm_betaselect <- function(object,
                           ncpus = parallel::detectCores(logical = FALSE) - 1,
                           cl = NULL,
                           iseed = NULL,
-                          ...,
                           delta_method = c("lavaan", "numDeriv"),
                           vector_form = TRUE) {
 
@@ -310,12 +309,22 @@ lm_betaselect <- function(object,
     # - Compute SE and/or CI, for retrieval.
     #   - Do the computation in other functions.
 
+    # - Do regression on the unstandardized input variables.
+    #   - The results are stored because some methods need them.
+    #   - Compute and store the OLS or ML vcov.
+    # - Do regression on standardized input variables.
+    #   - Compute and store the OLS or ML vcov.
+    # - Do bootstrapping if requested.
+    #   - Compute and store the bootstrap estimate.
+    # - Other SEs and CIs can be computed on request.
+
+browser()
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE
       }
     # Check whether the object is supported
-    lm_betaselect_check_fit(object)
+    # lm_betaselect_check_fit(object)
 
     # output <- match.arg(output)
     parallel <- match.arg(parallel)

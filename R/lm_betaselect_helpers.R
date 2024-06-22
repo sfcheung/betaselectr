@@ -58,17 +58,11 @@ fix_to_standardize_lm_data <- function(object,
                                        input_data,
                                        to_standardize = ".all.",
                                        not_to_standardize = NULL,
-                                       skip_categorical_x = TRUE,
-                                       prods = NULL) {
+                                       skip_categorical_x = TRUE) {
 
     if (!identical(to_standardize, ".all.") && !is.null(not_to_standardize)) {
         stop("Do not specify both to_standardize and not_to_standardize.")
       }
-    # if (is.null(prods)) {
-    #     prods <- find_all_products(object)
-    #   }
-
-    # Get the data frame
 
     k <- ncol(input_data)
 

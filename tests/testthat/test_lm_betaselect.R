@@ -1,4 +1,3 @@
-skip("WIP")
 # Adapted from stdmod
 
 library(testthat)
@@ -26,15 +25,14 @@ dat_tmp <- dat
 dat_tmp$iv <- scale(dat$iv, scale = FALSE, center = TRUE)[, 1]
 dat_tmp$mod <- scale(dat$mod, scale = sd(dat$mod), center = FALSE)[, 1]
 
-lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "iv")
-
-lm_beta_x <- lm_betaselect(lm_raw, to_standardize = "iv")
-lm_beta_y <- lm_betaselect(lm_raw, to_standardize = "dv")
-lm_beta_w <- lm_betaselect(lm_raw, to_standardize = "mod")
-lm_beta_xw <- lm_betaselect(lm_raw, to_standardize = c("mod", "iv"))
-lm_beta_yw <- lm_betaselect(lm_raw, to_standardize = c("mod", "dv"))
-lm_beta_xy <- lm_betaselect(lm_raw, to_standardize = c("iv", "dv"))
-lm_beta_xyw <- lm_betaselect(lm_raw)
+lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_y <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "dv", do_boot = FALSE)
+lm_beta_w <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "mod", do_boot = FALSE)
+lm_beta_xw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("mod", "iv"), do_boot = FALSE)
+lm_beta_yw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("mod", "dv"), do_boot = FALSE)
+lm_beta_xy <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("iv", "dv"), do_boot = FALSE)
+lm_beta_xyw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, do_boot = FALSE)
 
 test_that("Standardize x", {
     expect_equal(

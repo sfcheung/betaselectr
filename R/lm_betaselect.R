@@ -282,33 +282,15 @@ lm_betaselect <- function(...,
                           to_standardize = NULL,
                           not_to_standardize = NULL,
                           skip_categorical_x = TRUE,
-                          std_se = c("none", "delta", "bootstrap"),
-                          std_z = TRUE,
-                          std_pvalue = TRUE,
-                          std_ci = TRUE,
-                          level = .95,
-                          progress = TRUE,
-                          boot_out = NULL,
+                          do_boot = TRUE,
                           bootstrap = 100L,
-                          store_boot_est = TRUE,
-                          parallel = c("no", "snow", "multicore"),
-                          ncpus = parallel::detectCores(logical = FALSE) - 1,
-                          cl = NULL,
                           iseed = NULL,
-                          delta_method = c("lavaan", "numDeriv"),
-                          vector_form = TRUE) {
+                          parallel = FALSE,
+                          ncpus = parallel::detectCores(logical = FALSE) - 1,
+                          progress = TRUE,
+                          load_balancing = TRUE) {
 
-    # TODO:
-    # - Revise for lm-class object.
-    # Workflow:
-    # - Compute the variance-covariance matrix of variables
-    # - Identify variables to be standardized
-    # - Detect inline terms and warn users of them
-    # - For each term, identify how its beta_select is to be computed
-    # - Compute beta_select for each term
-    # - Compute SE and/or CI, for retrieval.
-    #   - Do the computation in other functions.
-
+    # Workflow
     # - Do regression on the unstandardized input variables.
     #   - The results are stored because some methods need them.
     #   - Compute and store the OLS or ML vcov.
@@ -328,30 +310,30 @@ lm_betaselect <- function(...,
                     envir = parent.frame())
     vcov_ustd <- stats::vcov(lm_ustd)
     lm_ustd_call <- stats::getCall(lm_ustd)
+    lm_ustd_args <- as.list(lm_ustd_call)[-1]
 
     # Do regression on standardized input variables.
 
     # Get the variables to be standardized
-    # prods <- find_all_products(object)
     if (is.null(to_standardize)) {
         to_standardize <- ".all."
       }
-
     input_data <- tryCatch(eval(lm_ustd_call$data,
                                 envir = parent.frame()))
     if (inherits(input_data, "error")) {
         input_data <- stats::model.frame(lm_ustd)
       }
-    to_standardize <- fix_to_standardize_lm_data(object = lm_ustd,
-                                                 input_data = input_data,
-                                                 to_standardize = to_standardize,
-                                                 not_to_standardize = not_to_standardize,
-                                                 skip_categorical_x = skip_categorical_x,
-                                                 prods = prods)
+    to_standardize <- fix_to_standardize_lm_data(
+                        object = lm_ustd,
+                        input_data = input_data,
+                        to_standardize = to_standardize,
+                        not_to_standardize = not_to_standardize,
+                        skip_categorical_x = skip_categorical_x
+                      )
     # Do standardization
-    input_dat_z <- input_data
+    input_data_z <- input_data
     for (xx in to_standardize) {
-        input_dat_z[, xx] <- scale(input_dat_z[, xx])[, 1]
+        input_data_z[, xx] <- scale(input_data_z[, xx])[, 1]
       }
     lm_std_call <- lm_ustd_call
     data_call <- lm_std_call$data
@@ -368,107 +350,34 @@ lm_betaselect <- function(...,
                    envir = parent.frame())
     vcov_std <- stats::vcov(lm_std)
 
-browser()
+    # Prepare output
 
-    # - Do bootstrapping if requested.
+    out <- lm_std
+    out$lm_betaselect$ustd <- lm_ustd
+    out$lm_betaselect$vcov_std <- vcov_std
+    out$lm_betaselect$vcov_ustd <- vcov_ustd
+    out$lm_betaselect$call <- match.call()
 
-    if (!is.null(iseed)) set.seed(iseed)
+    # Do bootstrapping if requested.
 
-    n <- nrow(input_data)
-    boot_i <- replicate(bootstrap,
-                        sample(n, n, replace = TRUE),
-                        simplify = FALSE)
-
-    if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
-        !interactive()) {
-        progress <- FALSE
-      }
-
-    if (parallel) {
-        my_cl <- parallel::makeCluster(ncpus)
-        on.exit(parallel::stopCluster(my_cl), add = TRUE)
-        lm_args_i <- lapply(lm_args, eval, envir = parent.frame())
-        if (progress) {
-            ustd_boot_out <- pbapply::pblapply(
-                boot_i,
-                function(i) {
-                    data_i <- lm_args_i$data[i, ]
-                    lm_args_i$data <- data_i
-                    out_i <- do.call(stats::lm,
-                                     lm_args_i)
-                    list(coef = stats::coef(out_i),
-                         vcov = stats::vcov(out_i))
-                  },
-                cl = my_cl
-              )
-          } else {
-            ustd_boot_out <- parallel::parLapplyLB(
-                cl = my_cl,
-                boot_i,
-                function(i) {
-                    data_i <- lm_args_i$data[i, ]
-                    lm_args_i$data <- data_i
-                    out_i <- do.call(stats::lm,
-                                     lm_args_i)
-                    list(coef = stats::coef(out_i),
-                         vcov = stats::vcov(out_i))
-                  },
-                chunk.size = 1
-              )
-          }
+    if (do_boot) {
+        boot_out <- lm_boot(lm_args = lm_ustd_args,
+                            input_data = input_data,
+                            to_standardize = to_standardize,
+                            parallel = parallel,
+                            iseed = iseed,
+                            bootstrap = bootstrap,
+                            ncpus = ncpus,
+                            progress = progress,
+                            load_balancing = load_balancing)
       } else {
-        if (progress) {
-            ustd_boot_out <- pbapply::pblapply(
-                boot_i,
-                function(i) {
-                    data_i <- lm_args_i$data[i, ]
-                    lm_args_i$data <- data_i
-                    out_i <- do.call(stats::lm,
-                                     lm_args_i)
-                    list(coef = stats::coef(out_i),
-                         vcov = stats::vcov(out_i))
-                  }
-              )
-          } else {
-            ustd_boot_out <- lapply(
-                boot_i,
-                function(i) {
-                    data_i <- lm_args_i$data[i, ]
-                    lm_args_i$data <- data_i
-                    out_i <- do.call(stats::lm,
-                                     lm_args_i)
-                    list(coef = stats::coef(out_i),
-                         vcov = stats::vcov(out_i))
-                  }
-              )
-          }
+        boot_out <- NULL
       }
+    out$lm_betaselect$boot_out <- boot_out
 
-    # Check whether the object is supported
-    # lm_betaselect_check_fit(object)
+    class(out) <- c("lm_betaselect", class(out))
 
-    # output <- match.arg(output)
-    parallel <- match.arg(parallel)
-    delta_method <- match.arg(delta_method)
-    std_se <- tolower(match.arg(std_se))
-    has_se <- !identical("none", std_se)
-    # ngroups <- lavaan::lavTech(object, what = "ngroups")
-
-
-    # Standard errors
-
-    # z statistic
-
-    # p-values
-
-    # Confidence intervals
-
-    class(objectz) <- c("lm_betaselect", class(object))
-
-    objectz$standardized_terms <- to_standardize
-    objectz$lm_betaselect <- match.call()
-    objectz$lm_call <- stats::getCall(object)
-    objectz
+    out
   }
 
 #' @noRd
@@ -480,4 +389,84 @@ std_data <- function(data,
         data[, xx] <- scale(data[, xx])[, 1]
       }
     data
+  }
+
+#' @noRd
+
+lm_boot <- function(lm_args,
+                    input_data,
+                    to_standardize,
+                    parallel,
+                    iseed,
+                    bootstrap,
+                    ncpus,
+                    progress,
+                    load_balancing) {
+
+    if (!is.null(iseed)) set.seed(iseed)
+
+    n <- nrow(input_data)
+    boot_idx <- replicate(bootstrap,
+                          sample(n, n, replace = TRUE),
+                          simplify = FALSE)
+
+    lm_args_i <- lapply(lm_args,
+                        eval,
+                        envir = parent.frame())
+
+    tmpfct <- function(i) {
+                  force(std_data)
+                  data_i <- input_data[i, ]
+                  input_data_z <- std_data(data_i,
+                                            to_standardize = to_standardize)
+                  lm_args_i$data <- data_i
+                  ustd_i <- do.call(stats::lm,
+                                    lm_args_i)
+                  lm_args_i$data <- input_data_z
+                  std_i <- do.call(stats::lm,
+                                    lm_args_i)
+                  list(coef_ustd = stats::coef(ustd_i),
+                      vcov_ustd = stats::vcov(ustd_i),
+                      coef_std = stats::coef(std_i),
+                      vcov_std = stats::vcov(std_i))
+                }
+
+    if (parallel) {
+        if (load_balancing && progress) {
+            pbopt_old <- pbapply::pboptions(use_lb = TRUE)
+            on.exit(pbapply::pboptions(pbopt_old), add = TRUE)
+          }
+        my_cl <- parallel::makeCluster(ncpus)
+        # TODO:
+        # - Change to pkg::std_data() later
+        parallel::clusterExport(cl = my_cl, "std_data")
+        on.exit(parallel::stopCluster(my_cl), add = TRUE)
+        if (progress) {
+            boot_out <- pbapply::pblapply(
+                X = boot_idx,
+                FUN = tmpfct,
+                cl = my_cl
+              )
+          } else {
+            boot_out <- parallel::parLapplyLB(
+                cl = my_cl,
+                X = boot_idx,
+                fun = tmpfct,
+                chunk.size = 1
+              )
+          }
+      } else {
+        if (progress) {
+            boot_out <- pbapply::pblapply(
+                X = boot_idx,
+                FUN = tmpfct
+              )
+          } else {
+            boot_out <- lapply(
+                X = boot_idx,
+                FUN = tmpfct
+              )
+          }
+      }
+    return(boot_out)
   }

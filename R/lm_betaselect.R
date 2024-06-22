@@ -426,9 +426,11 @@ lm_boot <- function(lm_args,
                   std_i <- do.call(stats::lm,
                                     lm_args_i)
                   list(coef_ustd = stats::coef(ustd_i),
-                      vcov_ustd = stats::vcov(ustd_i),
-                      coef_std = stats::coef(std_i),
-                      vcov_std = stats::vcov(std_i))
+                       vcov_ustd = stats::vcov(ustd_i),
+                       sigma_mm_ustd = stats::cov(stats::model.matrix(ustd_i)),
+                       coef_std = stats::coef(std_i),
+                       vcov_std = stats::vcov(std_i),
+                       sigma_mm_std = stats::cov(stats::model.matrix(std_i)))
                 }
 
     if (parallel) {

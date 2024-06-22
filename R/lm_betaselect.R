@@ -319,6 +319,12 @@ lm_betaselect <- function(...,
     # - Other SEs and CIs can be computed on request.
 
 browser()
+
+    # Do regression on the unstandardized input variables.
+    lm_call <- match.call()
+    lm_call[[1]] <- match.fun(quote(lm))
+    lm_ustd <- do.call(lm, lm_call[-1])
+
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE

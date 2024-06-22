@@ -26,6 +26,8 @@ dat_tmp <- dat
 dat_tmp$iv <- scale(dat$iv, scale = FALSE, center = TRUE)[, 1]
 dat_tmp$mod <- scale(dat$mod, scale = sd(dat$mod), center = FALSE)[, 1]
 
+lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = "iv")
+
 lm_beta_x <- lm_betaselect(lm_raw, to_standardize = "iv")
 lm_beta_y <- lm_betaselect(lm_raw, to_standardize = "dv")
 lm_beta_w <- lm_betaselect(lm_raw, to_standardize = "mod")

@@ -318,17 +318,132 @@ lm_betaselect <- function(...,
     #   - Compute and store the bootstrap estimate.
     # - Other SEs and CIs can be computed on request.
 
+    # Do regression on the unstandardized input variables.
+    my_call <- match.call()
+    lm_args <- as.list(my_call)[-1]
+    my_formals <- names(formals())
+    lm_args[my_formals] <- NULL
+    lm_call <- as.call(c(str2lang("stats::lm"), lm_args))
+    lm_ustd <- eval(lm_call,
+                    envir = parent.frame())
+    vcov_ustd <- stats::vcov(lm_ustd)
+    lm_ustd_call <- stats::getCall(lm_ustd)
+
+    # Do regression on standardized input variables.
+
+    # Get the variables to be standardized
+    # prods <- find_all_products(object)
+    if (is.null(to_standardize)) {
+        to_standardize <- ".all."
+      }
+
+    input_data <- tryCatch(eval(lm_ustd_call$data,
+                                envir = parent.frame()))
+    if (inherits(input_data, "error")) {
+        input_data <- stats::model.frame(lm_ustd)
+      }
+    to_standardize <- fix_to_standardize_lm_data(object = lm_ustd,
+                                                 input_data = input_data,
+                                                 to_standardize = to_standardize,
+                                                 not_to_standardize = not_to_standardize,
+                                                 skip_categorical_x = skip_categorical_x,
+                                                 prods = prods)
+    # Do standardization
+    input_dat_z <- input_data
+    for (xx in to_standardize) {
+        input_dat_z[, xx] <- scale(input_dat_z[, xx])[, 1]
+      }
+    lm_std_call <- lm_ustd_call
+    data_call <- lm_std_call$data
+    if (is.null(data_call)) {
+        lm_std_call$data <- std_data(input_data,
+                                    to_standardize = to_standardize)
+      } else {
+        tmp <- call("std_data",
+                    data = data_call,
+                    to_standardize = to_standardize)
+        lm_std_call$data <- tmp
+      }
+    lm_std <- eval(lm_std_call,
+                   envir = parent.frame())
+    vcov_std <- stats::vcov(lm_std)
+
 browser()
 
-    # Do regression on the unstandardized input variables.
-    lm_call <- match.call()
-    lm_call[[1]] <- match.fun(quote(lm))
-    lm_ustd <- do.call(lm, lm_call[-1])
+    # - Do bootstrapping if requested.
+
+    if (!is.null(iseed)) set.seed(iseed)
+
+    n <- nrow(input_data)
+    boot_i <- replicate(bootstrap,
+                        sample(n, n, replace = TRUE),
+                        simplify = FALSE)
 
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE
       }
+
+    if (parallel) {
+        my_cl <- parallel::makeCluster(ncpus)
+        on.exit(parallel::stopCluster(my_cl), add = TRUE)
+        lm_args_i <- lapply(lm_args, eval, envir = parent.frame())
+        if (progress) {
+            ustd_boot_out <- pbapply::pblapply(
+                boot_i,
+                function(i) {
+                    data_i <- lm_args_i$data[i, ]
+                    lm_args_i$data <- data_i
+                    out_i <- do.call(stats::lm,
+                                     lm_args_i)
+                    list(coef = stats::coef(out_i),
+                         vcov = stats::vcov(out_i))
+                  },
+                cl = my_cl
+              )
+          } else {
+            ustd_boot_out <- parallel::parLapplyLB(
+                cl = my_cl,
+                boot_i,
+                function(i) {
+                    data_i <- lm_args_i$data[i, ]
+                    lm_args_i$data <- data_i
+                    out_i <- do.call(stats::lm,
+                                     lm_args_i)
+                    list(coef = stats::coef(out_i),
+                         vcov = stats::vcov(out_i))
+                  },
+                chunk.size = 1
+              )
+          }
+      } else {
+        if (progress) {
+            ustd_boot_out <- pbapply::pblapply(
+                boot_i,
+                function(i) {
+                    data_i <- lm_args_i$data[i, ]
+                    lm_args_i$data <- data_i
+                    out_i <- do.call(stats::lm,
+                                     lm_args_i)
+                    list(coef = stats::coef(out_i),
+                         vcov = stats::vcov(out_i))
+                  }
+              )
+          } else {
+            ustd_boot_out <- lapply(
+                boot_i,
+                function(i) {
+                    data_i <- lm_args_i$data[i, ]
+                    lm_args_i$data <- data_i
+                    out_i <- do.call(stats::lm,
+                                     lm_args_i)
+                    list(coef = stats::coef(out_i),
+                         vcov = stats::vcov(out_i))
+                  }
+              )
+          }
+      }
+
     # Check whether the object is supported
     # lm_betaselect_check_fit(object)
 
@@ -339,25 +454,6 @@ browser()
     has_se <- !identical("none", std_se)
     # ngroups <- lavaan::lavTech(object, what = "ngroups")
 
-    # Get the variables to be standardized
-    # prods <- find_all_products(object)
-    if (is.null(to_standardize)) {
-        to_standardize <- ".all."
-      }
-    to_standardize <- fix_to_standardize_lm(object = object,
-                                            to_standardize = to_standardize,
-                                            not_to_standardize = not_to_standardize,
-                                            skip_categorical_x = skip_categorical_x,
-                                            prods = prods)
-
-    # Do standardization
-    dat <- stats::model.frame(object)
-    datz <- dat
-    for (xx in to_standardize) {
-        datz[, xx] <- scale(dat[, xx])[, 1]
-      }
-    objectz <- stats::update(object,
-                             data = datz)
 
     # Standard errors
 
@@ -375,3 +471,13 @@ browser()
     objectz
   }
 
+#' @noRd
+# Should be exported when ready
+
+std_data <- function(data,
+                     to_standardize) {
+    for (xx in to_standardize) {
+        data[, xx] <- scale(data[, xx])[, 1]
+      }
+    data
+  }

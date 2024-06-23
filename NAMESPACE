@@ -2,3 +2,5 @@
 
 S3method(print,lav_betaselect)
 export(lav_betaselect)
+export(lm_betaselect)
+export(std_data)

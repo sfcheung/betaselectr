@@ -1,46 +1,41 @@
-# WIP
-
-#' @title Standardize Coefficients in a Regression Model
+#' @title Standardize Coefficients in a
+#' Regression Model
 #'
 #' @description Can standardize selected
-#' variables in a regression model without
-#' refitting the models, can handle
-#' product term correctly and skip
-#' categorical predictors in
+#' variables in a regression model
+#' without refitting the models, can
+#' handle product term correctly and
+#' skip categorical predictors in
 #' standardization.
 #'
 #' @details This function lets users
-#' select which variables to be standardized
-#' when computing the standardized
-#' solution. It has the following
-#' features:
+#' select which variables to be
+#' standardized when computing the
+#' standardized solution. It has the
+#' following features:
 #'
 #' - It automatically skips categorical
 #' predictors (i.e., factor or string
 #' variables).
 #'
 #' - It does not standardize product
-#' term, which is incorrect. Instead,
-#' it compute the product term with
-#' its component variables standardized.
+#' term, which is incorrect. Instead, it
+#' compute the product term with its
+#' component variables standardized.
 #'
-#' - It can be used to generate bootstrap
-#' confidence intervals for the
-#' standardized solution. Bootstrap
+#' - It can be used to generate
+#' bootstrap confidence intervals for
+#' the standardized solution. Bootstrap
 #' confidence interval is better than
-#' doing standardization *before* fitting
-#' a model because it correctly takes
-#' into account the sampling variance
-#' of the standard deviations. It is
-#' also better than delta method
+#' doing standardization *before*
+#' fitting a model because it correctly
+#' takes into account the sampling
+#' variance of the standard deviations.
+#' It is also better than delta method
 #' confidence interval because it takes
 #' into account the usually asymmetric
 #' distribution of parameters after
 #' standardization.
-#'
-#' - For comparison, it can also report
-#' delta method standard errors and
-#' confidence intervals.
 #'
 #' ## Problems With Common Approaches
 #'
@@ -67,13 +62,26 @@
 #' be more difficult to interpret when
 #' they are standardized (e.g., age).
 #'
-#' @return
-#' A data frame storing the parameter
-#' estimates, with `vcov`, `coef` and
-#' `confint` methods. (TODO)
+#' ## How It Works
 #'
-#' @param object The output of
-#' a regression model fitted by [lm()].
+#' It standardize the original variables
+#' *before* they are used in the
+#' regression model. Therefore, strictly
+#' speaking, it does not standardize
+#' the predictors in a regression model,
+#' but standardize the *input variable*.
+#'
+#' The requested model is then fitted to
+#' the dataset with selected variables
+#' standardized.
+#'
+#' @return
+#' An object of the class `lm_betaselect`,
+#' which is similar to the output
+#' of [lm()].
+#'
+#' @param ... These arguments will be
+#' passed directly to [lm()].
 #'
 #' @param to_standardize A string vector,
 #' which should be the names of the
@@ -84,7 +92,7 @@
 #'
 #' @param not_to_standardize A string
 #' vector, which should be the names
-#' of the variables that should not be
+#' of the variables that should *not* be
 #' standardized. This argument is useful
 #' when most variables, except for a few,
 #' are to be standardized. This argument
@@ -92,177 +100,47 @@
 #' at the same time. Default is `NULL`,
 #' and only `to_standardize` is used.
 #'
-#' @param skip_categorical_x Logical.
-#' If `TRUE`, the default, all
-#' categorical predictors, defined as
-#' variables recognized as factors
-#' by [lm()], will
-#' be skipped in standardization. This
-#' overrides the argument
-#' `to_standardize`. That is, a
-#' categorical predictor will not be
-#' standardized even if listed in
-#' `to_standardize`, unless uses set
-#' this argument to `FALSE`.
+#' @param do_boot Whether bootstrapping
+#' will be conducted. Default is `TRUE`.
 #'
-#' @param std_se String. If set to `"none"`,
-#' the default, standard errors will not
-#' be computed for the standardized
-#' solution. If set to `"delta"`,
-#' delta method will be used to compute
-#' the standard errors. If set to
-#' `"bootstrap"`, then what it does
-#' depends whether `boot_out` is set.
-#' If `boot_out` is to an output of
-#' [manymome::do_boot()], its content
-#' will be used. If `boot_out` is
-#' `NULL` *and* bootstrap
-#' estimates are available in `object`
-#' (e.g., bootstrapping is requested
-#' when fitting the model in `lavaan`),
-#' then the stored bootstrap estimates
-#' will be sued. If not available,
-#' the bootstrapping will be conducted
-#' using [lavaan::bootstrapLavaan()],
-#' using arguments `bootstrap`,
-#' `parallel`, `ncpus`, `cl`, and
-#' `iseed`.`
+#' @param bootstrap If `do_boot` is
+#' `TRUE`, this argument is the number
+#' of bootstrap samples to draw. Default
+#' is 100. Should be set to 5000 or even
+#' 10000 for stable results.
 #'
-#' @param std_z Logical. If `TRUE` and
-#' `std_se` is not set to `"none"`,
-#' standard error will be computed
-#' using the method specified in
-#' `std_se`. Default is `TRUE`.
+#' @param iseed If `do_boot` is `TRUE`
+#' and this argument is not `NULL`,
+#' it will be used by [set.seed()] to
+#' set the seed for the random number
+#' generator. Default is `NULL`.
 #'
-#' @param std_pvalue Logical. If `TRUE`,
-#' `std_se` is not set to `"none"`,
-#' and `std_z` is `TRUE`, *p*-values
-#' will be computed using the method
-#' specified in `std_se`. For
-#' bootstrapping, the method proposed by
-#' Asparouhov and Muthén (2021) is used.
-#' Default is `TRUE`.
+#' @param parallel If `do_boot` is
+#' `TRUE` and this argument is `TRUE`,
+#' parallel processing will be used to
+#' do bootstrapping. Default is `FALSE`
+#' because bootstrapping in regression
+#' by [lm()] is rarely slow.
 #'
-#' @param std_ci Logical. If `TRUE` and
-#' `std_se` is not set to `"none"`,
-#' confidence intervals will be
-#' computed using the method specified in
-#' `std_se`. Default is `FALSE.`
-#'
-#' @param level The level of confidence
-#' of the confidence intervals. Default
-#' is .95. It will be used in the
-#' confidence intervals of both
-#' the unstandardized and
-#' standardized solution.
-#'
-#' @param ... Optional arguments to be
-#' passed to the [lavaan::parameterEstimates()],
-#' which will be use to generate the
-#' output.
-#'
-#' @param delta_method The method used
-#' to compute delta method standard
-#' errors. For internal use and should
-#' not be changed.
-#'
-#' @param vector_form The internal
-#' method used to compute standardized
-#' solution. For internal use and should
-#' not be changed.
+#' @param ncpus If `do_boot` is `TRUE`
+#' and `parallel` is also `TRUE`, this
+#' argument is the number of processes
+#' to be used in parallel processing.
+#' Default
+#' is `parallel::detectCores(logical = FALSE) - 1`
 #'
 #' @param progress Logical. If `TRUE`,
 #' progress bars will be displayed
 #' for long process.
 #'
-#' @param boot_out If `std_se` is
-#' `"bootstrap"` and this argument
-#' is set to an output of
-#' [manymome::do_boot()], its output
-#' will be used in computing statistics
-#' such as standard errors and
-#' confidence intervals. This allows
-#' users to use methods other than
-#' bootstrapping when fitting the
-#' model, while they can still request
-#' bootstrapping for the standardized
-#' solution.
-#'
-#' @param bootstrap If `std_se` is
-#' `"bootstrap"` but bootstrapping is
-#' not requested when fitting the model
-#' and `boot_out` is not set,
-#' [lavaan::bootstrapLavaan()] will be
-#' called to do bootstrapping. This
-#' argument is the number of bootstrap
-#' samples to draw. Default is 100.
-#' Should be set to 5000 or even 10000
-#' for stable results.
-#'
-#' @param parallel If `std_se` is
-#' `"bootstrap"` but bootstrapping is
-#' not requested when fitting the model
-#' and `boot_out` is not set,
-#' [lavaan::bootstrapLavaan()] will be
-#' called to do bootstrapping. This
-#' argument is to be passed to
-#' [lavaan::bootstrapLavaan()]. Default
-#' is `"no"`.
-#'
-#' @param ncpus If `std_se` is
-#' `"bootstrap"` but bootstrapping is
-#' not requested when fitting the model
-#' and `boot_out` is not set,
-#' [lavaan::bootstrapLavaan()] will be
-#' called to do bootstrapping. This
-#' argument is to be passed to
-#' [lavaan::bootstrapLavaan()]. Default
-#' is `parallel::detectCores(logical = FALSE) - 1`.
-#' Ignored if `parallel` is `"no"`.
-#'
-#' @param cl If `std_se` is
-#' `"bootstrap"` but bootstrapping is
-#' not requested when fitting the model
-#' and `boot_out` is not set,
-#' [lavaan::bootstrapLavaan()] will be
-#' called to do bootstrapping. This
-#' argument is to be passed to
-#' [lavaan::bootstrapLavaan()]. Default
-#' is `NULL`.
-#' Ignored if `parallel` is `"no"`.
-#'
-#' @param iseed If `std_se` is
-#' `"bootstrap"` but bootstrapping is
-#' not requested when fitting the model
-#' and `boot_out` is not set,
-#' [lavaan::bootstrapLavaan()] will be
-#' called to do bootstrapping. This
-#' argument is to be passed to
-#' [lavaan::bootstrapLavaan()] to set
-#' the seed for the random resampling.
-#' Default
-#' is `NULL`. Should be set to an integer
-#' for reproducible results.
-#' Ignored if `parallel` is `"no"`.
-#'
-#' @param store_boot_est Logical. If
-#' `std_se` is `"bootstrap"` and this
-#' argument is `TRUE`, the default,
-#' the bootstrap estimates of the
-#' standardized solution will be stored
-#' in the attribute `"boot_est"`. These
-#' estimates can be used for
-#' diagnosis of the bootstrapping. If
-#' `FALSE`, then the bootstrap estimates
-#' will not be stored.
-#'
+#' @param load_balancing Logical. If
+#' `parallel` is `TRUE`, this determine
+#' whether load balancing will be used.
+#' Default is `TRUE`.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
 #' @references
-#' Asparouhov, A., & Muthén, B. (2021). Bootstrap p-value computation.
-#' Retrieved from https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf
-#'
 #' Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N.
 #' (2022) Improving an old way to measure moderation effect in standardized
 #' units. *Health Psychology*, *41*(7), 502-505.
@@ -271,17 +149,38 @@
 #' @seealso [print.lav_betaselect()] for its print method.
 #'
 #' @examples
-#' \donttest{
-#' # TO ADD
-#' }
 #'
-#' @noRd
+#' data(data_test_mod_cat)
 #'
+#' # Standardize only iv
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv")
+#' summary(lm_beta_x)
+#'
+#' # Manually standardize iv and call lm()
+#'
+#' data_test_mod_cat$iv_z <- scale(data_test_mod_cat[, "iv"])[, 1]
+#'
+#' lm_beta_x_manual <- lm(dv ~ iv_z*mod + cov1 + cat1,
+#'                        data = data_test_mod_cat)
+#'
+#' coef(lm_beta_x)
+#' coef(lm_beta_x_manual)
+#'
+#' # Standardize all numeric variables
+#'
+#' lm_beta_all <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                              data = data_test_mod_cat)
+#' # Note that cat1 is not standardized
+#' summary(lm_beta_all)
+#'
+#' @export
 
 lm_betaselect <- function(...,
                           to_standardize = NULL,
                           not_to_standardize = NULL,
-                          skip_categorical_x = TRUE,
                           do_boot = TRUE,
                           bootstrap = 100L,
                           iseed = NULL,
@@ -328,7 +227,7 @@ lm_betaselect <- function(...,
                         input_data = input_data,
                         to_standardize = to_standardize,
                         not_to_standardize = not_to_standardize,
-                        skip_categorical_x = skip_categorical_x
+                        skip_categorical_x = TRUE
                       )
     # Do standardization
     input_data_z <- input_data
@@ -344,6 +243,8 @@ lm_betaselect <- function(...,
         tmp <- call("std_data",
                     data = data_call,
                     to_standardize = to_standardize)
+        # Need this trick to use pgk::name
+        tmp[[1]] <- str2lang("betaselectr::std_data")
         lm_std_call$data <- tmp
       }
     lm_std <- eval(lm_std_call,
@@ -380,8 +281,40 @@ lm_betaselect <- function(...,
     out
   }
 
-#' @noRd
-# Should be exported when ready
+#' @title Standardize Selected Variables
+#'
+#' @description Standardize selected
+#' variables in a data frame or similar
+#' object.
+#'
+#' @details This is a helper functions
+#' to be used by [lm_betaselect()]. It
+#' assumes that the variables selected
+#' has been checked whether they are
+#' numeric.
+#'
+#' @return
+#' A data frame similar to `data`,
+#' with selected variables standardized.
+#'
+#' @param data A data frame or similar
+#' object.
+#'
+#' @param to_standardized A character
+#' vector of the column names of
+#' variables to be standardized.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#' dat <- data_test_mod_cat
+#' dat <- std_data(dat, to_standardize = c("iv", "dv"))
+#' colMeans(dat[, c("dv", "iv")])
+#' apply(dat[, c("dv", "iv")], 2, sd)
+#'
+#' @export
 
 std_data <- function(data,
                      to_standardize) {
@@ -415,9 +348,8 @@ lm_boot <- function(lm_args,
                         envir = parent.frame())
 
     tmpfct <- function(i) {
-                  force(std_data)
                   data_i <- input_data[i, ]
-                  input_data_z <- std_data(data_i,
+                  input_data_z <- betaselectr::std_data(data_i,
                                             to_standardize = to_standardize)
                   lm_args_i$data <- data_i
                   ustd_i <- do.call(stats::lm,
@@ -439,9 +371,6 @@ lm_boot <- function(lm_args,
             on.exit(pbapply::pboptions(pbopt_old), add = TRUE)
           }
         my_cl <- parallel::makeCluster(ncpus)
-        # TODO:
-        # - Change to pkg::std_data() later
-        parallel::clusterExport(cl = my_cl, "std_data")
         on.exit(parallel::stopCluster(my_cl), add = TRUE)
         if (progress) {
             boot_out <- pbapply::pblapply(

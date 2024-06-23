@@ -10,7 +10,7 @@ std_data(data, to_standardize)
 \item{data}{A data frame or similar
 object.}
 
-\item{to_standardized}{A character
+\item{to_standardize}{A character
 vector of the column names of
 variables to be standardized.}
 }

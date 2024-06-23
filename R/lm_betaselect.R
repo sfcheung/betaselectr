@@ -300,7 +300,7 @@ lm_betaselect <- function(...,
 #' @param data A data frame or similar
 #' object.
 #'
-#' @param to_standardized A character
+#' @param to_standardize A character
 #' vector of the column names of
 #' variables to be standardized.
 #'

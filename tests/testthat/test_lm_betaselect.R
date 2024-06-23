@@ -19,7 +19,7 @@ lm_zxzw  <- lm(dv ~ iv*mod + cov1 + cat1, transform0(dat, c("iv", "mod")))
 lm_zxzy  <- lm(dv ~ iv*mod + cov1 + cat1, transform0(dat, c("iv", "dv")))
 lm_zyzw  <- lm(dv ~ iv*mod + cov1 + cat1, transform0(dat, c("dv", "mod")))
 lm_zall  <- lm(dv ~ iv*mod + cov1 + cat1, transform0(dat, c("iv", "dv", "mod", "cov1")))
-lm_inline  <- lm(dv ~ iv*mod + I(sqrt(cov1)) + cat1, transform0(dat, c("iv", "dv", "mod")))
+lm_inline  <- lm(dv ~ I(iv^2)*mod + I(1 / cov1) + cat1, transform0(dat, c("iv", "dv", "mod", "cov1")))
 
 dat_tmp <- dat
 dat_tmp$iv <- scale(dat$iv, scale = FALSE, center = TRUE)[, 1]
@@ -33,6 +33,7 @@ lm_beta_xw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("
 lm_beta_yw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("mod", "dv"), do_boot = FALSE)
 lm_beta_xy <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, to_standardize = c("iv", "dv"), do_boot = FALSE)
 lm_beta_xyw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, dat, do_boot = FALSE)
+lm_beta_inline <- lm_betaselect(dv ~ I(iv^2)*mod + I(1/ cov1) + cat1, dat, do_boot = FALSE)
 
 test_that("Standardize x", {
     expect_equal(
@@ -79,6 +80,13 @@ test_that("Standardize yw", {
 test_that("Standardize x, y, and w", {
     expect_equal(
         coef(lm_beta_xyw), coef(lm_zall),
+        ignore_attr = TRUE
+      )
+  })
+
+test_that("Inline terms", {
+    expect_equal(
+        coef(lm_beta_inline), coef(lm_inline),
         ignore_attr = TRUE
       )
   })

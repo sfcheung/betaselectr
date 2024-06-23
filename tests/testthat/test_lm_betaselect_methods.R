@@ -20,6 +20,15 @@ lm_beta_yw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_sta
 lm_beta_xy <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = c("iv", "dv"), do_boot = FALSE)
 lm_beta_xyw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, do_boot = FALSE)
 lm_beta_inline <- lm_betaselect(dv ~ I(iv^2)*mod + I(1/ cov1) + cat1, data_test_mod_cat, do_boot = FALSE)
+lm_beta_xyw_boot <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, do_boot = TRUE, bootstrap = 100, iseed = 1234, progress = FALSE)
+
+set.seed(1234)
+n <- nrow(data_test_mod_cat)
+i <- replicate(100, sample(n, size = n, replace = TRUE), simplify = FALSE)
+tmp <- sapply(i, function(xx) {
+          coef(lm(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat[xx, ]))
+        })
+vcov_raw_chk <- cov(t(tmp))
 
 test_that("coef", {
     expect_identical(lm_beta_x$coefficients,
@@ -34,4 +43,16 @@ test_that("coef", {
                      coef(lm_beta_inline))
     expect_identical(lm_inline_raw$coefficients,
                      coef(lm_beta_inline, type = "raw"))
+  })
+
+test_that("vcov", {
+    expect_error(vcov(lm_beta_x))
+    expect_warning(vcov(lm_beta_x, method = "ls"))
+    expect_equal(vcov(lm_beta_xyw_boot, method = "boot"),
+                 vcov(lm_beta_xyw_boot))
+    expect_warning(vcov(lm_beta_xyw_boot, method = "ls"),)
+    expect_equal(vcov(lm_beta_xyw_boot, method = "ls", type = "raw"),
+                 vcov(lm_raw))
+    expect_equal(vcov(lm_beta_xyw_boot, method = "boot", type = "raw"),
+                 vcov_raw_chk)
   })

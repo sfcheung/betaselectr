@@ -2,6 +2,7 @@
 
 S3method(coef,lm_betaselect)
 S3method(print,lav_betaselect)
+S3method(vcov,lm_betaselect)
 export(lav_betaselect)
 export(lm_betaselect)
 export(std_data)

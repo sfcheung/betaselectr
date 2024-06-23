@@ -399,5 +399,7 @@ lm_boot <- function(lm_args,
               )
           }
       }
+    attr(boot_out,
+         "boot_idx") <- boot_idx
     return(boot_out)
   }

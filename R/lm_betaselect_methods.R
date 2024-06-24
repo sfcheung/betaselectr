@@ -203,3 +203,190 @@ vcov.lm_betaselect <- function(object,
           }
       }
   }
+
+#' @title Confidence Interval for a
+#' 'lm_betaselect'-Class Object
+#'
+#' @description Return the confidence
+#' interval of the regression
+#' coefficients in the output of
+#' [lm_betaselect()].
+#'
+#' @details
+#' The type of
+#' confidence intervals depends
+#' on the object. If bootstrapping
+#' was requested, by default it returns
+#' the percentile bootstrap confidence
+#' intervals. Otherwise, it returns the
+#' OLS (or WLS) confidence intervals
+#' and raises a warning for the
+#' standardized solution.
+#'
+#' Support for other type of
+#' confidence intervals will be
+#' added.
+#'
+#' @return
+#' A *p* by 2 matrix of the confidence
+#' intervals, *p* being the number
+#' of coefficients.
+#'
+#' @param object The output of xxx.
+#'
+#' @param parm The terms for which
+#' the confidence intervals are returned.
+#' If missing, the confidence intervals
+#' of all terms will be returned.
+#'
+#' @param level The level of confidence,
+#' default is .95, returning the 95%
+#' confidence interval.
+#'
+#' @param method The method used to
+#' compute the confidence intervals/
+#' If bootstrapping was
+#' requested when calling
+#' [lm_betaselect()] and this argument
+#' is set to `"bootstrap"` or `"boot"`,
+#' the bootstrap confidence intervals
+#' are returned. If bootstrapping
+#' was not requested or if this argument
+#' is set to `"ls"`, then the usual `lm`
+#' confidence intervals are
+#' returned, with a warning raised
+#' unless `type` is `"raw"` or
+#' `"unstandardized".`
+#' Default is `"boot"`.
+#'
+#' @param type String. If
+#' `"unstandardized"` or `"raw"`, the
+#' confidence intervals of the
+#' coefficients *before* standardization
+#' are returned. If `"beta"` or
+#' `"standardized"`, then the
+#' confidence intervals of the
+#' coefficients *after* selected
+#' variables standardized are returned.
+#' Default is `"beta"`.
+#'
+#' @param warn Logical. Whether a warning
+#' will be raised is OLS (or WLS)
+#' confidence intervals are
+#' requested for the model with some
+#' variables standardized (i.e., `type`
+#' is `"beta"` or `"standardized"`).
+#' Default is `TRUE`.
+#'
+#' @param boot_type The type of
+#' bootstrap confidence intervals.
+#' Currently, only support `"perc"`,
+#' percentile bootstrap confidence
+#' intervals.
+#'
+#' @param ...  Optional arguments.
+#' Ignored.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' # bootstrap should be set to 2000 or 5000 in real studies
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv",
+#'                            do_boot = TRUE,
+#'                            bootstrap = 100,
+#'                            iseed = 1234)
+#' confint(lm_beta_x)
+#' confint(lm_beta_x, method = "ls")
+#' confint(lm_beta_x, type = "raw")
+#'
+#' @export
+
+confint.lm_betaselect <- function(object,
+                                  parm,
+                                  level = .95,
+                                  method = c("boot", "bootstrap", "ls"),
+                                  type = c("beta",
+                                           "standardized",
+                                           "raw",
+                                           "unstandardized"),
+                                  warn = TRUE,
+                                  boot_type = "perc",
+                                  ...) {
+    method <- match.arg(method)
+    type <- match.arg(type)
+    boot_type <- match.arg(boot_type)
+    if (method %in% c("boot", "bootstrap")) {
+        method <- "boot"
+      }
+    if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
+        stop("Bootstrap estimates not available. Maybe bootstrapping not requested?")
+      }
+    if (type %in% c("beta", "standardized")) {
+        if (method %in% c("boot", "bootstrap")) {1
+browser()
+            # TODO:
+            # - Work-in-progress. Not ready.
+            boot_out <- object$lm_betaselect$boot_out
+            boot_idx <- attr(boot_out, "boot_idx")
+            boot_est <- sapply(boot_out, function(x) {
+                            x$coef_std
+                          })
+            boot_est <- t(boot_est)
+            est <- stats::coef(object,
+                               type = type)
+            out <- boot_ci(est = est,
+                           boot_est = boot_est,
+                           type = boot_type,
+                           boot_idx = boot_idx)
+            return(out)
+          } else {
+            if (warn) {
+                warning("With standardization, the variance-covariance matrix ",
+                        "using OLS or WLS should not be used.")
+              }
+            NextMethod()
+          }
+      } else {
+        if (method %in% c("boot", "bootstrap")) {
+            boot_out <- object$lm_betaselect$boot_out
+            boot_est <- sapply(boot_out, function(x) {
+                            x$coef_ustd
+                          })
+            out <- stats::cov(t(boot_est))
+            return(out)
+          } else {
+            out <- stats::vcov(object$lm_betaselect$ustd)
+            return(out)
+          }
+      }
+  }
+
+#' @noRd
+
+boot_ci <- function(est,
+                    boot_est,
+                    type,
+                    boot_idx) {
+    # TODO:
+    # - Form bootstrap CI
+    p <- length(est)
+    tmp <- list(t = boot_est,
+                t0 = est,
+                R = nrow(boot_est))
+    out <- lapply(seq_len(p),
+                  function(x) {
+                      boot::boot.ci(boot.out = tmp,
+                                    conf = level,
+                                    type = boot_type,
+                                    index = x)$percent[4:5]
+                    })
+    out <- do.call(rbind, out)
+    rownames(out) <- names(est)
+  }

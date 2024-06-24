@@ -232,7 +232,8 @@ vcov.lm_betaselect <- function(object,
 #' intervals, *p* being the number
 #' of coefficients.
 #'
-#' @param object The output of xxx.
+#' @param object The output of
+#' [lm_betaselect()].
 #'
 #' @param parm The terms for which
 #' the confidence intervals are returned.
@@ -392,6 +393,74 @@ confint.lm_betaselect <- function(object,
                                   level = level)
             return(out)
           }
+      }
+  }
+
+#' @title ANOVA Tables for a
+#' 'lm_betaselect'-Class Object
+#'
+#' @description Return the analysis
+#' of variance tables for
+#' the outputs of
+#' [lm_betaselect()].
+#'
+#' @details
+#' By default, it calls [stats::anova()]
+#' on the results with selected variables
+#' standardized. By setting
+#'
+#' @return
+#' A *p* by 2 matrix of the confidence
+#' intervals, *p* being the number
+#' of coefficients.
+#'
+#' @param object The output of
+#' [lm_betaselect()].
+#'
+#' @param ...  Additional outputs
+#' of [lm_betaselect()].
+#'
+#' @param type String. If
+#' `"unstandardized"` or `"raw"`, the
+#' output *before* standardization
+#' are used If `"beta"` or
+#' `"standardized"`, then the
+#' output *after* selected
+#' variables standardized are returned.
+#' Default is `"beta"`.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv",
+#'                            do_boot = FALSE)
+#' anova(lm_beta_x)
+#' anova(lm_beta_x, type = "raw")
+#'
+#' @export
+
+anova.lm_betaselect <- function(object,
+                                ...,
+                                type = c("beta",
+                                          "standardized",
+                                          "raw",
+                                          "unstandardized")) {
+    type <- match.arg(type)
+    if (type %in% c("beta", "standardized")) {
+        NextMethod()
+      } else {
+        objects <- c(list(object), list(...))
+        ustds <- lapply(objects, function(x) x$lm_betaselect$ustd)
+        out <- do.call(stats::anova,
+                       ustds)
+        return(out)
       }
   }
 

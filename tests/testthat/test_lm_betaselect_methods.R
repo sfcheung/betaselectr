@@ -8,12 +8,13 @@ dat_tmp$iv <- scale(data_test_mod_cat$iv, scale = FALSE, center = TRUE)[, 1]
 dat_tmp$mod <- scale(data_test_mod_cat$mod, scale = sd(data_test_mod_cat$mod), center = FALSE)[, 1]
 
 lm_raw <- lm(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat)
+lm_raw2 <- lm(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat)
 lm_inline_raw <- lm(dv ~ I(iv^2)*mod + I(1/ cov1) + cat1,
                     data_test_mod_cat)
 
 
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
-lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_x2 <- lm_betaselect(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
 lm_beta_y <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "dv", do_boot = FALSE)
 lm_beta_w <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "mod", do_boot = FALSE)
 lm_beta_xw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = c("mod", "iv"), do_boot = FALSE)
@@ -80,4 +81,15 @@ test_that("confint", {
                  confint(lm_raw, level = .75, parm = "iv"))
     expect_equal(as.vector(confint(lm_beta_xyw_boot, method = "boot", type = "raw", parm = "mod", level = .90)),
                  boot.ci(lm_raw_boot, type = "perc", index = 3, conf = .90)$perc[4:5])
+  })
+
+test_that("anova", {
+    expect_equal(anova(lm_beta_x),
+                 anova(lm_raw))
+    expect_equal(anova(lm_beta_x, lm_beta_x2),
+                 anova(lm_raw, lm_raw2))
+    expect_equal(anova(lm_beta_xyw, type = "raw"),
+                 anova(lm_raw))
+    expect_equal(anova(lm_beta_x, lm_beta_x2, type = "raw"),
+                 anova(lm_raw, lm_raw2))
   })

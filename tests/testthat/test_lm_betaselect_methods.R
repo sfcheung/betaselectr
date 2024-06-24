@@ -109,3 +109,16 @@ test_that("summary", {
                  confint(lm_beta_xyw_boot, level = .90, method = "ls", warn = FALSE),
                  ignore_attr = TRUE)
   })
+
+test_that("print.summary", {
+    expect_output(print(summary(lm_beta_x, type = "raw", se_method = "lm")),
+                  "*before*", fixed = TRUE)
+    expect_output(print(summary(lm_beta_x, type = "beta", se_method = "lm")),
+                  "should not be used", fixed = TRUE)
+    expect_output(print(summary(lm_beta_xyw_boot)),
+                  "asymmetric", fixed = TRUE)
+    expect_output(print(summary(lm_beta_xyw_boot, ci = TRUE, level = .90)),
+                  "Percentile", fixed = TRUE)
+    expect_output(print(summary(lm_beta_xyw_boot, ci = TRUE, se_method = "lm", level = .90)),
+                  "should not be used")
+  })

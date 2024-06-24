@@ -543,7 +543,8 @@ anova.lm_betaselect <- function(object,
 #' of *p*-values if `se_method` is
 #' `"boot"` or `"bootstrap"`. If `"norm"`,
 #' then the *z* score is used to compute
-#' the *p*-value using a normal distribution.
+#' the *p*-value using a
+#' standard normal distribution.
 #' If `"asymmetric"`, the default, then
 #' the method presented in
 #' Asparouhov and Muthén (2021) is used
@@ -634,15 +635,17 @@ summary.lm_betaselect <- function(object,
       }
     out$lm_betaselect$summary_call <- match.call()
     out$lm_betaselect$call <- object$lm_betaselect$call
-    out$lm_betaselect$to_standardized <- object$lm_betaselect$to_standardized
+    out$lm_betaselect$to_standardize <- object$lm_betaselect$to_standardize
     out$lm_betaselect$se_method <- se_method
     out$lm_betaselect$ci <- ci
+    out$lm_betaselect$level <- level
     out$lm_betaselect$boot_type <- boot_type
     out$lm_betaselect$type <- type
     out$lm_betaselect$boot_pvalue_type <- boot_pvalue_type
     class(out) <- c("summary.lm_betaselect", class(out))
     if (se_method == "boot") {
         boot_out <- object$lm_betaselect$boot_out
+        out$lm_betaselect$bootstrap <- length(boot_out)
         boot_est <- sapply(boot_out, function(x) {
                         x$coef_std
                       })
@@ -689,3 +692,247 @@ summary.lm_betaselect <- function(object,
     out
   }
 
+#' @details
+#' The `print` method of
+#' `summary.lm_betaselect`-class objects
+#' is adapted from
+#' [stdmod::print.summary.std_selected()].
+#'
+#' @return
+#' The `print`-method of
+#' `summary.lm_betaselect` is called
+#' for its side effect. The object `x`
+#' is returned invisibly.
+#'
+#' @param x The output of
+#' [summary.lm_betaselect()].
+#'
+#' @param est_digits The number of
+#' digits after the decimal to be
+#' displayed for the coefficient
+#' estimates, their standard errors, and
+#' confidence intervals (if present).
+#' Note that the values will be rounded
+#' to this number of digits before
+#' printing. If all digits at this
+#' position are zero for all values, the
+#' values may be displayed with fewer
+#' digits. Note that the coefficient
+#' table is printed by
+#' [stats::printCoefmat()]. If some
+#' numbers are vary large, the number of
+#' digits after the decimal may be
+#' smaller than `est_digits` due to a
+#' limit on the column width. This value
+#' also determines the number of digits
+#' for displayed R-squared.
+#'
+#' @param signif.stars Whether "stars"
+#' (asterisks) are printed to denote
+#' the level of significance achieved
+#' for each coefficient. Default is
+#' `TRUE`.
+#'
+#' @param tz_digits The number of digits
+#' after the decimal to be displayed for
+#' the *t* or similar statistic (in the
+#' column `"t value"` or `"z value"`).
+#' This value also determines the number
+#' of digits for the *F* statistic for
+#' the R-squared.
+#'
+#' @param pvalue_less_than If a
+#' *p*-value is less than this value, it
+#' will be displayed with `"<(this
+#' value)".` For example, if
+#' `pvalue_less_than` is .001, the
+#' default, *p*-values less than .001
+#' will be displayed as `<.001`. This
+#' value also determines the printout of
+#' the *p*-value of the *F* statistic.
+#' (This argument does what `eps.Pvalue`
+#' does in [stats::printCoefmat()].)
+#'
+#'
+#' @describeIn summary.lm_betaselect The `print`-method for the output of the `summary` method of `lm_betaselect` objects.
+#'
+#' @export
+
+print.summary.lm_betaselect <- function(x,
+                                        est_digits = 3,
+                                        symbolic.cor = x$symbolic.cor,
+                                        signif.stars = getOption("show.signif.stars"),
+                                        tz_digits = 3,
+                                        pvalue_less_than = .001,
+                                        ...) {
+    cat("Call to lm_betaselect():\n")
+    print(x$lm_betaselect$call)
+    to_standardize <- x$lm_betaselect$to_standardize
+    type <- x$lm_betaselect$type
+            level <- x$lm_betaselect$level
+            level_str <- paste0(formatC(level * 100, digits = 1,
+                                        format = "f"),
+                                "%")
+    if (length(to_standardize) > 0) {
+        tmp <- paste(to_standardize, collapse = ", ")
+        tmp <- strwrap(tmp)
+      } else {
+        tmp <- "[Nil]"
+      }
+    cat("\nVariable(s) standardized:",
+        tmp, "\n")
+
+    x_rsq <- x$r.squared
+    x_rsq_adj <- x$adj.r.squared
+    x_fstatistic <- x$fstatistic
+    x$coefficients[, "Estimate"] <- round(x$coefficients[, "Estimate"], est_digits)
+    x$coefficients[, "Std. Error"] <- round(x$coefficients[, "Std. Error"], est_digits)
+    if (x$lm_betaselect$ci) {
+        x$coefficients[, "CI.Lower"] <- round(x$coefficients[, "CI.Lower"], est_digits)
+        x$coefficients[, "CI.Upper"] <- round(x$coefficients[, "CI.Upper"], est_digits)
+      }
+    i <- match(c("t value", "z value"), colnames(x$coefficients))
+    i <- i[!is.na(i)]
+    x$coefficients[, i] <- round(x$coefficients[, i], tz_digits)
+    x$fstatistic <- NULL
+    NextMethod(eps.Pvalue = pvalue_less_than,
+              dig.tst = tz_digits)
+
+    cat(format_rsq(rsq = x_rsq,
+                   rsq_adj = x_rsq_adj,
+                   digits = est_digits), sep = "\n")
+    print_fstatistic(x_fstatistic,
+                      f_digits = tz_digits,
+                      p_digits = ceiling(-log10(pvalue_less_than)))
+    cat("\n")
+
+    tmp <- character(0)
+    tmp <- c(tmp, "Note:")
+    tmp <- c(tmp,
+             strwrap(switch(type,
+                beta = "- Results *after* standardization are reported.",
+                raw = "- Results *before* standardization are reported."),
+                exdent = 2))
+    if (x$lm_betaselect$se_method == "boot") {
+        tmp <- c(tmp,
+                 strwrap("- Nonparametric bootstrapping conducted.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap(paste0("- The number of bootstrap samples is ",
+                                x$lm_betaselect$bootstrap, "."),
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- Standard errors are bootstrap standard errors.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- Z values are computed by 'Estimate / Std. Error'.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap(switch(x$lm_betaselect$boot_pvalue_type,
+                           asymmetric = "- The bootstrap p-values are asymmetric p-values by Asparouhov and Muth\u00e9n (2021).",
+                           norm = "- The bootstrap p-values are based on standard normal distribution using z values."),
+                         exdent = 2))
+        if (x$lm_betaselect$ci) {
+            boot_type_str <- switch(x$lm_betaselect$boot_type,
+                               perc = "Percentile",
+                               bc = "Bias-corrected")
+            tmp <- c(tmp,
+                     strwrap(paste0("- ",
+                                   boot_type_str,
+                                   " bootstrap ",
+                                   level_str,
+                                   " confidence interval reported."),
+                             exdent = 2))
+          }
+      } else {
+        # se_method == "ls"
+        tmp <- c(tmp,
+                 strwrap("- Standard errors are least-squares standard errors.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- T values are computed by 'Estimate / Std. Error'.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- P-values are usual t-test p-values.",
+                         exdent = 2))
+        if ((length(to_standardize) > 0) &&
+            type == "beta") {
+            tmp <- c(tmp,
+                     strwrap(paste0("- Least squares standard errors, t values, p-values, and confidence intervals (if reported) ",
+                                    "should not be used for coefficients involved in standardization."),
+                            exdent = 2))
+          }
+        if (x$lm_betaselect$ci) {
+            tmp <- c(tmp,
+                     strwrap(paste0("- ",
+                                    "Least squares ",
+                                    level_str,
+                                    " confidence interval reported."),
+                             exdent = 2))
+          }
+      }
+    cat(tmp, sep = "\n")
+    invisible(x)
+  }
+
+
+#' @noRd
+# Copied from stdmod
+
+format_pvalue <- function(p,
+                          eps = 1e-3) {
+    p_digits <- ceiling(-log10(eps))
+    if (p < eps) {
+        return(paste0("< ",
+               formatC(eps,
+                       digits = p_digits,
+                       format = "f")))
+      } else {
+        return(formatC(p,
+                       digits = p_digits,
+                       format = "f"))
+      }
+  }
+
+
+#' @noRd
+# Copied from stdmod
+
+format_rsq <- function(rsq, rsq_adj,
+                       digits = 4) {
+    x1 <- c("R-squared",
+            "Adjusted R-squared")
+    x2 <- formatC(c(rsq, rsq_adj),
+                  digits = digits,
+                  format = "f")
+    x1max <- max(nchar(x1))
+    i <- which(nchar(x1) != x1max)
+    x1[i] <- paste0(x1[i],
+                    paste0(rep(" ", x1max - nchar(x1[1])),
+                           collapse = ""))
+    paste0(x1, "       : ", x2)
+  }
+
+#' @noRd
+# Copied from stdmod
+
+#' @noRd
+
+print_fstatistic <- function(fstatistic,
+                             f_digits = 4,
+                             p_digits = 3) {
+     f <- fstatistic["value"]
+     df1 <- fstatistic["numdf"]
+     df2 <- fstatistic["dendf"]
+     f_txt <- paste0("F(",
+                     df1, ", ", df2, ") = ",
+                     round(f, f_digits))
+     p <- stats::pf(f, df1, df2, lower.tail = FALSE)
+     p_txt <- format_pvalue(p,
+                            eps = 10^(-p_digits))
+     if (!grepl("^<", p_txt)) {
+        p_txt <- paste0("= ", p_txt)
+       }
+     cat("ANOVA test of R-squared : ",
+         f_txt, ", p ", p_txt, "\n", sep = "")
+  }

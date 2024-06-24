@@ -2,6 +2,7 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{summary.lm_betaselect}
 \alias{summary.lm_betaselect}
+\alias{print.summary.lm_betaselect}
 \title{Summary of a
 'lm_betaselect'-Class Object}
 \usage{
@@ -15,6 +16,16 @@
   boot_type = c("perc", "bc"),
   boot_pvalue_type = c("asymmetric", "norm"),
   type = c("beta", "standardized", "raw", "unstandardized"),
+  ...
+)
+
+\method{print}{summary.lm_betaselect}(
+  x,
+  est_digits = 3,
+  symbolic.cor = x$symbolic.cor,
+  signif.stars = getOption("show.signif.stars"),
+  tz_digits = 3,
+  pvalue_less_than = 0.001,
   ...
 )
 }
@@ -71,7 +82,8 @@ bootstrap confidence interval.}
 of \emph{p}-values if \code{se_method} is
 \code{"boot"} or \code{"bootstrap"}. If \code{"norm"},
 then the \emph{z} score is used to compute
-the \emph{p}-value using a normal distribution.
+the \emph{p}-value using a
+standard normal distribution.
 If \code{"asymmetric"}, the default, then
 the method presented in
 Asparouhov and Muthén (2021) is used
@@ -89,6 +101,54 @@ Default is \code{"beta"}.}
 
 \item{...}{Additional arguments
 passed to other methods.}
+
+\item{x}{The output of
+\code{\link[=summary.lm_betaselect]{summary.lm_betaselect()}}.}
+
+\item{est_digits}{The number of
+digits after the decimal to be
+displayed for the coefficient
+estimates, their standard errors, and
+confidence intervals (if present).
+Note that the values will be rounded
+to this number of digits before
+printing. If all digits at this
+position are zero for all values, the
+values may be displayed with fewer
+digits. Note that the coefficient
+table is printed by
+\code{\link[stats:printCoefmat]{stats::printCoefmat()}}. If some
+numbers are vary large, the number of
+digits after the decimal may be
+smaller than \code{est_digits} due to a
+limit on the column width. This value
+also determines the number of digits
+for displayed R-squared.}
+
+\item{signif.stars}{Whether "stars"
+(asterisks) are printed to denote
+the level of significance achieved
+for each coefficient. Default is
+\code{TRUE}.}
+
+\item{tz_digits}{The number of digits
+after the decimal to be displayed for
+the \emph{t} or similar statistic (in the
+column \code{"t value"} or \code{"z value"}).
+This value also determines the number
+of digits for the \emph{F} statistic for
+the R-squared.}
+
+\item{pvalue_less_than}{If a
+\emph{p}-value is less than this value, it
+will be displayed with \verb{"<(this value)".} For example, if
+\code{pvalue_less_than} is .001, the
+default, \emph{p}-values less than .001
+will be displayed as \verb{<.001}. This
+value also determines the printout of
+the \emph{p}-value of the \emph{F} statistic.
+(This argument does what \code{eps.Pvalue}
+does in \code{\link[stats:printCoefmat]{stats::printCoefmat()}}.)}
 }
 \value{
 It returns an object of class
@@ -97,6 +157,11 @@ similar to the output of
 \code{\link[stats:summary.lm]{stats::summary.lm()}}, with additional
 information on the standardization
 and bootstrapping, if requested.
+
+The \code{print}-method of
+\code{summary.lm_betaselect} is called
+for its side effect. The object \code{x}
+is returned invisibly.
 }
 \description{
 The \code{summary} method
@@ -110,7 +175,17 @@ standardized. By setting \code{type} to
 \code{"raw"} or \code{"unstandardized"}, it
 return the summary for the results
 \emph{before} standardization.
+
+The \code{print} method of
+\code{summary.lm_betaselect}-class objects
+is adapted from
+\code{\link[stdmod:print.summary.std_selected]{stdmod::print.summary.std_selected()}}.
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{print(summary.lm_betaselect)}: The \code{print}-method for the output of the \code{summary} method of \code{lm_betaselect} objects.
+
+}}
 \section{Functions}{
 \itemize{
 \item \code{summary(lm_betaselect)}: The summary method for a \code{lm_betaselect}-class object.

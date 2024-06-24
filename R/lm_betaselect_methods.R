@@ -588,7 +588,7 @@ anova.lm_betaselect <- function(object,
 #' summary(lm_beta_x, boot_pvalue_type = "norm")
 #' summary(lm_beta_x, type = "raw")
 #'
-#' @describeIn summary.lm_betaselect The summary method for a `lm_betaselect`-class object.
+#' @rdname summary.lm_betaselect
 #'
 #' @export
 
@@ -754,7 +754,7 @@ summary.lm_betaselect <- function(object,
 #' does in [stats::printCoefmat()].)
 #'
 #'
-#' @describeIn summary.lm_betaselect The `print`-method for the output of the `summary` method of `lm_betaselect` objects.
+#' @rdname summary.lm_betaselect
 #'
 #' @export
 
@@ -915,8 +915,6 @@ format_rsq <- function(rsq, rsq_adj,
 
 #' @noRd
 # Copied from stdmod
-
-#' @noRd
 
 print_fstatistic <- function(fstatistic,
                              f_digits = 4,

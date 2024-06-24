@@ -181,16 +181,6 @@ The \code{print} method of
 is adapted from
 \code{\link[stdmod:print.summary.std_selected]{stdmod::print.summary.std_selected()}}.
 }
-\section{Methods (by generic)}{
-\itemize{
-\item \code{print(summary.lm_betaselect)}: The \code{print}-method for the output of the \code{summary} method of \code{lm_betaselect} objects.
-
-}}
-\section{Functions}{
-\itemize{
-\item \code{summary(lm_betaselect)}: The summary method for a \code{lm_betaselect}-class object.
-
-}}
 \examples{
 
 data(data_test_mod_cat)

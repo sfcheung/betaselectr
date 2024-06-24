@@ -24,9 +24,10 @@ variables standardized are returned.
 Default is \code{"beta"}.}
 }
 \value{
-A \emph{p} by 2 matrix of the confidence
-intervals, \emph{p} being the number
-of coefficients.
+It returns an object of class
+\code{anova}, which is identical to
+the output of \code{\link[=stats:anova]{stats:anova()}} in
+structure.
 }
 \description{
 Return the analysis
@@ -37,7 +38,10 @@ the outputs of
 \details{
 By default, it calls \code{\link[stats:anova]{stats::anova()}}
 on the results with selected variables
-standardized. By setting
+standardized. By setting \code{type} to
+\code{"raw"} or \code{"unstandardized"}, it
+calls \code{\link[stats:anova]{stats::anova()}} on the results
+\emph{before} standardization.
 }
 \examples{
 

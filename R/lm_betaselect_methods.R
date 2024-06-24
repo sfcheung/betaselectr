@@ -407,12 +407,16 @@ confint.lm_betaselect <- function(object,
 #' @details
 #' By default, it calls [stats::anova()]
 #' on the results with selected variables
-#' standardized. By setting
+#' standardized. By setting `type` to
+#' `"raw"` or `"unstandardized"`, it
+#' calls [stats::anova()] on the results
+#' *before* standardization.
 #'
 #' @return
-#' A *p* by 2 matrix of the confidence
-#' intervals, *p* being the number
-#' of coefficients.
+#' It returns an object of class
+#' `anova`, which is identical to
+#' the output of [stats:anova()] in
+#' structure.
 #'
 #' @param object The output of
 #' [lm_betaselect()].

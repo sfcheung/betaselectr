@@ -1,6 +1,7 @@
 # Adapted from stdmod
 
 library(testthat)
+library(boot)
 
 dat_tmp <- data_test_mod_cat
 dat_tmp$iv <- scale(data_test_mod_cat$iv, scale = FALSE, center = TRUE)[, 1]
@@ -29,6 +30,14 @@ tmp <- sapply(i, function(xx) {
           coef(lm(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat[xx, ]))
         })
 vcov_raw_chk <- cov(t(tmp))
+set.seed(1234)
+lm_raw_boot <- boot(data_test_mod_cat,
+                    function(d, i) {
+                        coef(lm(dv ~ iv*mod + cov1 + cat1, d[i, ]))
+                      },
+                    R = 100,
+                    simple = TRUE)
+
 
 test_that("coef", {
     expect_identical(lm_beta_x$coefficients,
@@ -55,4 +64,20 @@ test_that("vcov", {
                  vcov(lm_raw))
     expect_equal(vcov(lm_beta_xyw_boot, method = "boot", type = "raw"),
                  vcov_raw_chk)
+  })
+
+
+test_that("confint", {
+    expect_error(confint(lm_beta_x))
+    expect_warning(confint(lm_beta_x, method = "ls"))
+    expect_equal(confint(lm_beta_xyw_boot, method = "boot", level = .80,
+                         parm = c("(Intercept)", "cat1gp2")),
+                 confint(lm_beta_xyw_boot, level = .80,
+                         parm = c("(Intercept)", "cat1gp2")))
+    expect_warning(confint(lm_beta_xyw_boot, method = "ls"),)
+    expect_equal(confint(lm_beta_xyw_boot, method = "ls", type = "raw",
+                 level = .75, parm = "iv"),
+                 confint(lm_raw, level = .75, parm = "iv"))
+    expect_equal(as.vector(confint(lm_beta_xyw_boot, method = "boot", type = "raw", parm = "mod", level = .90)),
+                 boot.ci(lm_raw_boot, type = "perc", index = 3, conf = .90)$perc[4:5])
   })

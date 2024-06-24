@@ -323,6 +323,9 @@ confint.lm_betaselect <- function(object,
     method <- match.arg(method)
     type <- match.arg(type)
     boot_type <- match.arg(boot_type)
+    if (missing(parm)) {
+        parm <- stats::variable.names(object)
+      }
     if (method %in% c("boot", "bootstrap")) {
         method <- "boot"
       }
@@ -333,16 +336,14 @@ confint.lm_betaselect <- function(object,
         if (method %in% c("boot", "bootstrap")) {1
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
-            boot_est <- sapply(boot_out, function(x) {
-                            x$coef_std
+            boot_est <- lapply(parm, function(y) {
+                            out <- sapply(boot_out, function(x) {
+                                      x$coef_ustd[y]
+                                    })
+                            out
                           })
-            boot_est <- t(boot_est)
-            boot_est <- lapply(seq_len(ncol(boot_est)),
-                                function(x) {
-                                    boot_est[, x, drop = FALSE]
-                                  })
             est <- stats::coef(object,
-                               type = type)
+                               type = type)[parm]
             out <- mapply(boot_ci_internal,
                           t0 = est,
                           t = boot_est,
@@ -357,22 +358,25 @@ confint.lm_betaselect <- function(object,
                 warning("With standardization, the variance-covariance matrix ",
                         "using OLS or WLS should not be used.")
               }
-            NextMethod()
+            class(object) <- "lm"
+            out <- stats::confint(object,
+                                  parm = parm,
+                                  level = level,
+                                  ...)
+            return(out)
           }
       } else {
         if (method %in% c("boot", "bootstrap")) {
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
-            boot_est <- sapply(boot_out, function(x) {
-                            x$coef_ustd
+            boot_est <- lapply(parm, function(y) {
+                            out <- sapply(boot_out, function(x) {
+                                      x$coef_ustd[y]
+                                    })
+                            out
                           })
-            boot_est <- t(boot_est)
-            boot_est <- lapply(seq_len(ncol(boot_est)),
-                                function(x) {
-                                    boot_est[, x, drop = FALSE]
-                                  })
             est <- stats::coef(object,
-                               type = type)
+                               type = type)[parm]
             out <- mapply(boot_ci_internal,
                           t0 = est,
                           t = boot_est,
@@ -383,7 +387,9 @@ confint.lm_betaselect <- function(object,
             out <- do.call(rbind, out)
             return(out)
           } else {
-            out <- stats::confint(object$lm_betaselect$ustd)
+            out <- stats::confint(object$lm_betaselect$ustd,
+                                  parm = parm,
+                                  level = level)
             return(out)
           }
       }

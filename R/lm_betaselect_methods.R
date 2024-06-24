@@ -280,9 +280,10 @@ vcov.lm_betaselect <- function(object,
 #'
 #' @param boot_type The type of
 #' bootstrap confidence intervals.
-#' Currently, only support `"perc"`,
+#' Currently, it supports `"perc"`,
 #' percentile bootstrap confidence
-#' intervals.
+#' intervals, and `"bc"`, bias-corrected
+#' bootstrap confidence interval.
 #'
 #' @param ...  Optional arguments.
 #' Ignored.
@@ -317,7 +318,7 @@ confint.lm_betaselect <- function(object,
                                            "raw",
                                            "unstandardized"),
                                   warn = TRUE,
-                                  boot_type = "perc",
+                                  boot_type = c("perc", "bc"),
                                   ...) {
     method <- match.arg(method)
     type <- match.arg(type)
@@ -330,21 +331,26 @@ confint.lm_betaselect <- function(object,
       }
     if (type %in% c("beta", "standardized")) {
         if (method %in% c("boot", "bootstrap")) {1
-browser()
-            # TODO:
-            # - Work-in-progress. Not ready.
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- sapply(boot_out, function(x) {
                             x$coef_std
                           })
             boot_est <- t(boot_est)
+            boot_est <- lapply(seq_len(ncol(boot_est)),
+                                function(x) {
+                                    boot_est[, x, drop = FALSE]
+                                  })
             est <- stats::coef(object,
                                type = type)
-            out <- boot_ci(est = est,
-                           boot_est = boot_est,
-                           type = boot_type,
-                           boot_idx = boot_idx)
+            out <- mapply(boot_ci_internal,
+                          t0 = est,
+                          t = boot_est,
+                          level = level,
+                          boot_type = boot_type,
+                          add_names = TRUE,
+                          SIMPLIFY = FALSE)
+            out <- do.call(rbind, out)
             return(out)
           } else {
             if (warn) {
@@ -356,37 +362,30 @@ browser()
       } else {
         if (method %in% c("boot", "bootstrap")) {
             boot_out <- object$lm_betaselect$boot_out
+            boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- sapply(boot_out, function(x) {
                             x$coef_ustd
                           })
-            out <- stats::cov(t(boot_est))
+            boot_est <- t(boot_est)
+            boot_est <- lapply(seq_len(ncol(boot_est)),
+                                function(x) {
+                                    boot_est[, x, drop = FALSE]
+                                  })
+            est <- stats::coef(object,
+                               type = type)
+            out <- mapply(boot_ci_internal,
+                          t0 = est,
+                          t = boot_est,
+                          level = level,
+                          boot_type = boot_type,
+                          add_names = TRUE,
+                          SIMPLIFY = FALSE)
+            out <- do.call(rbind, out)
             return(out)
           } else {
-            out <- stats::vcov(object$lm_betaselect$ustd)
+            out <- stats::confint(object$lm_betaselect$ustd)
             return(out)
           }
       }
   }
 
-#' @noRd
-
-boot_ci <- function(est,
-                    boot_est,
-                    type,
-                    boot_idx) {
-    # TODO:
-    # - Form bootstrap CI
-    p <- length(est)
-    tmp <- list(t = boot_est,
-                t0 = est,
-                R = nrow(boot_est))
-    out <- lapply(seq_len(p),
-                  function(x) {
-                      boot::boot.ci(boot.out = tmp,
-                                    conf = level,
-                                    type = boot_type,
-                                    index = x)$percent[4:5]
-                    })
-    out <- do.call(rbind, out)
-    rownames(out) <- names(est)
-  }

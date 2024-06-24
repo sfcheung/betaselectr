@@ -2,6 +2,7 @@
 % Please edit documentation in R/lm_betaselect.R
 \name{lm_betaselect}
 \alias{lm_betaselect}
+\alias{print.lm_betaselect}
 \title{Standardize Coefficients in a
 Regression Model}
 \usage{
@@ -17,10 +18,21 @@ lm_betaselect(
   progress = TRUE,
   load_balancing = TRUE
 )
+
+\method{print}{lm_betaselect}(
+  x,
+  digits = max(3L, getOption("digits") - 3L),
+  type = c("beta", "standardized", "raw", "unstandardized"),
+  ...
+)
 }
 \arguments{
-\item{...}{These arguments will be
-passed directly to \code{\link[=lm]{lm()}}.}
+\item{...}{For \code{\link[=lm_betaselect]{lm_betaselect()}},
+these arguments will be
+passed directly to \code{\link[=lm]{lm()}}. For
+the \code{print}-method of \code{lm_betaselect}
+objects, this will be passed to
+other methods.}
 
 \item{to_standardize}{A string vector,
 which should be the names of the
@@ -76,6 +88,21 @@ for long process.}
 \code{parallel} is \code{TRUE}, this determine
 whether load balancing will be used.
 Default is \code{TRUE}.}
+
+\item{x}{A \code{lm_betaselect}-class object.}
+
+\item{digits}{The number of significant
+digits to be printed for the
+coefficients.}
+
+\item{type}{The coefficients to be
+printed. For \code{"beta"} or
+\code{"standardized"}, the coefficients
+after selected variables standardized
+will be printed. For \code{"raw"} or
+\code{"unstandardized"}, the coefficients
+before standardization was done will
+be printed.}
 }
 \value{
 An object of the class \code{lm_betaselect},
@@ -166,6 +193,7 @@ data(data_test_mod_cat)
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                            data = data_test_mod_cat,
                            to_standardize = "iv")
+lm_beta_x
 summary(lm_beta_x)
 
 # Manually standardize iv and call lm()

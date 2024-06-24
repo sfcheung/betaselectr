@@ -80,8 +80,12 @@
 #' which is similar to the output
 #' of [lm()].
 #'
-#' @param ... These arguments will be
-#' passed directly to [lm()].
+#' @param ... For [lm_betaselect()],
+#' these arguments will be
+#' passed directly to [lm()]. For
+#' the `print`-method of `lm_betaselect`
+#' objects, this will be passed to
+#' other methods.
 #'
 #' @param to_standardize A string vector,
 #' which should be the names of the
@@ -157,6 +161,7 @@
 #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
 #'                            data = data_test_mod_cat,
 #'                            to_standardize = "iv")
+#' lm_beta_x
 #' summary(lm_beta_x)
 #'
 #' # Manually standardize iv and call lm()
@@ -176,6 +181,7 @@
 #' # Note that cat1 is not standardized
 #' summary(lm_beta_all)
 #'
+#' @rdname lm_betaselect
 #' @export
 
 lm_betaselect <- function(...,
@@ -403,4 +409,56 @@ lm_boot <- function(lm_args,
     attr(boot_out,
          "boot_idx") <- boot_idx
     return(boot_out)
+  }
+
+#' @param x A `lm_betaselect`-class object.
+#'
+#' @param digits The number of significant
+#' digits to be printed for the
+#' coefficients.
+#'
+#' @param type The coefficients to be
+#' printed. For `"beta"` or
+#' `"standardized"`, the coefficients
+#' after selected variables standardized
+#' will be printed. For `"raw"` or
+#' `"unstandardized"`, the coefficients
+#' before standardization was done will
+#' be printed.
+#'
+#' @rdname lm_betaselect
+#' @export
+
+print.lm_betaselect <- function(x,
+                                digits = max(3L, getOption("digits") - 3L),
+                                type = c("beta", "standardized", "raw", "unstandardized"),
+                                ...) {
+    type <- match.arg(type)
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    to_standardize <- x$lm_betaselect$to_standardize
+
+    cat("\nCall to lm_betaselect():\n")
+    print(x$lm_betaselect$call)
+    if (type == "beta") {
+        if (length(to_standardize) > 0) {
+            tmp <- paste0(to_standardize, collapse = ", ")
+          } else {
+            tmp <- "[Nil]"
+          }
+        cat("\nVariable(s) standardized:",
+            tmp)
+        cat("\n")
+        cat("\nModel *after* standardization:\n")
+        NextMethod()
+      } else {
+        cat("\nModel *before* standardization:\n")
+        NextMethod(x = x$lm_betaselect$ustd,
+                   digits = digits,
+                   ...)
+      }
+    invisible(x)
   }

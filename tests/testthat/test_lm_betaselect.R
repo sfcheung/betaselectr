@@ -90,3 +90,12 @@ test_that("Inline terms", {
         ignore_attr = TRUE
       )
   })
+
+test_that("print.lm_betaselect", {
+    expect_output(print(lm_beta_x),
+                  "Variable(s) standardized: iv", fixed = TRUE)
+    expect_output(print(lm_beta_x),
+                  "betaselectr::std_data", fixed = TRUE)
+    expect_output(print(lm_beta_x, type = "raw"),
+                  "data = dat", fixed = TRUE)
+  })

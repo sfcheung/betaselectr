@@ -17,7 +17,8 @@
 )
 }
 \arguments{
-\item{object}{The output of xxx.}
+\item{object}{The output of
+\code{\link[=lm_betaselect]{lm_betaselect()}}.}
 
 \item{parm}{The terms for which
 the confidence intervals are returned.

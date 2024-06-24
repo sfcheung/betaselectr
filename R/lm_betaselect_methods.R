@@ -415,7 +415,7 @@ confint.lm_betaselect <- function(object,
 #' @return
 #' It returns an object of class
 #' `anova`, which is identical to
-#' the output of [stats:anova()] in
+#' the output of [stats::anova()] in
 #' structure.
 #'
 #' @param object The output of

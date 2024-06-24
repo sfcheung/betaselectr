@@ -26,7 +26,7 @@ Default is \code{"beta"}.}
 \value{
 It returns an object of class
 \code{anova}, which is identical to
-the output of \code{\link[=stats:anova]{stats:anova()}} in
+the output of \code{\link[stats:anova]{stats::anova()}} in
 structure.
 }
 \description{

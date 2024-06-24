@@ -339,7 +339,7 @@ confint.lm_betaselect <- function(object,
             boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- lapply(parm, function(y) {
                             out <- sapply(boot_out, function(x) {
-                                      x$coef_ustd[y]
+                                      x$coef_std[y]
                                     })
                             out
                           })
@@ -466,5 +466,226 @@ anova.lm_betaselect <- function(object,
                        ustds)
         return(out)
       }
+  }
+
+#' @title Summary of a
+#' 'lm_betaselect'-Class Object
+#'
+#' @description The `summary` method
+#' for `lm_betaselect`-class objects.
+#'
+#' @details
+#' By default, it returns a
+#' `summary.lm_betaselect`-class object
+#' for the results with selected variables
+#' standardized. By setting `type` to
+#' `"raw"` or `"unstandardized"`, it
+#' return the summary for the results
+#' *before* standardization.
+#'
+#' @return
+#' It returns an object of class
+#' `summary.lm_betaselect`, which is
+#' similar to the output of
+#' [stats::summary.lm()], with additional
+#' information on the standardization
+#' and bootstrapping, if requested.
+#'
+#' @param object The output of
+#' [lm_betaselect()].
+#'
+#' @param correlation If `TRUE`, the
+#' correlation matrix of the estimates
+#' will be returned. The same argument
+#' in [stats::summary.lm()]. Default
+#' is `FALSE`.
+#'
+#' @param symbolic.cor If `TRUE`,
+#' correlations are printed in symbolic
+#' form as in [stats::summary.lm()].
+#' Default is `FALSE`.
+#'
+#' @param se_method The method used to
+#' compute the standard errors and
+#' confidence intervals (if requested).
+#' If bootstrapping was
+#' requested when calling
+#' [lm_betaselect()] and this argument
+#' is set to `"bootstrap"` or `"boot"`,
+#' the bootstrap standard errors are
+#' returned. If bootstrapping
+#' was not requested or if this argument
+#' is set to `"t"`, `"lm"`, or `"ls"`,
+#' then the usual `lm`
+#' standard errors are
+#' returned, with a warning raised
+#' unless `type` is `"raw"` or
+#' `"unstandardized".`
+#' Default is `"boot"`.
+#'
+#' @param ci Logical. Whether
+#' confidence intervals are computed.
+#' Default is `FALSE.`
+#'
+#' @param level The level of confidence,
+#' default is .95, returning the 95%
+#' confidence interval.
+#'
+#' @param boot_type The type of
+#' bootstrap confidence intervals,
+#' if requested.
+#' Currently, it supports `"perc"`,
+#' percentile bootstrap confidence
+#' intervals, and `"bc"`, bias-corrected
+#' bootstrap confidence interval.
+#'
+#' @param boot_pvalue_type The type
+#' of *p*-values if `se_method` is
+#' `"boot"` or `"bootstrap"`. If `"norm"`,
+#' then the *z* score is used to compute
+#' the *p*-value using a normal distribution.
+#' If `"asymmetric"`, the default, then
+#' the method presented in
+#' Asparouhov and Muthén (2021) is used
+#' to compute the *p*-value based on the
+#' bootstrap distribution.
+#'
+#' @param type String. If
+#' `"unstandardized"` or `"raw"`, the
+#' output *before* standardization
+#' are used If `"beta"` or
+#' `"standardized"`, then the
+#' output *after* selected
+#' variables standardized are returned.
+#' Default is `"beta"`.
+#'
+#' @param ...  Additional arguments
+#' passed to other methods.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @references
+#' Asparouhov, A., & Muthén, B. (2021). Bootstrap p-value computation.
+#' Retrieved from https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf
+#'
+#' @seealso [lm_betaselect()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' # bootstrap should be set to 2000 or 5000 in real studies
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv",
+#'                            do_boot = TRUE,
+#'                            bootstrap = 100,
+#'                            iseed = 1234)
+#'
+#' summary(lm_beta_x)
+#' summary(lm_beta_x, ci = TRUE)
+#' summary(lm_beta_x, boot_pvalue_type = "norm")
+#' summary(lm_beta_x, type = "raw")
+#'
+#' @describeIn summary.lm_betaselect The summary method for a `lm_betaselect`-class object.
+#'
+#' @export
+
+summary.lm_betaselect <- function(object,
+                                  correlation = FALSE,
+                                  symbolic.cor = FALSE,
+                                  se_method = c("boot", "bootstrap", "t", "lm", "ls"),
+                                  ci = FALSE,
+                                  level = .95,
+                                  boot_type = c("perc", "bc"),
+                                  boot_pvalue_type = c("asymmetric", "norm"),
+                                  type = c("beta",
+                                            "standardized",
+                                            "raw",
+                                            "unstandardized"),
+                                  ...) {
+    se_method <- match.arg(se_method)
+    type <- match.arg(type)
+    boot_type <- match.arg(boot_type)
+    boot_pvalue_type <- match.arg(boot_pvalue_type)
+    if (se_method %in% c("t", "lm", "ls")) {
+        se_method <- "ls"
+      }
+    if (se_method %in% c("boot", "bootstrap")) {
+        se_method <- "boot"
+      }
+    if (type %in% c("beta", "standardized")) {
+        type <- "beta"
+      }
+    if (type %in% c("raw", "unstandardized")) {
+        type <- "raw"
+      }
+    if (identical(se_method, "boot") && is.null(object$lm_betaselect$boot_out)) {
+        stop("Bootstrap estimates not available. Maybe bootstrapping not requested?")
+      }
+    if (type == "beta") {
+        out <- NextMethod()
+      } else {
+        # type = "raw"
+        out <- stats::summary.lm(object = object$lm_betaselect$ustd,
+                                  correlation = correlation,
+                                  symbolic.cor = symbolic.cor,
+                                  ...)
+      }
+    out$lm_betaselect$summary_call <- match.call()
+    out$lm_betaselect$call <- object$lm_betaselect$call
+    out$lm_betaselect$to_standardized <- object$lm_betaselect$to_standardized
+    out$lm_betaselect$se_method <- se_method
+    out$lm_betaselect$ci <- ci
+    out$lm_betaselect$boot_type <- boot_type
+    out$lm_betaselect$type <- type
+    out$lm_betaselect$boot_pvalue_type <- boot_pvalue_type
+    class(out) <- c("summary.lm_betaselect", class(out))
+    if (se_method == "boot") {
+        boot_out <- object$lm_betaselect$boot_out
+        boot_est <- sapply(boot_out, function(x) {
+                        x$coef_std
+                      })
+        boot_est_se <- apply(boot_est, 1, stats::sd, simplify = TRUE)
+        out$coefficients[, "Std. Error"] <- boot_est_se
+        z_values <- out$coefficients[, "Estimate"] / boot_est_se
+        out$coefficients[, "t value"] <- z_values
+        i <- which(colnames(out$coefficients) == "t value")
+        colnames(out$coefficients)[i] <- "z value"
+        if (boot_pvalue_type == "asymmetric") {
+            boot_est_list <- split(boot_est, rownames(boot_est))
+            boot_pvalues <- sapply(boot_est_list,
+                                   est2p,
+                                   h0 = 0)
+          } else {
+            # boot_pvalue_type == "norm"
+            boot_pvalues <- stats::pnorm(abs(z_values),
+                                         lower.tail = FALSE) * 2
+          }
+        out$coefficients[, "Pr(>|t|)"] <- boot_pvalues
+        i <- which(colnames(out$coefficients) == "Pr(>|t|)")
+        colnames(out$coefficients)[i] <- switch(boot_pvalue_type,
+                    asymmetric = "Pr(Boot)",
+                    norm = "Pr(>|z|)")
+      } else {
+        # se_method == "ls"
+        # No need to change
+      }
+    if (ci) {
+        out_ci <- confint.lm_betaselect(object,
+                                        level = level,
+                                        method = se_method,
+                                        type = type,
+                                        warn = FALSE,
+                                        boot_type = boot_type)
+        colnames(out_ci) <- c("CI.Lower", "CI.Upper")
+        i <- which(colnames(out$coefficients) == "Estimate")
+        out_coef <- out$coefficients
+        out_coef <- cbind(out_coef[, seq_len(i), drop = FALSE],
+                          out_ci,
+                          out_coef[, -seq_len(i), drop = FALSE])
+        out$coefficients <- out_coef
+      }
+    out
   }
 

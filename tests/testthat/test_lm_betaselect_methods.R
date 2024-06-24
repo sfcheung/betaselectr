@@ -12,7 +12,6 @@ lm_raw2 <- lm(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat)
 lm_inline_raw <- lm(dv ~ I(iv^2)*mod + I(1/ cov1) + cat1,
                     data_test_mod_cat)
 
-
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
 lm_beta_x2 <- lm_betaselect(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
 lm_beta_y <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "dv", do_boot = FALSE)
@@ -92,4 +91,21 @@ test_that("anova", {
                  anova(lm_raw))
     expect_equal(anova(lm_beta_x, lm_beta_x2, type = "raw"),
                  anova(lm_raw, lm_raw2))
+  })
+
+test_that("summary", {
+    lm_beta_x_lm <- lm_beta_x
+    class(lm_beta_x_lm) <- "lm"
+    expect_error(summary(lm_beta_x))
+    expect_equal(summary(lm_beta_x, type = "raw", se_method = "lm")$coefficients,
+                 summary(lm_raw)$coefficients)
+    expect_equal(summary(lm_beta_x, type = "beta", se_method = "lm")$coefficients,
+                 summary(lm_beta_x_lm)$coefficients)
+    expect_no_error(summary(lm_beta_xyw_boot))
+    expect_equal(summary(lm_beta_xyw_boot, ci = TRUE, level = .90)$coefficients[, 2:3],
+                 confint(lm_beta_xyw_boot, level = .90),
+                 ignore_attr = TRUE)
+    expect_equal(summary(lm_beta_xyw_boot, ci = TRUE, se_method = "lm", level = .90)$coefficients[, 2:3],
+                 confint(lm_beta_xyw_boot, level = .90, method = "ls", warn = FALSE),
+                 ignore_attr = TRUE)
   })

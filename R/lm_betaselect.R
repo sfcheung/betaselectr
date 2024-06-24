@@ -258,6 +258,7 @@ lm_betaselect <- function(...,
     out$lm_betaselect$vcov_std <- vcov_std
     out$lm_betaselect$vcov_ustd <- vcov_ustd
     out$lm_betaselect$call <- match.call()
+    out$lm_betaselect$to_standardize <- to_standardize
 
     # Do bootstrapping if requested.
 

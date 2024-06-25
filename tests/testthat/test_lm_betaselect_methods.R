@@ -158,3 +158,18 @@ test_that("deviance", {
                  deviance(lm_raw))
   })
 
+test_that("fitted", {
+    expect_equal(fitted(lm_beta_y),
+                 fitted(lm_raw_dv))
+    expect_equal(fitted(lm_beta_y),
+                 fitted(lm_raw_dv))
+    expect_equal(fitted(lm_beta_xyw, type = "raw"),
+                 fitted(lm_raw))
+  })
+
+test_that("plot.lm", {
+    # Should be tested in an interactive session
+    expect_no_error(plot(lm_beta_y))
+    expect_no_error(plot(lm_beta_y, model_type = "raw"))
+  })
+

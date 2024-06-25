@@ -1187,3 +1187,157 @@ deviance.lm_betaselect <- function(object,
         return(out)
       }
   }
+
+#' @title Model Fitted Values
+#'
+#' @description Extract the
+#' fitted values from a `lm_betaselect`
+#' object.
+#'
+#' @details
+#' It simply passes the model with
+#' or without selected variables
+#' standardized to [stats::fitted()].
+#' Please refer to
+#' the help page of [stats::fitted()]
+#' for details.
+#'
+#' @return
+#' It returns the fitted values of the
+#' requested model.
+#'
+#' @param object A `lm_betaselect`-class
+#' object.
+#'
+#' @param type The model from which the
+#' fitted values are returned. For
+#' `"beta"` or `"standardized"`, the
+#' model is the one after selected
+#' variables standardized. For `"raw"`
+#' or `"unstandardized"`, the model is
+#' the one before standardization was
+#' done.
+#'
+#' @param ...  Optional arguments.
+#' To be passed to [stats::fitted()].
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()] and [stats::fitted()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv")
+#' fitted(lm_beta_x)
+#' fitted(lm_beta_x, type = "raw")
+#'
+#' @export
+
+fitted.lm_betaselect <- function(object,
+                                   type = c("beta", "standardized",
+                                            "raw", "unstandardized"),
+                                   ...) {
+    type <- match.arg(type)
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    if (type == "beta") {
+        NextMethod()
+      } else {
+        # type == "raw"
+        out <- stats::fitted(object = object$lm_betaselect$ustd,
+                             ...)
+        return(out)
+      }
+  }
+
+#' @title Plot Diagnostics for an `lm_betaselect` Object
+#'
+#' @description Plot the diagnostics
+#' for the model before or after
+#' standardization.
+#'
+#' @details
+#' It simply passes the model with
+#' or without selected variables
+#' standardized to the `plot` method
+#' of `lm` objects.
+#' Please refer to
+#' the help page of [stats::plot.lm()]
+#' for details.
+#'
+#' ## IMPORTANT
+#'
+#' Some diagnostics that makes use
+#' of the sampling variances and
+#' covariances of coefficient estimates
+#' *may* not be applicable to the
+#' models with one or more variables
+#' standardized. Therefore, they should
+#' only be used for exploratory purpose.
+#'
+#' @return
+#' It returns `NULL`. Called for its
+#' side effects.
+#'
+#' @param x A `lm_betaselect`-class
+#' object.
+#'
+#' @param model_type The model from which the
+#' the diagnostics are plotted For
+#' `"beta"` or `"standardized"`, the
+#' model is the one after selected
+#' variables standardized. For `"raw"`
+#' or `"unstandardized"`, the model is
+#' the one before standardization was
+#' done.
+#'
+#' @param ...  Arguments
+#' to be passed to [stats::plot.lm()].
+#' Please refer to the help page of
+#' [stats::plot.lm()].
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()] and [stats::plot.lm()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv")
+#' plot(lm_beta_x)
+#' plot(lm_beta_x, model_type = "raw")
+#'
+#' @export
+
+plot.lm_betaselect <- function(x,
+                               model_type = c("beta", "standardized",
+                                              "raw", "unstandardized"),
+                               ...) {
+    model_type <- match.arg(model_type)
+    model_type <- switch(model_type,
+                         beta = "beta",
+                         standardized = "beta",
+                         raw = "raw",
+                         unstandardized = "raw")
+    if (model_type == "beta") {
+        NextMethod()
+      } else {
+        # type == "raw"
+        args <- as.list(match.call())[-1]
+        args$x <- x$lm_betaselect$ustd
+        args$model_type <- NULL
+        do.call(utils::getS3method(f = "plot",
+                                   class = "lm"),
+                args)
+      }
+  }

@@ -4,13 +4,14 @@ library(testthat)
 library(boot)
 
 dat_tmp <- data_test_mod_cat
-dat_tmp$iv <- scale(data_test_mod_cat$iv, scale = FALSE, center = TRUE)[, 1]
+dat_tmp$dv <- scale(data_test_mod_cat$dv)[, 1]
 dat_tmp$mod <- scale(data_test_mod_cat$mod, scale = sd(data_test_mod_cat$mod), center = FALSE)[, 1]
 
 lm_raw <- lm(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat)
 lm_raw2 <- lm(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat)
 lm_inline_raw <- lm(dv ~ I(iv^2)*mod + I(1/ cov1) + cat1,
                     data_test_mod_cat)
+lm_raw_dv <- lm(dv ~ iv*mod + cov1 + cat1, dat_tmp)
 
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
 lm_beta_x2 <- lm_betaselect(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
@@ -122,3 +123,17 @@ test_that("print.summary", {
     expect_output(print(summary(lm_beta_xyw_boot, ci = TRUE, se_method = "lm", level = .90)),
                   "should not be used")
   })
+
+test_that("logLik", {
+    expect_equal(logLik(lm_beta_x),
+                 logLik(lm_beta_x, type = "raw"))
+    expect_equal(logLik(lm_beta_y),
+                 logLik(lm_raw_dv))
+    expect_equal(logLik(lm_beta_y, type = "raw"),
+                 logLik(lm_raw))
+    expect_equal(logLik(lm_beta_w),
+                 logLik(lm_raw))
+    expect_equal(logLik(lm_beta_w, type = "raw"),
+                 logLik(lm_raw))
+  })
+

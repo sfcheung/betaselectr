@@ -792,10 +792,10 @@ print.summary.lm_betaselect <- function(x,
     print(x$lm_betaselect$call)
     to_standardize <- x$lm_betaselect$to_standardize
     type <- x$lm_betaselect$type
-            level <- x$lm_betaselect$level
-            level_str <- paste0(formatC(level * 100, digits = 1,
-                                        format = "f"),
-                                "%")
+    level <- x$lm_betaselect$level
+    level_str <- paste0(formatC(level * 100, digits = 1,
+                                format = "f"),
+                        "%")
     if (length(to_standardize) > 0) {
         tmp <- paste(to_standardize, collapse = ", ")
         tmp <- strwrap(tmp)
@@ -1014,7 +1014,8 @@ print_fstatistic <- function(fstatistic,
 
 logLik.lm_betaselect <- function(object,
                                  REML = FALSE,
-                                 type = c("beta", "standardized", "raw", "unstandardized"),
+                                 type = c("beta", "standardized",
+                                          "raw", "unstandardized"),
                                  ...) {
     type <- match.arg(type)
     type <- switch(type,

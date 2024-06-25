@@ -99,7 +99,8 @@ test_that("anova", {
 test_that("summary", {
     lm_beta_x_lm <- lm_beta_x
     class(lm_beta_x_lm) <- "lm"
-    expect_error(summary(lm_beta_x))
+    expect_warning(summary(lm_beta_x),
+                   "changed")
     expect_equal(summary(lm_beta_x, type = "raw", se_method = "lm")$coefficients,
                  summary(lm_raw)$coefficients)
     expect_equal(summary(lm_beta_x, type = "beta", se_method = "lm")$coefficients,

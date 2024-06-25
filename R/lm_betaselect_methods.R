@@ -473,7 +473,12 @@ anova.lm_betaselect <- function(object,
                                           "raw",
                                           "unstandardized")) {
     type <- match.arg(type)
-    if (type %in% c("beta", "standardized")) {
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    if (type == "beta") {
         NextMethod()
       } else {
         objects <- c(list(object), list(...))
@@ -611,34 +616,36 @@ anova.lm_betaselect <- function(object,
 summary.lm_betaselect <- function(object,
                                   correlation = FALSE,
                                   symbolic.cor = FALSE,
-                                  se_method = c("boot", "bootstrap", "t", "lm", "ls"),
+                                  se_method = c("boot", "bootstrap",
+                                                "t", "lm", "ls"),
                                   ci = FALSE,
                                   level = .95,
                                   boot_type = c("perc", "bc"),
                                   boot_pvalue_type = c("asymmetric", "norm"),
                                   type = c("beta",
-                                            "standardized",
-                                            "raw",
-                                            "unstandardized"),
+                                           "standardized",
+                                           "raw",
+                                           "unstandardized"),
                                   ...) {
     se_method <- match.arg(se_method)
     type <- match.arg(type)
+    se_method <- switch(se_method,
+                        boot = "boot",
+                        bootstrap = "boot",
+                        t = "ls",
+                        lm = "ls",
+                        ls = "ls")
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
     boot_type <- match.arg(boot_type)
     boot_pvalue_type <- match.arg(boot_pvalue_type)
-    if (se_method %in% c("t", "lm", "ls")) {
-        se_method <- "ls"
-      }
-    if (se_method %in% c("boot", "bootstrap")) {
-        se_method <- "boot"
-      }
-    if (type %in% c("beta", "standardized")) {
-        type <- "beta"
-      }
-    if (type %in% c("raw", "unstandardized")) {
-        type <- "raw"
-      }
     if (identical(se_method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        stop("Bootstrap estimates not available. Maybe bootstrapping not requested?")
+        warning("Bootstrap estimates not available; ",
+                "'se_method' changed to 'ls'.")
+        se_method <- "ls"
       }
     if (type == "beta") {
         out <- NextMethod()

@@ -188,3 +188,56 @@ test_that("predict", {
     expect_equal(predict(lm_beta_y, newdata = data_test_mod_cat[10:20, ]),
                  predict(lm_raw_dv, newdata = dat_tmp[10:20, ]))
   })
+
+# add1
+
+lm_raw_0 <- lm(dv ~ iv + mod, data_test_mod_cat)
+lm_raw_1a <- lm(dv ~ iv + mod + cov1, data_test_mod_cat)
+lm_raw_1b <- lm(dv ~ iv + mod + cat1, data_test_mod_cat)
+add1(lm_raw_0, ~ . + cov1 + cat1)
+extractAIC(lm_raw_1a)
+extractAIC(lm_raw_1b)
+anova(lm_raw_1a)["Residuals", "Sum Sq"]
+anova(lm_raw_1b)["Residuals", "Sum Sq"]
+drop1(lm_raw_1b)
+drop1(lm_raw_1a, ~ cov1)
+extractAIC(lm_raw_0)
+anova(lm_raw_0)["Residuals", "Sum Sq"]
+
+dat_tmp2 <- data_test_mod_cat
+dat_tmp2$iv <- scale(dat_tmp2$iv)[, 1]
+dat_tmp2$cov1 <- scale(dat_tmp2$cov1)[, 1]
+dat_tmp2$dv <- scale(dat_tmp2$dv)[, 1]
+lm_beta_manual_0 <- lm(dv ~ iv + mod, dat_tmp2)
+lm_beta_manual_1a <- lm(dv ~ iv + mod + cov1, dat_tmp2)
+lm_beta_manual_1b <- lm(dv ~ iv + mod + cat1, dat_tmp2)
+add1(lm_beta_manual_0, ~ . + cov1 + cat1)
+extractAIC(lm_beta_manual_1a)
+extractAIC(lm_beta_manual_1b)
+anova(lm_beta_manual_1a)["Residuals", "Sum Sq"]
+anova(lm_beta_manual_1b)["Residuals", "Sum Sq"]
+drop1(lm_beta_manual_1b)
+drop1(lm_beta_manual_1a, ~ cov1)
+extractAIC(lm_beta_manual_0)
+anova(lm_beta_manual_0)["(lm_beta_manual_0siduals", "Sum Sq"]
+
+test_that("add1() and drop1()", {
+    lm_beta_0 <- lm_betaselect(dv ~ iv + mod, data_test_mod_cat, to_standardize = c("iv", "dv", "cov1"), progress = FALSE, do_boot = FALSE)
+    lm_beta_1a <- lm_betaselect(dv ~ iv + mod + cov1, data_test_mod_cat, to_standardize = c("iv", "dv", "cov1"), progress = FALSE, do_boot = FALSE)
+    lm_beta_1b <- lm_betaselect(dv ~ iv + mod + cat1, data_test_mod_cat, to_standardize = c("iv", "dv", "cov1"), progress = FALSE, do_boot = FALSE)
+    add1_out <- add1(lm_beta_0, ~ . + cov1 + cat1)
+    expect_equal(add1_out["cov1", "AIC"],
+                 extractAIC(lm_beta_manual_1a)[2])
+    expect_equal(add1_out["cat1", "AIC"],
+                 extractAIC(lm_beta_manual_1b)[2])
+    expect_equal(add1_out["cov1", "RSS"],
+                 anova(lm_beta_manual_1a)["Residuals", "Sum Sq"])
+    expect_equal(add1_out["cat1", "RSS"],
+                 anova(lm_beta_manual_1b)["Residuals", "Sum Sq"])
+    drop1_out1b <- drop1(lm_beta_1b)
+    drop1_out1a <- drop1(lm_beta_1a, ~ cov1)
+    expect_equal(drop1_out1b["cat1", "AIC"],
+                 extractAIC(lm_beta_manual_0)[2])
+    expect_equal(drop1_out1b["cat1", "RSS"],
+                 anova(lm_beta_manual_0)["Residuals", "Sum Sq"])
+  })

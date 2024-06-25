@@ -3,7 +3,6 @@
 S3method(anova,lm_betaselect)
 S3method(coef,lm_betaselect)
 S3method(confint,lm_betaselect)
-S3method(plot,lm_betaselect)
 S3method(predict,lm_betaselect)
 S3method(print,lav_betaselect)
 S3method(print,lm_betaselect)

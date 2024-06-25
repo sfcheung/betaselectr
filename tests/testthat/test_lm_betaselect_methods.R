@@ -171,7 +171,7 @@ test_that("plot.lm", {
     skip("To be tested in an interactive section")
     # Should be tested in an interactive session
     plot(lm_beta_y)
-    plot(lm_beta_y, model_type = "raw")
+    plot(get_raqw(lm_beta_y))
   })
 
 test_that("predict", {

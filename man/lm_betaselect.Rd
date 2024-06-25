@@ -108,9 +108,11 @@ before standardization was done will
 be printed.}
 }
 \value{
-An object of the class \code{lm_betaselect},
+The function \code{\link[=lm_betaselect]{lm_betaselect()}}
+returns an object of the class \code{lm_betaselect},
 which is similar to the output
-of \code{\link[=lm]{lm()}}.
+of \code{\link[=lm]{lm()}}, with additional information
+stored.
 
 The function \code{\link[=raw_output]{raw_output()}} returns
 an object of the class \code{lm}, which are
@@ -119,15 +121,15 @@ to the data by \code{\link[stats:lm]{stats::lm()}} without
 standardization.
 }
 \description{
-Can standardize selected
-variables in a regression model
-without refitting the models, can
-handle product term correctly and
+Can fit a linear regression
+models with selected variables standardized;
+handle product terms correctly and
 skip categorical predictors in
 standardization.
 }
 \details{
-This function lets users
+The function \code{\link[=lm_betaselect]{lm_betaselect()}}
+lets users
 select which variables to be
 standardized when computing the
 standardized solution. It has the
@@ -140,19 +142,29 @@ variables).
 term, which is incorrect. Instead, it
 compute the product term with its
 component variables standardized.
+\item It standardizes the selected
+variables \emph{before} fitting a model.
+Therefore, If a model has the term
+\code{log(x)} and \code{x} is one of the
+selected variables, the model used
+the logarithm of the \emph{standardized}
+\code{x} in the model, instead of
+standardized \code{log(x)} which is
+difficult to interpret.
 \item It can be used to generate
+nonparametric
 bootstrap confidence intervals for
 the standardized solution. Bootstrap
 confidence interval is better than
-doing standardization \emph{before}
-fitting a model because it correctly
+the least square confidence interval
+ignoring the standardization
+because it
 takes into account the sampling
 variance of the standard deviations.
-It is also better than delta method
-confidence interval because it takes
-into account the usually asymmetric
-distribution of parameters after
-standardization.
+It is one of the recommended methods
+for forming confidence intervals for
+coefficients involving standardized
+variables (Jones & Waller, 2013).
 }
 \subsection{Problems With Common Approaches}{
 
@@ -164,7 +176,7 @@ The solution may be uninterpretable
 or misleading in these conditions:
 \itemize{
 \item Dummy variables are standardized
-and can not be interpreted as the
+and cannot be interpreted as the
 difference between two groups on the
 outcome variables.
 \item Product terms (interaction terms)
@@ -181,19 +193,93 @@ they are standardized (e.g., age).
 
 \subsection{How It Works}{
 
-It standardize the original variables
+It standardizes the original variables
 \emph{before} they are used in the
 regression model. Therefore, strictly
 speaking, it does not standardize
 the predictors in a regression model,
-but standardize the \emph{input variable}.
+but standardize the \emph{input variable}
+(Gelman et al., 2021).
 
 The requested model is then fitted to
 the dataset with selected variables
-standardized.
+standardized. For the ease of
+follow-up analysis, both the results
+with selected variables standardized
+and the results without
+standardization are stored. If
+required, the results without
+standardization can be retrieved
+by \code{\link[=raw_output]{raw_output()}}.
 }
 
-The function \code{\link[=raw_output]{raw_output()}} simply extract
+\subsection{Methods}{
+
+The output of \code{\link[=lm_betaselect]{lm_betaselect()}} is
+an \code{lm_betaselect}-class object.
+It has the following methods:add
+\itemize{
+\item A \code{coef}-method for extracting
+the coefficients of the model.
+(See \code{\link[=coef.lm_betaselect]{coef.lm_betaselect()}} for details.)
+\item A \code{vcov}-method for extracting the
+variance-covariance matrix of the
+estimates of the coefficients.
+If bootstrapping is requested, it
+can return the matrix based on the
+bootstrapping estimates.
+(See \code{\link[=vcov.lm_betaselect]{vcov.lm_betaselect()}} for details.)
+\item A \code{confint}-method for forming the
+confidence intervals of the
+estimates of the coefficients.
+If bootstrapping is requested, it
+can return the bootstrap confidence
+intervals.
+(See \code{\link[=confint.lm_betaselect]{confint.lm_betaselect()}} for details.)
+\item A \code{summary}-method for printing the
+summary of the results, with additional
+information such as the number of
+bootstrap samples and which variables
+have been standardized.
+(See \code{\link[=summary.lm_betaselect]{summary.lm_betaselect()}} for details.)
+\item An \code{anova}-method for printing the
+ANOVA table. Can also be used to
+compare two or more outputs of
+\code{\link[=lm_betaselect]{lm_betaselect()}}.
+(See \code{\link[=anova.lm_betaselect]{anova.lm_betaselect()}} for details.)
+\item A \code{predict}-method for computing
+predicted values. It can be used to
+compute the predicted values given
+a set of new unstandardized data.
+The data will be standardized before
+computing the predicted values in
+the models with standardization.
+(See \code{\link[=predict.lm_betaselect]{predict.lm_betaselect()}} for details.)
+}
+
+Most other methods for the output
+of \code{\link[stats:lm]{stats::lm()}} should also work
+on an \code{lm_betaselect}-class object.
+Some of them will give the same
+results regardless of the variables
+standardized. For example,
+\code{\link[=rstandard]{rstandard()}} and \code{\link[=cooks.distance]{cooks.distance()}}.
+For some others, they should be used
+with cautions if they make use of
+the variance-covariance matrix
+of the estimates because they may use
+the least square version.
+
+To use the methods for \code{lm} objects
+on the results without standardization,
+simply use \code{\link[=raw_output]{raw_output()}}. For example,
+to get the fitted values without
+standardization, call
+\code{fitted(raw_output(x))}, where \code{x}
+is the output of \code{\link[=lm_betaselect]{lm_betaselect()}}.
+}
+
+The function \code{\link[=raw_output]{raw_output()}} simply extracts
 the regression output by \code{\link[stats:lm]{stats::lm()}}
 on the variables without standardization.
 }
@@ -235,6 +321,20 @@ Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N.
 (2022) Improving an old way to measure moderation effect in standardized
 units. \emph{Health Psychology}, \emph{41}(7), 502-505.
 \doi{10.1037/hea0001188}
+
+Craig, C. C. (1936). On the frequency function of xy.
+\emph{The Annals of Mathematical Statistics, 7}(1),
+1--15. \doi{10.1214/aoms/1177732541}
+
+Gelman, A., Hill, J., & Vehtari, A. (2021).
+\emph{Regression and other stories}.
+Cambridge University Press.
+\doi{10.1017/9781139161879}
+
+Jones, J. A., & Waller, N. G. (2013). Computing confidence
+intervals for standardized regression coefficients.
+\emph{Psychological Methods, 18}(4), 435--453.
+\doi{10.1037/a0033269}
 }
 \seealso{
 \code{\link[=print.lav_betaselect]{print.lav_betaselect()}} for its print method.

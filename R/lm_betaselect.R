@@ -1,14 +1,14 @@
 #' @title Standardize Coefficients in a
 #' Regression Model
 #'
-#' @description Can standardize selected
-#' variables in a regression model
-#' without refitting the models, can
-#' handle product term correctly and
+#' @description Can fit a linear regression
+#' models with selected variables standardized;
+#' handle product terms correctly and
 #' skip categorical predictors in
 #' standardization.
 #'
-#' @details This function lets users
+#' @details The function [lm_betaselect()]
+#' lets users
 #' select which variables to be
 #' standardized when computing the
 #' standardized solution. It has the
@@ -23,19 +23,30 @@
 #' compute the product term with its
 #' component variables standardized.
 #'
+#' - It standardizes the selected
+#' variables *before* fitting a model.
+#' Therefore, If a model has the term
+#' `log(x)` and `x` is one of the
+#' selected variables, the model used
+#' the logarithm of the *standardized*
+#' `x` in the model, instead of
+#' standardized `log(x)` which is
+#' difficult to interpret.
+#'
 #' - It can be used to generate
+#' nonparametric
 #' bootstrap confidence intervals for
 #' the standardized solution. Bootstrap
 #' confidence interval is better than
-#' doing standardization *before*
-#' fitting a model because it correctly
+#' the least square confidence interval
+#' ignoring the standardization
+#' because it
 #' takes into account the sampling
 #' variance of the standard deviations.
-#' It is also better than delta method
-#' confidence interval because it takes
-#' into account the usually asymmetric
-#' distribution of parameters after
-#' standardization.
+#' It is one of the recommended methods
+#' for forming confidence intervals for
+#' coefficients involving standardized
+#' variables (Jones & Waller, 2013).
 #'
 #' ## Problems With Common Approaches
 #'
@@ -47,7 +58,7 @@
 #' or misleading in these conditions:
 #'
 #' - Dummy variables are standardized
-#' and can not be interpreted as the
+#' and cannot be interpreted as the
 #' difference between two groups on the
 #' outcome variables.
 #'
@@ -64,21 +75,100 @@
 #'
 #' ## How It Works
 #'
-#' It standardize the original variables
+#' It standardizes the original variables
 #' *before* they are used in the
 #' regression model. Therefore, strictly
 #' speaking, it does not standardize
 #' the predictors in a regression model,
-#' but standardize the *input variable*.
+#' but standardize the *input variable*
+#' (Gelman et al., 2021).
 #'
 #' The requested model is then fitted to
 #' the dataset with selected variables
-#' standardized.
+#' standardized. For the ease of
+#' follow-up analysis, both the results
+#' with selected variables standardized
+#' and the results without
+#' standardization are stored. If
+#' required, the results without
+#' standardization can be retrieved
+#' by [raw_output()].
+#'
+#' ## Methods
+#'
+#' The output of [lm_betaselect()] is
+#' an `lm_betaselect`-class object.
+#' It has the following methods:add
+#'
+#' - A `coef`-method for extracting
+#' the coefficients of the model.
+#' (See [coef.lm_betaselect()] for details.)
+#'
+#' - A `vcov`-method for extracting the
+#' variance-covariance matrix of the
+#' estimates of the coefficients.
+#' If bootstrapping is requested, it
+#' can return the matrix based on the
+#' bootstrapping estimates.
+#' (See [vcov.lm_betaselect()] for details.)
+#'
+#' - A `confint`-method for forming the
+#' confidence intervals of the
+#' estimates of the coefficients.
+#' If bootstrapping is requested, it
+#' can return the bootstrap confidence
+#' intervals.
+#' (See [confint.lm_betaselect()] for details.)
+#'
+#' - A `summary`-method for printing the
+#' summary of the results, with additional
+#' information such as the number of
+#' bootstrap samples and which variables
+#' have been standardized.
+#' (See [summary.lm_betaselect()] for details.)
+#'
+#' - An `anova`-method for printing the
+#' ANOVA table. Can also be used to
+#' compare two or more outputs of
+#' [lm_betaselect()].
+#' (See [anova.lm_betaselect()] for details.)
+#'
+#' - A `predict`-method for computing
+#' predicted values. It can be used to
+#' compute the predicted values given
+#' a set of new unstandardized data.
+#' The data will be standardized before
+#' computing the predicted values in
+#' the models with standardization.
+#' (See [predict.lm_betaselect()] for details.)
+#'
+#' Most other methods for the output
+#' of [stats::lm()] should also work
+#' on an `lm_betaselect`-class object.
+#' Some of them will give the same
+#' results regardless of the variables
+#' standardized. For example,
+#' [rstandard()] and [cooks.distance()].
+#' For some others, they should be used
+#' with cautions if they make use of
+#' the variance-covariance matrix
+#' of the estimates because they may use
+#' the least square version.
+#'
+#' To use the methods for `lm` objects
+#' on the results without standardization,
+#' simply use [raw_output()]. For example,
+#' to get the fitted values without
+#' standardization, call
+#' `fitted(raw_output(x))`, where `x`
+#' is the output of [lm_betaselect()].
 #'
 #' @return
-#' An object of the class `lm_betaselect`,
+#' The function [lm_betaselect()]
+#' returns an object of the class `lm_betaselect`,
 #' which is similar to the output
-#' of [lm()].
+#' of [lm()], with additional information
+#' stored.
 #'
 #' @param ... For [lm_betaselect()],
 #' these arguments will be
@@ -149,6 +239,21 @@
 #' (2022) Improving an old way to measure moderation effect in standardized
 #' units. *Health Psychology*, *41*(7), 502-505.
 #' \doi{10.1037/hea0001188}
+#'
+#' Craig, C. C. (1936). On the frequency function of xy.
+#' *The Annals of Mathematical Statistics, 7*(1),
+#' 1--15. \doi{10.1214/aoms/1177732541}
+#'
+#' Gelman, A., Hill, J., & Vehtari, A. (2021).
+#' *Regression and other stories*.
+#' Cambridge University Press.
+#' \doi{10.1017/9781139161879}
+#'
+#' Jones, J. A., & Waller, N. G. (2013). Computing confidence
+#' intervals for standardized regression coefficients.
+#' *Psychological Methods, 18*(4), 435--453.
+#' \doi{10.1037/a0033269}
+
 #'
 #' @seealso [print.lav_betaselect()] for its print method.
 #'
@@ -466,7 +571,7 @@ print.lm_betaselect <- function(x,
 #' @param x A `lm_betaselect`-class object.
 #'
 #' @details
-#' The function [raw_output()] simply extract
+#' The function [raw_output()] simply extracts
 #' the regression output by [stats::lm()]
 #' on the variables without standardization.
 #'

@@ -154,7 +154,7 @@ test_that("deviance", {
                  deviance(lm_raw_dv))
     expect_equal(deviance(lm_beta_y),
                  deviance(lm_raw_dv))
-    expect_equal(deviance(lm_beta_xyw, type = "raw"),
+    expect_equal(deviance(get_raw(lm_beta_xyw)),
                  deviance(lm_raw))
   })
 

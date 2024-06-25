@@ -1119,74 +1119,74 @@ print_fstatistic <- function(fstatistic,
 #       }
 #   }
 
-#' @title Model Deviance
-#'
-#' @description Extract the
-#' deviance from a `lm_betaselect`
-#' object.
-#'
-#' @details
-#' It simply passes the model with
-#' or without selected variables
-#' standardized to [stats::deviance()].
-#' Please refer to
-#' the help page of [stats::deviance()]
-#' for details.
-#'
-#' @return
-#' It returns the value of the
-#' deviance of the requested model.
-#'
-#' @param object A `lm_betaselect`-class
-#' object.
-#'
-#' @param type The model from which the
-#' deviance is returned. For
-#' `"beta"` or `"standardized"`, the
-#' model is the one after selected
-#' variables standardized. For `"raw"`
-#' or `"unstandardized"`, the model is
-#' the one before standardization was
-#' done.
-#'
-#' @param ...  Optional arguments.
-#' To be passed to [stats::deviance()].
-#'
-#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
-#'
-#' @seealso [lm_betaselect()] and [stats::deviance()]
-#'
-#' @examples
-#'
-#' data(data_test_mod_cat)
-#'
-#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
-#'                            data = data_test_mod_cat,
-#'                            to_standardize = "iv")
-#' deviance(lm_beta_x)
-#' deviance(lm_beta_x, type = "raw")
-#'
-#' @export
+# #' @title Model Deviance
+# #'
+# #' @description Extract the
+# #' deviance from a `lm_betaselect`
+# #' object.
+# #'
+# #' @details
+# #' It simply passes the model with
+# #' or without selected variables
+# #' standardized to [stats::deviance()].
+# #' Please refer to
+# #' the help page of [stats::deviance()]
+# #' for details.
+# #'
+# #' @return
+# #' It returns the value of the
+# #' deviance of the requested model.
+# #'
+# #' @param object A `lm_betaselect`-class
+# #' object.
+# #'
+# #' @param type The model from which the
+# #' deviance is returned. For
+# #' `"beta"` or `"standardized"`, the
+# #' model is the one after selected
+# #' variables standardized. For `"raw"`
+# #' or `"unstandardized"`, the model is
+# #' the one before standardization was
+# #' done.
+# #'
+# #' @param ...  Optional arguments.
+# #' To be passed to [stats::deviance()].
+# #'
+# #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+# #'
+# #' @seealso [lm_betaselect()] and [stats::deviance()]
+# #'
+# #' @examples
+# #'
+# #' data(data_test_mod_cat)
+# #'
+# #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+# #'                            data = data_test_mod_cat,
+# #'                            to_standardize = "iv")
+# #' deviance(lm_beta_x)
+# #' deviance(lm_beta_x, type = "raw")
+# #'
+# #' @export
 
-deviance.lm_betaselect <- function(object,
-                                   type = c("beta", "standardized",
-                                            "raw", "unstandardized"),
-                                   ...) {
-    type <- match.arg(type)
-    type <- switch(type,
-                   beta = "beta",
-                   standardized = "beta",
-                   raw = "raw",
-                   unstandardized = "raw")
-    if (type == "beta") {
-        NextMethod()
-      } else {
-        # type == "raw"
-        out <- stats::deviance(object$lm_betaselect$ustd,
-                               ...)
-        return(out)
-      }
-  }
+# deviance.lm_betaselect <- function(object,
+#                                    type = c("beta", "standardized",
+#                                             "raw", "unstandardized"),
+#                                    ...) {
+#     type <- match.arg(type)
+#     type <- switch(type,
+#                    beta = "beta",
+#                    standardized = "beta",
+#                    raw = "raw",
+#                    unstandardized = "raw")
+#     if (type == "beta") {
+#         NextMethod()
+#       } else {
+#         # type == "raw"
+#         out <- stats::deviance(object$lm_betaselect$ustd,
+#                                ...)
+#         return(out)
+#       }
+#   }
 
 #' @title Model Fitted Values
 #'

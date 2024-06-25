@@ -137,3 +137,12 @@ test_that("logLik", {
                  logLik(lm_raw))
   })
 
+test_that("extractAIC", {
+    expect_equal(extractAIC(lm_beta_y),
+                 extractAIC(lm_raw_dv))
+    expect_equal(extractAIC(lm_beta_y),
+                 extractAIC(lm_raw_dv))
+    expect_equal(extractAIC(lm_beta_y, type = "raw"),
+                 extractAIC(lm_raw))
+  })
+

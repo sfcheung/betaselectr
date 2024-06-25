@@ -168,11 +168,14 @@ vcov.lm_betaselect <- function(object,
                                ...) {
     method <- match.arg(method)
     type <- match.arg(type)
-    if (method %in% c("boot", "bootstrap")) {
-        method <- "boot"
-      }
+    method <- switch(method,
+                     boot = "boot",
+                     bootstrap = "boot",
+                     ls = "ls")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        stop("Bootstrap estimates not available. Maybe bootstrapping not requested?")
+        warning("Bootstrap estimates not available; ",
+                "'method' changed to 'ls'.")
+        method <- "ls"
       }
     if (type %in% c("beta", "standardized")) {
         if (method %in% c("boot", "bootstrap")) {

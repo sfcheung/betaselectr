@@ -56,7 +56,8 @@ test_that("coef", {
   })
 
 test_that("vcov", {
-    expect_error(vcov(lm_beta_x))
+    expect_warning(expect_warning(vcov(lm_beta_x), "changed"),
+                   "should not")
     expect_warning(vcov(lm_beta_x, method = "ls"))
     expect_equal(vcov(lm_beta_xyw_boot, method = "boot"),
                  vcov(lm_beta_xyw_boot))

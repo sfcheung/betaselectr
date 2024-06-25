@@ -163,7 +163,7 @@ test_that("fitted", {
                  fitted(lm_raw_dv))
     expect_equal(fitted(lm_beta_y),
                  fitted(lm_raw_dv))
-    expect_equal(fitted(lm_beta_xyw, type = "raw"),
+    expect_equal(fitted(get_raw(lm_beta_xyw)),
                  fitted(lm_raw))
   })
 

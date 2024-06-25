@@ -1188,74 +1188,74 @@ print_fstatistic <- function(fstatistic,
 #       }
 #   }
 
-#' @title Model Fitted Values
-#'
-#' @description Extract the
-#' fitted values from a `lm_betaselect`
-#' object.
-#'
-#' @details
-#' It simply passes the model with
-#' or without selected variables
-#' standardized to [stats::fitted()].
-#' Please refer to
-#' the help page of [stats::fitted()]
-#' for details.
-#'
-#' @return
-#' It returns the fitted values of the
-#' requested model.
-#'
-#' @param object A `lm_betaselect`-class
-#' object.
-#'
-#' @param type The model from which the
-#' fitted values are returned. For
-#' `"beta"` or `"standardized"`, the
-#' model is the one after selected
-#' variables standardized. For `"raw"`
-#' or `"unstandardized"`, the model is
-#' the one before standardization was
-#' done.
-#'
-#' @param ...  Optional arguments.
-#' To be passed to [stats::fitted()].
-#'
-#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
-#'
-#' @seealso [lm_betaselect()] and [stats::fitted()]
-#'
-#' @examples
-#'
-#' data(data_test_mod_cat)
-#'
-#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
-#'                            data = data_test_mod_cat,
-#'                            to_standardize = "iv")
-#' fitted(lm_beta_x)
-#' fitted(lm_beta_x, type = "raw")
-#'
-#' @export
+# #' @title Model Fitted Values
+# #'
+# #' @description Extract the
+# #' fitted values from a `lm_betaselect`
+# #' object.
+# #'
+# #' @details
+# #' It simply passes the model with
+# #' or without selected variables
+# #' standardized to [stats::fitted()].
+# #' Please refer to
+# #' the help page of [stats::fitted()]
+# #' for details.
+# #'
+# #' @return
+# #' It returns the fitted values of the
+# #' requested model.
+# #'
+# #' @param object A `lm_betaselect`-class
+# #' object.
+# #'
+# #' @param type The model from which the
+# #' fitted values are returned. For
+# #' `"beta"` or `"standardized"`, the
+# #' model is the one after selected
+# #' variables standardized. For `"raw"`
+# #' or `"unstandardized"`, the model is
+# #' the one before standardization was
+# #' done.
+# #'
+# #' @param ...  Optional arguments.
+# #' To be passed to [stats::fitted()].
+# #'
+# #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+# #'
+# #' @seealso [lm_betaselect()] and [stats::fitted()]
+# #'
+# #' @examples
+# #'
+# #' data(data_test_mod_cat)
+# #'
+# #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+# #'                            data = data_test_mod_cat,
+# #'                            to_standardize = "iv")
+# #' fitted(lm_beta_x)
+# #' fitted(lm_beta_x, type = "raw")
+# #'
+# #' @export
 
-fitted.lm_betaselect <- function(object,
-                                   type = c("beta", "standardized",
-                                            "raw", "unstandardized"),
-                                   ...) {
-    type <- match.arg(type)
-    type <- switch(type,
-                   beta = "beta",
-                   standardized = "beta",
-                   raw = "raw",
-                   unstandardized = "raw")
-    if (type == "beta") {
-        NextMethod()
-      } else {
-        # type == "raw"
-        out <- stats::fitted(object = object$lm_betaselect$ustd,
-                             ...)
-        return(out)
-      }
-  }
+# fitted.lm_betaselect <- function(object,
+#                                    type = c("beta", "standardized",
+#                                             "raw", "unstandardized"),
+#                                    ...) {
+#     type <- match.arg(type)
+#     type <- switch(type,
+#                    beta = "beta",
+#                    standardized = "beta",
+#                    raw = "raw",
+#                    unstandardized = "raw")
+#     if (type == "beta") {
+#         NextMethod()
+#       } else {
+#         # type == "raw"
+#         out <- stats::fitted(object = object$lm_betaselect$ustd,
+#                              ...)
+#         return(out)
+#       }
+#   }
 
 #' @title Plot Diagnostics for an `lm_betaselect` Object
 #'

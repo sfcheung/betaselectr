@@ -330,14 +330,22 @@ confint.lm_betaselect <- function(object,
     if (missing(parm)) {
         parm <- stats::variable.names(object)
       }
-    if (method %in% c("boot", "bootstrap")) {
-        method <- "boot"
-      }
+    method <- switch(method,
+                     boot = "boot",
+                     bootstrap = "boot",
+                     ls = "ls")
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        stop("Bootstrap estimates not available. Maybe bootstrapping not requested?")
+        warning("Bootstrap estimates not available; ",
+                "'method' changed to 'ls'.")
+        method <- "ls"
       }
-    if (type %in% c("beta", "standardized")) {
-        if (method %in% c("boot", "bootstrap")) {1
+    if (type == "beta") {
+        if (method == "boot") {1
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- lapply(parm, function(y) {
@@ -370,7 +378,7 @@ confint.lm_betaselect <- function(object,
             return(out)
           }
       } else {
-        if (method %in% c("boot", "bootstrap")) {
+        if (method == "boot") {
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- lapply(parm, function(y) {

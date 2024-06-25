@@ -70,7 +70,8 @@ test_that("vcov", {
 
 
 test_that("confint", {
-    expect_error(confint(lm_beta_x))
+    expect_warning(expect_warning(confint(lm_beta_x), "changed"),
+                   "should not")
     expect_warning(confint(lm_beta_x, method = "ls"))
     expect_equal(confint(lm_beta_xyw_boot, method = "boot", level = .80,
                          parm = c("(Intercept)", "cat1gp2")),

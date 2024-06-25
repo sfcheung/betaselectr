@@ -3,6 +3,7 @@
 \name{lm_betaselect}
 \alias{lm_betaselect}
 \alias{print.lm_betaselect}
+\alias{get_raw}
 \title{Standardize Coefficients in a
 Regression Model}
 \usage{
@@ -25,6 +26,8 @@ lm_betaselect(
   type = c("beta", "standardized", "raw", "unstandardized"),
   ...
 )
+
+get_raw(x)
 }
 \arguments{
 \item{...}{For \code{\link[=lm_betaselect]{lm_betaselect()}},
@@ -108,6 +111,12 @@ be printed.}
 An object of the class \code{lm_betaselect},
 which is similar to the output
 of \code{\link[=lm]{lm()}}.
+
+The function \code{\link[=get_raw]{get_raw()}} returns
+an object of the class \code{lm}, which are
+the results of fitting the model
+to the data by \code{\link[stats:lm]{stats::lm()}} without
+standardization.
 }
 \description{
 Can standardize selected
@@ -183,6 +192,10 @@ The requested model is then fitted to
 the dataset with selected variables
 standardized.
 }
+
+The function \code{\link[=get_raw]{get_raw()}} simply extract
+the regression output by \code{\link[stats:lm]{stats::lm()}}
+on the variables without standardization.
 }
 \examples{
 
@@ -212,6 +225,9 @@ lm_beta_all <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                              data = data_test_mod_cat)
 # Note that cat1 is not standardized
 summary(lm_beta_all)
+
+
+summary(get_raw(lm_beta_x))
 
 }
 \references{

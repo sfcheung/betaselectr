@@ -99,3 +99,8 @@ test_that("print.lm_betaselect", {
     expect_output(print(lm_beta_x, type = "raw"),
                   "data = dat", fixed = TRUE)
   })
+
+test_that("get_raw", {
+    expect_identical(coef(get_raw(lm_beta_xyw)),
+                     coef(lm_raw))
+  })

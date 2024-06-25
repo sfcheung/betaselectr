@@ -172,13 +172,18 @@ vcov.lm_betaselect <- function(object,
                      boot = "boot",
                      bootstrap = "boot",
                      ls = "ls")
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
         warning("Bootstrap estimates not available; ",
                 "'method' changed to 'ls'.")
         method <- "ls"
       }
-    if (type %in% c("beta", "standardized")) {
-        if (method %in% c("boot", "bootstrap")) {
+    if (type == "beta") {
+        if (method == "boot") {
             boot_out <- object$lm_betaselect$boot_out
             boot_est <- sapply(boot_out, function(x) {
                             x$coef_std
@@ -193,7 +198,7 @@ vcov.lm_betaselect <- function(object,
             NextMethod()
           }
       } else {
-        if (method %in% c("boot", "bootstrap")) {
+        if (method == "boot") {
             boot_out <- object$lm_betaselect$boot_out
             boot_est <- sapply(boot_out, function(x) {
                             x$coef_ustd

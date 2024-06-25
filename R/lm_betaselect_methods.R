@@ -1341,3 +1341,102 @@ plot.lm_betaselect <- function(x,
                 args)
       }
   }
+
+#' @title Predict Method for an 'lm_betaselect' Object
+#'
+#' @description Compute the predicted
+#' values in a model fitted by
+#' `lm_betaselect()`.
+#'
+#' @details
+#' It simply passes the model *before*
+#' or *after* selected variables
+#' are standardized to the
+#' `predict`-method of an `lm` object.
+#'
+#' ## IMPORTANT
+#'
+#' Some statistics, such as prediction
+#' or confidence interval, which make use
+#' of the sampling variances and
+#' covariances of coefficient estimates
+#' *may* not be applicable to the
+#' models with one or more variables
+#' standardized. Therefore, they should
+#' only be used for exploratory purpose.
+#'
+#' @return
+#' It returns the output of [stats::predict.lm()].
+#'
+#' @param object A `lm_betaselect`-class
+#' object.
+#'
+#' @param model_type The model from which the
+#' the predicted values are computed.
+#' For
+#' `"beta"` or `"standardized"`, the
+#' model is the one after selected
+#' variables standardized. For `"raw"`
+#' or `"unstandardized"`, the model is
+#' the one before standardization was
+#' done.
+#'
+#' @param newdata If set to a data
+#' frame, the predicted values are
+#' computed using this data frame.
+#' The data must be unstandardized.
+#' That is, the variables are of the
+#' same units as in the data frame
+#' used in [lm_betaselect()]. If
+#' `model_type` is `"beta"` or
+#' `"standardized"`, it will be
+#' standardized using the setting
+#' of `to_standardize` when `object`
+#' is created in [lm_betaselect()].
+#'
+#' @param ...  Arguments
+#' to be passed to [stats::predict.lm()].
+#' Please refer to the help page of
+#' [stats::predict.lm()].
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()] and [stats::predict.lm()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv")
+#' predict(lm_beta_x)
+#' predict(lm_beta_x, model_type = "raw")
+#'
+#' @export
+
+predict.lm_betaselect <- function(object,
+                                  model_type = c("beta", "standardized",
+                                                "raw", "unstandardized"),
+                                  newdata,
+                                  ...) {
+    model_type <- match.arg(model_type)
+    model_type <- switch(model_type,
+                         beta = "beta",
+                         standardized = "beta",
+                         raw = "raw",
+                         unstandardized = "raw")
+    to_standardize <- object$lm_betaselect$to_standardize
+    if (model_type == "beta") {
+        if (!missing(newdata)) {
+            newdata_std <- std_data(newdata,
+                                to_standardize = to_standardize)
+            NextMethod(newdata = newdata_std)
+          } else {
+            NextMethod()
+          }
+      } else {
+        object <- object$lm_betaselect$ustd
+        NextMethod()
+      }
+  }

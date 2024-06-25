@@ -174,3 +174,17 @@ test_that("plot.lm", {
     plot(lm_beta_y, model_type = "raw")
   })
 
+test_that("predict", {
+    expect_equal(predict(lm_beta_y),
+                 predict(lm_raw_dv))
+    expect_equal(predict(lm_beta_y),
+                 predict(lm_raw_dv))
+    expect_equal(predict(lm_beta_xyw, model_type = "raw"),
+                 predict(lm_raw))
+    expect_equal(predict(lm_beta_y, interval = "confidence"),
+                 predict(lm_raw_dv, interval = "confidence"))
+    expect_equal(predict(lm_beta_xyw, model_type = "raw"),
+                 predict(lm_raw))
+    expect_equal(predict(lm_beta_y, newdata = data_test_mod_cat[10:20, ]),
+                 predict(lm_raw_dv, newdata = dat_tmp[10:20, ]))
+  })

@@ -168,8 +168,9 @@ test_that("fitted", {
   })
 
 test_that("plot.lm", {
+    skip("To be tested in an interactive section")
     # Should be tested in an interactive session
-    expect_no_error(plot(lm_beta_y))
-    expect_no_error(plot(lm_beta_y, model_type = "raw"))
+    plot(lm_beta_y)
+    plot(lm_beta_y, model_type = "raw")
   })
 

@@ -1035,89 +1035,89 @@ print_fstatistic <- function(fstatistic,
 #       }
 #   }
 
-#' @title Extract AIC
-#'
-#' @description Extract the
-#' Akaike Information Criterion (AIC)
-#' from a `lm_betaselect` object.
-#'
-#' @details
-#' It simply passes the model with
-#' or without selected variables
-#' standardized to [stats::extractAIC()].
-#' Please refer to
-#' the help page of [stats::extractAIC()]
-#' for details.
-#'
-#' @return
-#' It returns a numeric vector of
-#' two elements, which is simply the
-#' output of [stats::extractAIC()]
-#' on the requested model.
-#'
-#' @param fit A `lm_betaselect`-class
-#' object.
-#'
-#' @param scale To be passed
-#' to [stats::extractAIC()]. See its
-#' help page for details.
-#'
-#' @param k The weight of the
-#' equivalent degrees of freedom to be
-#' used in the computation of AIC.
-#' See [stats::extractAIC()] for details.
-#'
-#' @param type The model from which the
-#' AIC is returned. For
-#' `"beta"` or `"standardized"`, the
-#' model is the one after selected
-#' variables standardized. For `"raw"`
-#' or `"unstandardized"`, the model is
-#' the one before standardization was
-#' done.
-#'
-#' @param ...  Optional arguments.
-#' To be passed to [stats::extractAIC()].
-#'
-#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
-#'
-#' @seealso [lm_betaselect()] and [stats::extractAIC()]
-#'
-#' @examples
-#'
-#' data(data_test_mod_cat)
-#'
-#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
-#'                            data = data_test_mod_cat,
-#'                            to_standardize = "iv")
-#' extractAIC(lm_beta_x)
-#' extractAIC(lm_beta_x, type = "raw")
-#'
-#' @export
+# #' @title Extract AIC
+# #'
+# #' @description Extract the
+# #' Akaike Information Criterion (AIC)
+# #' from a `lm_betaselect` object.
+# #'
+# #' @details
+# #' It simply passes the model with
+# #' or without selected variables
+# #' standardized to [stats::extractAIC()].
+# #' Please refer to
+# #' the help page of [stats::extractAIC()]
+# #' for details.
+# #'
+# #' @return
+# #' It returns a numeric vector of
+# #' two elements, which is simply the
+# #' output of [stats::extractAIC()]
+# #' on the requested model.
+# #'
+# #' @param fit A `lm_betaselect`-class
+# #' object.
+# #'
+# #' @param scale To be passed
+# #' to [stats::extractAIC()]. See its
+# #' help page for details.
+# #'
+# #' @param k The weight of the
+# #' equivalent degrees of freedom to be
+# #' used in the computation of AIC.
+# #' See [stats::extractAIC()] for details.
+# #'
+# #' @param type The model from which the
+# #' AIC is returned. For
+# #' `"beta"` or `"standardized"`, the
+# #' model is the one after selected
+# #' variables standardized. For `"raw"`
+# #' or `"unstandardized"`, the model is
+# #' the one before standardization was
+# #' done.
+# #'
+# #' @param ...  Optional arguments.
+# #' To be passed to [stats::extractAIC()].
+# #'
+# #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+# #'
+# #' @seealso [lm_betaselect()] and [stats::extractAIC()]
+# #'
+# #' @examples
+# #'
+# #' data(data_test_mod_cat)
+# #'
+# #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+# #'                            data = data_test_mod_cat,
+# #'                            to_standardize = "iv")
+# #' extractAIC(lm_beta_x)
+# #' extractAIC(lm_beta_x, type = "raw")
+# #'
+# #' @export
 
-extractAIC.lm_betaselect <- function(fit,
-                                     scale,
-                                     k = 2,
-                                     type = c("beta", "standardized",
-                                              "raw", "unstandardized"),
-                                     ...) {
-    type <- match.arg(type)
-    type <- switch(type,
-                   beta = "beta",
-                   standardized = "beta",
-                   raw = "raw",
-                   unstandardized = "raw")
-    if (type == "beta") {
-        NextMethod()
-      } else {
-        # type == "raw"
-        my_args <- as.list(match.call())[-1]
-        my_args$fit <- fit$lm_betaselect$ustd
-        out <- do.call(stats::extractAIC,
-                       my_args)
-        return(out)
-      }
-  }
+# extractAIC.lm_betaselect <- function(fit,
+#                                      scale,
+#                                      k = 2,
+#                                      type = c("beta", "standardized",
+#                                               "raw", "unstandardized"),
+#                                      ...) {
+#     type <- match.arg(type)
+#     type <- switch(type,
+#                    beta = "beta",
+#                    standardized = "beta",
+#                    raw = "raw",
+#                    unstandardized = "raw")
+#     if (type == "beta") {
+#         NextMethod()
+#       } else {
+#         # type == "raw"
+#         my_args <- as.list(match.call())[-1]
+#         my_args$fit <- fit$lm_betaselect$ustd
+#         out <- do.call(stats::extractAIC,
+#                        my_args)
+#         return(out)
+#       }
+#   }
 
 #' @title Model Deviance
 #'

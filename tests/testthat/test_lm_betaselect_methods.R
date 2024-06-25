@@ -145,7 +145,7 @@ test_that("extractAIC", {
                  extractAIC(lm_raw_dv))
     expect_equal(extractAIC(lm_beta_y),
                  extractAIC(lm_raw_dv))
-    expect_equal(extractAIC(lm_beta_y, type = "raw"),
+    expect_equal(extractAIC(get_raw(lm_beta_y)),
                  extractAIC(lm_raw))
   })
 

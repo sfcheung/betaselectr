@@ -146,3 +146,12 @@ test_that("extractAIC", {
                  extractAIC(lm_raw))
   })
 
+test_that("deviance", {
+    expect_equal(deviance(lm_beta_y),
+                 deviance(lm_raw_dv))
+    expect_equal(deviance(lm_beta_y),
+                 deviance(lm_raw_dv))
+    expect_equal(deviance(lm_beta_xyw, type = "raw"),
+                 deviance(lm_raw))
+  })
+

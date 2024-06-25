@@ -958,82 +958,82 @@ print_fstatistic <- function(fstatistic,
          f_txt, ", p ", p_txt, "\n", sep = "")
   }
 
-#' @title Extract Log-Likelihood
-#'
-#' @description Extract the
-#' log-likelihood of a `lm_betaselect`
-#' object.
-#'
-#' @details
-#' It simply passes the model with
-#' or without selected variables
-#' standardized to the method
-#' [stats::logLik.lm()]. Please refer to
-#' the help page of [stats::logLik.lm()]
-#' for details.
-#'
-#' @return
-#' It returns an object of the class
-#' `logLik`, the same object returned
-#' by [stats::logLik.lm()].
-#'
-#' @param object A `lm_betaselect`-class
-#' object.
-#'
-#' @param REML Whether the restricted
-#' log-likelihood is returned. Default
-#' is `FALSE`.
-#'
-#' @param type The model from which the
-#' log-likelihood is returned. For
-#' `"beta"` or `"standardized"`, the
-#' model is the one after selected
-#' variables standardized. For `"raw"`
-#' or `"unstandardized"`, the model is
-#' the one before standardization was
-#' done.
-#'
-#' @param ...  Optional arguments.
-#' To be passed to [stats::logLik.lm()].
-#'
-#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
-#'
-#' @seealso [lm_betaselect()] and [stats::logLik.lm()]
-#'
-#' @examples
-#'
-#' data(data_test_mod_cat)
-#'
-#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
-#'                            data = data_test_mod_cat,
-#'                            to_standardize = "iv")
-#' logLik(lm_beta_x)
-#' logLik(lm_beta_x, type = "raw")
-#'
-#' @export
+# #' @title Extract Log-Likelihood
+# #'
+# #' @description Extract the
+# #' log-likelihood of a `lm_betaselect`
+# #' object.
+# #'
+# #' @details
+# #' It simply passes the model with
+# #' or without selected variables
+# #' standardized to the method
+# #' [stats::logLik.lm()]. Please refer to
+# #' the help page of [stats::logLik.lm()]
+# #' for details.
+# #'
+# #' @return
+# #' It returns an object of the class
+# #' `logLik`, the same object returned
+# #' by [stats::logLik.lm()].
+# #'
+# #' @param object A `lm_betaselect`-class
+# #' object.
+# #'
+# #' @param REML Whether the restricted
+# #' log-likelihood is returned. Default
+# #' is `FALSE`.
+# #'
+# #' @param type The model from which the
+# #' log-likelihood is returned. For
+# #' `"beta"` or `"standardized"`, the
+# #' model is the one after selected
+# #' variables standardized. For `"raw"`
+# #' or `"unstandardized"`, the model is
+# #' the one before standardization was
+# #' done.
+# #'
+# #' @param ...  Optional arguments.
+# #' To be passed to [stats::logLik.lm()].
+# #'
+# #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+# #'
+# #' @seealso [lm_betaselect()] and [stats::logLik.lm()]
+# #'
+# #' @examples
+# #'
+# #' data(data_test_mod_cat)
+# #'
+# #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+# #'                            data = data_test_mod_cat,
+# #'                            to_standardize = "iv")
+# #' logLik(lm_beta_x)
+# #' logLik(lm_beta_x, type = "raw")
+# #'
+# #' @export
 
-logLik.lm_betaselect <- function(object,
-                                 REML = FALSE,
-                                 type = c("beta", "standardized",
-                                          "raw", "unstandardized"),
-                                 ...) {
-    type <- match.arg(type)
-    type <- switch(type,
-                   beta = "beta",
-                   standardized = "beta",
-                   raw = "raw",
-                   unstandardized = "raw")
-    if (type == "beta") {
-        NextMethod(object = object,
-                   REML = REML,
-                   ...)
-      } else {
-        # type == "raw"
-        stats::logLik(object = object$lm_betaselect$ustd,
-                      REML = REML,
-                      ...)
-      }
-  }
+# logLik.lm_betaselect <- function(object,
+#                                  REML = FALSE,
+#                                  type = c("beta", "standardized",
+#                                           "raw", "unstandardized"),
+#                                  ...) {
+#     type <- match.arg(type)
+#     type <- switch(type,
+#                    beta = "beta",
+#                    standardized = "beta",
+#                    raw = "raw",
+#                    unstandardized = "raw")
+#     if (type == "beta") {
+#         NextMethod(object = object,
+#                    REML = REML,
+#                    ...)
+#       } else {
+#         # type == "raw"
+#         stats::logLik(object = object$lm_betaselect$ustd,
+#                       REML = REML,
+#                       ...)
+#       }
+#   }
 
 #' @title Extract AIC
 #'

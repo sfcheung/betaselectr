@@ -129,14 +129,14 @@ test_that("print.summary", {
 
 test_that("logLik", {
     expect_equal(logLik(lm_beta_x),
-                 logLik(lm_beta_x, type = "raw"))
+                 logLik(get_raw(lm_beta_x)))
     expect_equal(logLik(lm_beta_y),
                  logLik(lm_raw_dv))
-    expect_equal(logLik(lm_beta_y, type = "raw"),
+    expect_equal(logLik(get_raw(lm_beta_y)),
                  logLik(lm_raw))
     expect_equal(logLik(lm_beta_w),
                  logLik(lm_raw))
-    expect_equal(logLik(lm_beta_w, type = "raw"),
+    expect_equal(logLik(get_raw(lm_beta_w)),
                  logLik(lm_raw))
   })
 

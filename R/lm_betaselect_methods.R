@@ -1,9 +1,9 @@
-#' @title Coefficients of a
+#' @title Coefficients of an
 #' 'lm_betaselect'-Class Object
 #'
 #' @description Return the estimates of
-#' coefficients in a
-#' 'lm_betaselect'-class object.
+#' coefficients in an
+#' `lm_betaselect`-class object.
 #
 #' @details By default, it extracts the
 #' regression coefficients *after* the
@@ -18,7 +18,7 @@
 #' regression coefficients.
 #'
 #' @param object The output of
-#' [lm_betaselect()], or a
+#' [lm_betaselect()], or an
 #' `lm_betaselect`-class object.
 #'
 #' @param complete If `TRUE`, it returns
@@ -69,7 +69,7 @@ coef.lm_betaselect <- function(object,
       }
   }
 
-#' @title The 'vcov' Method for a
+#' @title The 'vcov' Method for an
 #' 'lm_betaselect'-Class Object
 #'
 #' @description Compute the
@@ -99,7 +99,7 @@ coef.lm_betaselect <- function(object,
 #'
 #' @param object The output of
 #' [lm_betaselect()]
-#' or am `lm_betaselect`-class object.
+#' or an `lm_betaselect`-class object.
 #'
 #' @param method The method used to
 #' compute the variance-covariance
@@ -212,7 +212,7 @@ vcov.lm_betaselect <- function(object,
       }
   }
 
-#' @title Confidence Interval for a
+#' @title Confidence Interval for an
 #' 'lm_betaselect'-Class Object
 #'
 #' @description Return the confidence
@@ -412,7 +412,7 @@ confint.lm_betaselect <- function(object,
       }
   }
 
-#' @title ANOVA Tables for a
+#' @title ANOVA Tables for an
 #' 'lm_betaselect'-Class Object
 #'
 #' @description Return the analysis
@@ -489,7 +489,7 @@ anova.lm_betaselect <- function(object,
       }
   }
 
-#' @title Summary of a
+#' @title Summary of an
 #' 'lm_betaselect'-Class Object
 #'
 #' @description The `summary` method
@@ -961,7 +961,7 @@ print_fstatistic <- function(fstatistic,
 # #' @title Extract Log-Likelihood
 # #'
 # #' @description Extract the
-# #' log-likelihood of a `lm_betaselect`
+# #' log-likelihood of an `lm_betaselect`
 # #' object.
 # #'
 # #' @details
@@ -977,7 +977,7 @@ print_fstatistic <- function(fstatistic,
 # #' `logLik`, the same object returned
 # #' by [stats::logLik.lm()].
 # #'
-# #' @param object A `lm_betaselect`-class
+# #' @param object An `lm_betaselect`-class
 # #' object.
 # #'
 # #' @param REML Whether the restricted
@@ -1039,7 +1039,7 @@ print_fstatistic <- function(fstatistic,
 # #'
 # #' @description Extract the
 # #' Akaike Information Criterion (AIC)
-# #' from a `lm_betaselect` object.
+# #' from an `lm_betaselect` object.
 # #'
 # #' @details
 # #' It simply passes the model with
@@ -1055,7 +1055,7 @@ print_fstatistic <- function(fstatistic,
 # #' output of [stats::extractAIC()]
 # #' on the requested model.
 # #'
-# #' @param fit A `lm_betaselect`-class
+# #' @param fit An `lm_betaselect`-class
 # #' object.
 # #'
 # #' @param scale To be passed
@@ -1122,7 +1122,7 @@ print_fstatistic <- function(fstatistic,
 # #' @title Model Deviance
 # #'
 # #' @description Extract the
-# #' deviance from a `lm_betaselect`
+# #' deviance from an `lm_betaselect`
 # #' object.
 # #'
 # #' @details
@@ -1137,7 +1137,7 @@ print_fstatistic <- function(fstatistic,
 # #' It returns the value of the
 # #' deviance of the requested model.
 # #'
-# #' @param object A `lm_betaselect`-class
+# #' @param object An `lm_betaselect`-class
 # #' object.
 # #'
 # #' @param type The model from which the
@@ -1191,7 +1191,7 @@ print_fstatistic <- function(fstatistic,
 # #' @title Model Fitted Values
 # #'
 # #' @description Extract the
-# #' fitted values from a `lm_betaselect`
+# #' fitted values from an `lm_betaselect`
 # #' object.
 # #'
 # #' @details
@@ -1206,7 +1206,7 @@ print_fstatistic <- function(fstatistic,
 # #' It returns the fitted values of the
 # #' requested model.
 # #'
-# #' @param object A `lm_betaselect`-class
+# #' @param object An `lm_betaselect`-class
 # #' object.
 # #'
 # #' @param type The model from which the
@@ -1286,7 +1286,7 @@ print_fstatistic <- function(fstatistic,
 # #' It returns `NULL`. Called for its
 # #' side effects.
 # #'
-# #' @param x A `lm_betaselect`-class
+# #' @param x An `lm_betaselect`-class
 # #' object.
 # #'
 # #' @param model_type The model from which the
@@ -1368,7 +1368,7 @@ print_fstatistic <- function(fstatistic,
 #' @return
 #' It returns the output of [stats::predict.lm()].
 #'
-#' @param object A `lm_betaselect`-class
+#' @param object An `lm_betaselect`-class
 #' object.
 #'
 #' @param model_type The model from which the

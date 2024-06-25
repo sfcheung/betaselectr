@@ -2,7 +2,7 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{coef.lm_betaselect}
 \alias{coef.lm_betaselect}
-\title{Coefficients of a
+\title{Coefficients of an
 'lm_betaselect'-Class Object}
 \usage{
 \method{coef}{lm_betaselect}(
@@ -14,7 +14,7 @@
 }
 \arguments{
 \item{object}{The output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}, or a
+\code{\link[=lm_betaselect]{lm_betaselect()}}, or an
 \code{lm_betaselect}-class object.}
 
 \item{complete}{If \code{TRUE}, it returns
@@ -40,8 +40,8 @@ regression coefficients.
 }
 \description{
 Return the estimates of
-coefficients in a
-'lm_betaselect'-class object.
+coefficients in an
+\code{lm_betaselect}-class object.
 }
 \details{
 By default, it extracts the

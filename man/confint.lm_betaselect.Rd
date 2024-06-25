@@ -2,7 +2,7 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{confint.lm_betaselect}
 \alias{confint.lm_betaselect}
-\title{Confidence Interval for a
+\title{Confidence Interval for an
 'lm_betaselect'-Class Object}
 \usage{
 \method{confint}{lm_betaselect}(

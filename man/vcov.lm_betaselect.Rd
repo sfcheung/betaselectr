@@ -2,7 +2,7 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{vcov.lm_betaselect}
 \alias{vcov.lm_betaselect}
-\title{The 'vcov' Method for a
+\title{The 'vcov' Method for an
 'lm_betaselect'-Class Object}
 \usage{
 \method{vcov}{lm_betaselect}(
@@ -16,7 +16,7 @@
 \arguments{
 \item{object}{The output of
 \code{\link[=lm_betaselect]{lm_betaselect()}}
-or am \code{lm_betaselect}-class object.}
+or an \code{lm_betaselect}-class object.}
 
 \item{method}{The method used to
 compute the variance-covariance

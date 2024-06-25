@@ -2,7 +2,7 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{anova.lm_betaselect}
 \alias{anova.lm_betaselect}
-\title{ANOVA Tables for a
+\title{ANOVA Tables for an
 'lm_betaselect'-Class Object}
 \usage{
 \method{anova}{lm_betaselect}(object, ..., type = c("beta", "standardized", "raw", "unstandardized"))

@@ -12,7 +12,7 @@
 )
 }
 \arguments{
-\item{object}{A \code{lm_betaselect}-class
+\item{object}{An \code{lm_betaselect}-class
 object.}
 
 \item{model_type}{The model from which the

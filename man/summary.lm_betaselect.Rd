@@ -3,7 +3,7 @@
 \name{summary.lm_betaselect}
 \alias{summary.lm_betaselect}
 \alias{print.summary.lm_betaselect}
-\title{Summary of a
+\title{Summary of an
 'lm_betaselect'-Class Object}
 \usage{
 \method{summary}{lm_betaselect}(

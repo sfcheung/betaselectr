@@ -32,7 +32,7 @@ Imports:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Config/testthat/start-first: std_selected_lavaan*
+Config/testthat/start-first: lav_betaselect_mg*
 URL: https://sfcheung.github.io/betaselectr/
 BugReports: https://github.com/sfcheung/betaselectr/issues
 Depends:

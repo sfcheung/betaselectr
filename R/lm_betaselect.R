@@ -466,12 +466,12 @@ print.lm_betaselect <- function(x,
 #' @param x A `lm_betaselect`-class object.
 #'
 #' @details
-#' The function [get_raw()] simply extract
+#' The function [raw_output()] simply extract
 #' the regression output by [stats::lm()]
 #' on the variables without standardization.
 #'
 #' @return
-#' The function [get_raw()] returns
+#' The function [raw_output()] returns
 #' an object of the class `lm`, which are
 #' the results of fitting the model
 #' to the data by [stats::lm()] without
@@ -479,11 +479,11 @@ print.lm_betaselect <- function(x,
 #'
 #' @examples
 #'
-#' summary(get_raw(lm_beta_x))
+#' summary(raw_output(lm_beta_x))
 #'
 #' @rdname lm_betaselect
 #' @export
 
-get_raw <- function(x) {
+raw_output <- function(x) {
     x$lm_betaselect$ustd
   }

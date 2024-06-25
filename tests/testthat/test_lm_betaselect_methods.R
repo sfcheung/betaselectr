@@ -129,14 +129,14 @@ test_that("print.summary", {
 
 test_that("logLik", {
     expect_equal(logLik(lm_beta_x),
-                 logLik(get_raw(lm_beta_x)))
+                 logLik(raw_output(lm_beta_x)))
     expect_equal(logLik(lm_beta_y),
                  logLik(lm_raw_dv))
-    expect_equal(logLik(get_raw(lm_beta_y)),
+    expect_equal(logLik(raw_output(lm_beta_y)),
                  logLik(lm_raw))
     expect_equal(logLik(lm_beta_w),
                  logLik(lm_raw))
-    expect_equal(logLik(get_raw(lm_beta_w)),
+    expect_equal(logLik(raw_output(lm_beta_w)),
                  logLik(lm_raw))
   })
 
@@ -145,7 +145,7 @@ test_that("extractAIC", {
                  extractAIC(lm_raw_dv))
     expect_equal(extractAIC(lm_beta_y),
                  extractAIC(lm_raw_dv))
-    expect_equal(extractAIC(get_raw(lm_beta_y)),
+    expect_equal(extractAIC(raw_output(lm_beta_y)),
                  extractAIC(lm_raw))
   })
 
@@ -154,7 +154,7 @@ test_that("deviance", {
                  deviance(lm_raw_dv))
     expect_equal(deviance(lm_beta_y),
                  deviance(lm_raw_dv))
-    expect_equal(deviance(get_raw(lm_beta_xyw)),
+    expect_equal(deviance(raw_output(lm_beta_xyw)),
                  deviance(lm_raw))
   })
 
@@ -163,7 +163,7 @@ test_that("fitted", {
                  fitted(lm_raw_dv))
     expect_equal(fitted(lm_beta_y),
                  fitted(lm_raw_dv))
-    expect_equal(fitted(get_raw(lm_beta_xyw)),
+    expect_equal(fitted(raw_output(lm_beta_xyw)),
                  fitted(lm_raw))
   })
 

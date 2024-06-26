@@ -34,15 +34,30 @@ reference:
   #   Section description.
 - contents:
   - lav_betaselect
+  - lm_betaselect
 - title: Helper Functions
   # desc:  >
   #   Section description.
 - contents:
+  - std_data
+- title: Methods
+  # desc:  >
+  #   Section description.
+- contents:
   - print.lav_betaselect
+  - anova.lm_betaselect
+  - coef.lm_betaselect
+  - confint.lm_betaselect
+  - getCall.lm_betaselect
+  - predict.lm_betaselect
+  - summary.lm_betaselect
+  - vcov.lm_betaselect
+
 - title: Datasets
   desc: Datasets used in examples.
 - contents:
   - has_keyword("datasets")
+
 
 #  components:
 #    articles:

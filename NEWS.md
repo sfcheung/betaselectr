@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.2
+# betaselectr 0.0.1.3
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -11,3 +11,6 @@
 - For `lav_betaselect()`, added an
   option to skip finding product
   terms. (0.0.1.2)
+
+- Added some examples for the main
+  functions. (0.0.1.3)

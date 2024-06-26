@@ -61,9 +61,21 @@
 #' [semhelpinghands::print.std_solution_boot()].
 #'
 #' @examples
-#' \donttest{
-#' # TO ADD
-#' }
+#' library(lavaan)
+#' mod <-
+#' "
+#' med ~ iv + mod + iv:mod
+#' dv ~ med + iv
+#' "
+#' fit <- sem(mod,
+#'            data_test_medmod,
+#'            fixed.x = TRUE)
+#' summary(fit)
+#' fit_beta <- lav_betaselect(fit,
+#'                            to_standardize = c("iv", "dv"))
+#' fit_beta
+#' print(fit_beta,
+#'       output = "text")
 #'
 #' @return
 #'  `x` is returned invisibly. Called for its side effect.
@@ -261,7 +273,7 @@ print.lav_betaselect <- function(x,
         j <- sort(match(comps, out))[1]
         out <- out[-c(i:max(i, (j - 2)))]
         i <- which(out == "")[1]
-        header_stdp[i] <- "Selected Standardized Estimates Only (std.p):"
+        header_stdp[i] <- "Selected Standardized Estimates Only (Bs):"
         out <- append(out,
                       header_stdp,
                       after = i)

@@ -23,10 +23,10 @@ lav_betaselect(
   ncpus = parallel::detectCores(logical = FALSE) - 1,
   cl = NULL,
   iseed = NULL,
+  find_product_terms = TRUE,
   ...,
   delta_method = c("lavaan", "numDeriv"),
-  vector_form = TRUE,
-  find_product_terms = TRUE
+  vector_form = TRUE
 )
 }
 \arguments{
@@ -210,6 +210,16 @@ is \code{NULL}. Should be set to an integer
 for reproducible results.
 Ignored if \code{parallel} is \code{"no"}.}
 
+\item{find_product_terms}{String.
+If it is certain that a model does
+not have product terms, setting this
+to \code{FALSE} will skip the search, which
+is time consuming for a models with
+many paths and/or many variables.
+Default is \code{TRUE}, and the function
+will automatically identify product
+terms, if any.}
+
 \item{...}{Optional arguments to be
 passed to the \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}},
 which will be use to generate the
@@ -224,16 +234,6 @@ not be changed.}
 method used to compute standardized
 solution. For internal use and should
 not be changed.}
-
-\item{find_product_terms}{String.
-If it is certain that a model does
-not have product terms, setting this
-to \code{FALSE} will skip the search, which
-is time consuming for a models with
-many paths and/or many variables.
-Default is \code{TRUE}, and the function
-will automatically identify product
-terms, if any.}
 }
 \value{
 A data frame storing the parameter
@@ -330,9 +330,41 @@ raw data.
 }
 }
 \examples{
-\donttest{
-# TO ADD
-}
+
+library(lavaan)
+mod <-
+"
+med ~ iv + mod + iv:mod
+dv ~ med + iv
+"
+fit <- sem(mod,
+           data_test_medmod,
+           fixed.x = TRUE)
+summary(fit)
+fit_beta <- lav_betaselect(fit,
+                           to_standardize = c("iv", "dv"))
+fit_beta
+print(fit_beta,
+      output = "text")
+
+# In real studies:
+# - should set bootstrap to at least 5000
+# - should set parallel to "snow" or "multicore"
+fit_beta_boot <- lav_betaselect(fit,
+                                to_standardize = c("iv", "dv"),
+                                std_se = "bootstrap",
+                                std_ci = TRUE,
+                                bootstrap = 100,
+                                iseed = 1234)
+fit_beta_boot
+print(fit_beta_boot,
+      output = "text")
+
+# Print only beta_selects
+print(fit_beta_boot,
+      output = "text",
+      standardized_only = TRUE)
+
 
 }
 \references{

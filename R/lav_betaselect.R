@@ -316,9 +316,41 @@
 #' @seealso [print.lav_betaselect()] for its print method.
 #'
 #' @examples
-#' \donttest{
-#' # TO ADD
-#' }
+#'
+#' library(lavaan)
+#' mod <-
+#' "
+#' med ~ iv + mod + iv:mod
+#' dv ~ med + iv
+#' "
+#' fit <- sem(mod,
+#'            data_test_medmod,
+#'            fixed.x = TRUE)
+#' summary(fit)
+#' fit_beta <- lav_betaselect(fit,
+#'                            to_standardize = c("iv", "dv"))
+#' fit_beta
+#' print(fit_beta,
+#'       output = "text")
+#'
+#' # In real studies:
+#' # - should set bootstrap to at least 5000
+#' # - should set parallel to "snow" or "multicore"
+#' fit_beta_boot <- lav_betaselect(fit,
+#'                                 to_standardize = c("iv", "dv"),
+#'                                 std_se = "bootstrap",
+#'                                 std_ci = TRUE,
+#'                                 bootstrap = 100,
+#'                                 iseed = 1234)
+#' fit_beta_boot
+#' print(fit_beta_boot,
+#'       output = "text")
+#'
+#' # Print only beta_selects
+#' print(fit_beta_boot,
+#'       output = "text",
+#'       standardized_only = TRUE)
+#'
 #'
 #' @export
 #'
@@ -341,10 +373,10 @@ lav_betaselect <- function(object,
                            ncpus = parallel::detectCores(logical = FALSE) - 1,
                            cl = NULL,
                            iseed = NULL,
+                           find_product_terms = TRUE,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
-                           vector_form = TRUE,
-                           find_product_terms = TRUE) {
+                           vector_form = TRUE) {
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE
@@ -363,7 +395,7 @@ lav_betaselect <- function(object,
     # Get the variables to be standardized
     if (find_product_terms) {
         prods <- find_all_products(object,
-                                  parallel = (parallel != "none"),
+                                  parallel = (parallel != "no"),
                                   ncpus = ncpus,
                                   cl = cl,
                                   progress = progress)

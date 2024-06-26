@@ -68,9 +68,21 @@ in the output of \code{\link[=summary]{summary()}}
 for a \code{lavaan} output.
 }
 \examples{
-\donttest{
-# TO ADD
-}
+library(lavaan)
+mod <-
+"
+med ~ iv + mod + iv:mod
+dv ~ med + iv
+"
+fit <- sem(mod,
+           data_test_medmod,
+           fixed.x = TRUE)
+summary(fit)
+fit_beta <- lav_betaselect(fit,
+                           to_standardize = c("iv", "dv"))
+fit_beta
+print(fit_beta,
+      output = "text")
 
 }
 \seealso{

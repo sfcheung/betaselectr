@@ -866,11 +866,11 @@ find_all_products <- function(fit,
                                 expand = TRUE)
           }
         if (progress) {
-            cat("\nFinding product terms in the model ...\n")
+            cat("Finding product terms in the model ...\n")
             prods <- pbapply::pblapply(tmp,
                                        FUN = tmpfct,
                                        cl = cl)
-            cat("\nFinished finding product terms.\n")
+            cat("Finished finding product terms.\n")
           } else {
             prods <- parallel::parLapplyLB(cl = cl,
                                            tmp,
@@ -879,14 +879,14 @@ find_all_products <- function(fit,
           }
       } else {
         if (progress) {
-            cat("\nFinding product terms in the model ...\n")
+            cat("Finding product terms in the model ...\n")
             prods <- pbapply::pbmapply(manymome::get_prod,
                                        x = reg_paths[, "rhs"],
                                        y = reg_paths[, "lhs"],
                                        MoreArgs = list(fit = fit,
                                                        expand = TRUE),
                                        SIMPLIFY = FALSE)
-            cat("\nFinished finding product terms.\n")
+            cat("Finished finding product terms.\n")
           } else {
             prods <- mapply(manymome::get_prod,
                             x = reg_paths[, "rhs"],

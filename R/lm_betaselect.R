@@ -142,15 +142,16 @@
 #' the models with standardization.
 #' (See [predict.lm_betaselect()] for details.)
 #'
-#' - An `update`-method for updating
-#' a call to [lm_betaselect()], which
-#' can update the model in the same
+#' - The default `update`-method for updating
+#' a call also works for an
+#' `lm_betaselect` object. It can
+#' update the model in the same
 #' way it updates a model fitted by
 #' [stats::lm()], and also update
 #' arguments of [lm_betaselect()],
 #' such as the variables to be
 #' standardized.
-#' (See [update.lm_betaselect()] for details.)
+#' (See [stats::update()] for details.)
 #'
 #' Most other methods for the output
 #' of [stats::lm()] should also work

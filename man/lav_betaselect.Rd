@@ -25,7 +25,8 @@ lav_betaselect(
   iseed = NULL,
   ...,
   delta_method = c("lavaan", "numDeriv"),
-  vector_form = TRUE
+  vector_form = TRUE,
+  find_product_terms = TRUE
 )
 }
 \arguments{
@@ -223,6 +224,16 @@ not be changed.}
 method used to compute standardized
 solution. For internal use and should
 not be changed.}
+
+\item{find_product_terms}{String.
+If it is certain that a model does
+not have product terms, setting this
+to \code{FALSE} will skip the search, which
+is time consuming for a models with
+many paths and/or many variables.
+Default is \code{TRUE}, and the function
+will automatically identify product
+terms, if any.}
 }
 \value{
 A data frame storing the parameter

@@ -841,16 +841,61 @@ to_standardize_for_i <- function(prods,
 
 #' @noRd
 
-find_all_products <- function(fit) {
+find_all_products <- function(fit,
+                              parallel = TRUE,
+                              ncpus = parallel::detectCores(logical = FALSE) - 1,
+                              cl = NULL,
+                              progress = FALSE) {
+
     ptable <- lavaan::parameterTable(fit)
     reg_paths <- all_reg_paths(ptable)
     if (length(reg_paths) == 0) return(list())
-    prods <- mapply(manymome::get_prod,
-                    x = reg_paths[, "rhs"],
-                    y = reg_paths[, "lhs"],
-                    MoreArgs = list(fit = fit,
-                                    expand = TRUE),
-                    SIMPLIFY = FALSE)
+    if (parallel) {
+        if (is.null(cl)) {
+            cl <- parallel::makeCluster(min(nrow(reg_paths), ncpus))
+            on.exit(parallel::stopCluster(cl), add = TRUE)
+          }
+        tmp <- split(reg_paths,
+                      seq_len(nrow(reg_paths)),
+                      drop = FALSE)
+        tmpfct <- function(xx) {
+            force(fit)
+            manymome::get_prod(x = xx[2],
+                                y = xx[1],
+                                fit = fit,
+                                expand = TRUE)
+          }
+        if (progress) {
+            cat("\nFinding product terms in the model ...\n")
+            prods <- pbapply::pblapply(tmp,
+                                       FUN = tmpfct,
+                                       cl = cl)
+            cat("\nFinished finding product terms.\n")
+          } else {
+            prods <- parallel::parLapplyLB(cl = cl,
+                                           tmp,
+                                           fun = tmpfct,
+                                           chunk.size = 1)
+          }
+      } else {
+        if (progress) {
+            cat("\nFinding product terms in the model ...\n")
+            prods <- pbapply::pbmapply(manymome::get_prod,
+                                       x = reg_paths[, "rhs"],
+                                       y = reg_paths[, "lhs"],
+                                       MoreArgs = list(fit = fit,
+                                                       expand = TRUE),
+                                       SIMPLIFY = FALSE)
+            cat("\nFinished finding product terms.\n")
+          } else {
+            prods <- mapply(manymome::get_prod,
+                            x = reg_paths[, "rhs"],
+                            y = reg_paths[, "lhs"],
+                            MoreArgs = list(fit = fit,
+                                            expand = TRUE),
+                            SIMPLIFY = FALSE)
+          }
+      }
     prods_ok <- sapply(prods, function(x) is.list(x))
     if (!any(prods_ok)) {
         return(list())

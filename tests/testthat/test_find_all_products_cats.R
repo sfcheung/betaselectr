@@ -22,8 +22,8 @@ fit <- sem(mod, dat, meanstructure = TRUE, fixed.x = FALSE)
 fit2 <- sem(mod, dat, meanstructure = TRUE, fixed.x = FALSE, group = "city")
 
 
-prods <- find_all_products(fit)
-prods2 <- find_all_products(fit2)
+prods <- find_all_products(fit, parallel = FALSE)
+prods2 <- find_all_products(fit2, parallel = FALSE)
 
 test_that("Find prods", {
   expect_true(setequal(names(prods),
@@ -37,4 +37,15 @@ test_that("Find cat", {
                        c("gpgp3", "gpgp2")))
   expect_true(setequal(find_categorical(fit2),
                        c("gpgp3", "gpgp2")))
+})
+
+
+test_that("Find prods: parallel", {
+  skip_on_cran()
+  prodsb <- find_all_products(fit, parallel = TRUE, ncpus = 2)
+  prods2b <- find_all_products(fit2, parallel = TRUE, ncpus = 2)
+  expect_true(setequal(names(prods),
+                       c("x:gpgp2", "x:gpgp3", "x:w4")))
+  expect_true(setequal(names(prods2),
+                       c("x:gpgp2", "x:gpgp3", "x:w4")))
 })

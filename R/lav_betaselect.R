@@ -291,6 +291,16 @@
 #' `FALSE`, then the bootstrap estimates
 #' will not be stored.
 #'
+#' @param find_product_terms String.
+#' If it is certain that a model does
+#' not have product terms, setting this
+#' to `FALSE` will skip the search, which
+#' is time consuming for a models with
+#' many paths and/or many variables.
+#' Default is `TRUE`, and the function
+#' will automatically identify product
+#' terms, if any.
+#'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -333,7 +343,8 @@ lav_betaselect <- function(object,
                            iseed = NULL,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
-                           vector_form = TRUE) {
+                           vector_form = TRUE,
+                           find_product_terms = TRUE) {
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE
@@ -350,7 +361,15 @@ lav_betaselect <- function(object,
     ngroups <- lavaan::lavTech(object, what = "ngroups")
 
     # Get the variables to be standardized
-    prods <- find_all_products(object)
+    if (find_product_terms) {
+        prods <- find_all_products(object,
+                                  parallel = (parallel != "none"),
+                                  ncpus = ncpus,
+                                  cl = cl,
+                                  progress = progress)
+      } else {
+        prods <- list()
+      }
     to_standardize <- fix_to_standardize(object = object,
                                          to_standardize = to_standardize,
                                          not_to_standardize = not_to_standardize,

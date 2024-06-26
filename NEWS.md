@@ -1,3 +1,5 @@
-# betaselectr 0.0.0.9000
+# betaselectr 0.0.1.1
 
-Initial commit.
+- Added `lm_betaselect()` and related
+  methods and helper functions.
+  (0.0.1.1)

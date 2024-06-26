@@ -19,6 +19,45 @@
     <loc>https://sfcheung.github.io/betaselectr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/anova.lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/coef.lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/confint.lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/data_test_medmod.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/data_test_mod_cat.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/getCall.lm_betaselect.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/betaselectr/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/lav_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/predict.lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/print.lav_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/std_data.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/summary.lm_betaselect.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/vcov.lm_betaselect.html</loc>
   </url>
 </urlset>

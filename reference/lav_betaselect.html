@@ -20,7 +20,7 @@ standardization."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,8 @@ standardization.</p>
 <span>  iseed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  delta_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lavaan"</span>, <span class="st">"numDeriv"</span><span class="op">)</span>,</span>
-<span>  vector_form <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  vector_form <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  find_product_terms <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -328,6 +329,18 @@ not be changed.</p></dd>
 method used to compute standardized
 solution. For internal use and should
 not be changed.</p></dd>
+
+
+<dt>find_product_terms</dt>
+<dd><p>String.
+If it is certain that a model does
+not have product terms, setting this
+to <code>FALSE</code> will skip the search, which
+is time consuming for a models with
+many paths and/or many variables.
+Default is <code>TRUE</code>, and the function
+will automatically identify product
+terms, if any.</p></dd>
 
 </dl></div>
     <div class="section level2">

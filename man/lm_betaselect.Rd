@@ -255,6 +255,15 @@ The data will be standardized before
 computing the predicted values in
 the models with standardization.
 (See \code{\link[=predict.lm_betaselect]{predict.lm_betaselect()}} for details.)
+\item An \code{update}-method for updating
+a call to \code{\link[=lm_betaselect]{lm_betaselect()}}, which
+can update the model in the same
+way it updates a model fitted by
+\code{\link[stats:lm]{stats::lm()}}, and also update
+arguments of \code{\link[=lm_betaselect]{lm_betaselect()}},
+such as the variables to be
+standardized.
+(See \code{\link[=update.lm_betaselect]{update.lm_betaselect()}} for details.)
 }
 
 Most other methods for the output

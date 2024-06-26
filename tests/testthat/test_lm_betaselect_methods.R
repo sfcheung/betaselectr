@@ -241,3 +241,46 @@ test_that("add1() and drop1()", {
     expect_equal(drop1_out1b["cat1", "RSS"],
                  anova(lm_beta_manual_0)["Residuals", "Sum Sq"])
   })
+
+lm_beta_u0 <- lm_betaselect(dv ~ iv, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_u1 <- lm_betaselect(dv ~ iv + mod + cov1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_u2 <- lm_betaselect(dv ~ iv*mod + cov1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_u3 <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_u4 <- lm_betaselect(dv ~ iv + mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = FALSE)
+lm_beta_u5 <- lm_betaselect(dv ~ iv + mod + cov1, data_test_mod_cat, to_standardize = "dv", do_boot = FALSE)
+lm_beta_u6 <- lm_betaselect(dv ~ iv + mod + cov1, data_test_mod_cat[20:50, ], to_standardize = "iv", do_boot = FALSE)
+
+test_that("getCall", {
+    expect_equal(as.character(getCall(lm_beta_u1)[[1]])[3],
+                 "lm_betaselect")
+    expect_equal(as.character(getCall(lm_beta_u1, what = "beta")[[1]])[3],
+                 "lm")
+    expect_equal(as.character(as.list(getCall(lm_beta_u1, what = "beta")$data)[[1]])[3],
+                 "std_data")
+    expect_equal(as.character(getCall(lm_beta_u1, what = "raw")[[1]])[3],
+                 "lm")
+  })
+
+test_that("update", {
+    lm_beta_tmp <- update(lm_beta_u1, ~ . + cat1)
+    expect_equal(coef(lm_beta_tmp),
+                 coef(lm_beta_u4))
+    lm_beta_tmp <- update(lm_beta_u4, ~ . - cat1)
+    expect_equal(coef(lm_beta_tmp),
+                 coef(lm_beta_u1))
+    lm_beta_tmp <- update(lm_beta_u0, ~ . + mod + cov1 + cat1)
+    expect_equal(coef(lm_beta_tmp),
+                 coef(lm_beta_u4))
+    lm_beta_tmp <- update(lm_beta_u4, ~ . - cat1 - cov1 - mod)
+    expect_equal(coef(lm_beta_tmp),
+                 coef(lm_beta_u0))
+    lm_beta_tmp <- update(lm_beta_u1, ~ . + iv*mod)
+    expect_equal(sort(coef(lm_beta_tmp)),
+                 sort(coef(lm_beta_u2)))
+    lm_beta_tmp <- update(lm_beta_u1, to_standardize = "dv")
+    expect_equal(sort(coef(lm_beta_tmp)),
+                 sort(coef(lm_beta_u5)))
+    lm_beta_tmp <- update(lm_beta_u0, ~ . + mod + cov1, data = data_test_mod_cat[20:50, ])
+    expect_equal(sort(coef(lm_beta_tmp)),
+                 sort(coef(lm_beta_u6)))
+  })

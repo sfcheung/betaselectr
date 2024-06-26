@@ -142,6 +142,16 @@
 #' the models with standardization.
 #' (See [predict.lm_betaselect()] for details.)
 #'
+#' - An `update`-method for updating
+#' a call to [lm_betaselect()], which
+#' can update the model in the same
+#' way it updates a model fitted by
+#' [stats::lm()], and also update
+#' arguments of [lm_betaselect()],
+#' such as the variables to be
+#' standardized.
+#' (See [update.lm_betaselect()] for details.)
+#'
 #' Most other methods for the output
 #' of [stats::lm()] should also work
 #' on an `lm_betaselect`-class object.
@@ -322,6 +332,12 @@ lm_betaselect <- function(...,
     lm_ustd_call <- stats::getCall(lm_ustd)
     lm_ustd_args <- as.list(lm_ustd_call)[-1]
 
+    # Construct a call to lm_betaselect with argument names
+    my_call2 <- as.list(match.call(expand.dots = FALSE))
+    lm_betaselect_args <- c(lm_ustd_args, my_call2[-c(1,2)])
+    lm_betaselect_call <- as.call(c(str2lang("betaselectr::lm_betaselect"),
+                                    lm_betaselect_args))
+
     # Do regression on standardized input variables.
 
     # Get the variables to be standardized
@@ -368,7 +384,7 @@ lm_betaselect <- function(...,
     out$lm_betaselect$ustd <- lm_ustd
     out$lm_betaselect$vcov_std <- vcov_std
     out$lm_betaselect$vcov_ustd <- vcov_ustd
-    out$lm_betaselect$call <- match.call()
+    out$lm_betaselect$call <- lm_betaselect_call
     out$lm_betaselect$to_standardize <- to_standardize
 
     # Do bootstrapping if requested.

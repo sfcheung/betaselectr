@@ -1440,3 +1440,117 @@ predict.lm_betaselect <- function(object,
         NextMethod()
       }
   }
+
+#' @title Update and Re-fit a Call to
+#' 'lm_betaselect()'
+#'
+#' @description The `update`-method
+#' for an `lm_betaselect`-class objects.
+#'
+#' @details This works in the same way
+#' the default `update`-method does for
+#' the output of [stats::lm()].
+#'
+#' @return
+#' It returns the output of
+#' [lm_betaselect()] with the updated
+#' call, such as the updated model.
+#'
+#' @param object An `lm_betaselect`-class
+#' object.
+#'
+#' @param formula. Changes to the formula,
+#' as in the default [update()] method.
+#'
+#' @param ...  For [update.lm_betaselect()],
+#' additional arguments
+#' to the call, as in the default
+#' [update()] method. Ignored by
+#' [getCall.lm_betaselect()].
+#'
+#' @param evaluate Whether the updated
+#' call will be evaluated. Default is
+#' `TRUE`.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [lm_betaselect()] and [stats::update()]
+#'
+#' @examples
+#'
+#' data(data_test_mod_cat)
+#'
+#' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1,
+#'                            data = data_test_mod_cat,
+#'                            to_standardize = "iv")
+#' summary(lm_beta_x)
+#' lm_beta_x2 <- update(lm_beta_x, ~ . + cat1)
+#' summary(lm_beta_x2)
+#'
+#' @export
+
+update.lm_betaselect <- function(object,
+                                 formula.,
+                                 ...,
+                                 evaluate = TRUE) {
+    # Adapted from the default update
+    # By default, get the call to lm_betaselect()
+    if (is.null(call <- stats::getCall(object)))
+        stop("need an object with call component")
+    extras <- match.call(expand.dots = FALSE)$...
+    if (!missing(formula.))
+        call$formula <- stats::update(formula(object), formula.)
+    if (length(extras)) {
+        existing <- !is.na(match(names(extras), names(call)))
+        for (a in names(extras)[existing]) call[[a]] <- extras[[a]]
+        if (any(!existing)) {
+            call <- c(as.list(call), extras[!existing])
+            call <- as.call(call)
+        }
+    }
+    if (evaluate)
+        eval(call, parent.frame())
+    else call
+  }
+
+#' @param x An `lm_betaselect`-class
+#' object from which the call is to
+#' be extracted.
+#'
+#' @param what Which call to extract.
+#' For `"lm_betaselect"`, the call
+#' to [lm_betaselect()] is extracted.
+#' For
+#' `"beta"` or `"standardized"`, the
+#' call used to fit the model *after*
+#' selected variables standardized
+#' is extracted.
+#' For `"raw"`
+#' or `"unstandardized"`, the call used
+#' to fit hte model *before* standardization
+#' is extracted.
+#'
+#' @rdname update.lm_betaselect
+#'
+#' @export
+
+getCall.lm_betaselect <- function(x,
+                                  what = c("lm_betaselect",
+                                           "beta",
+                                           "standardized",
+                                           "raw",
+                                           "unstandardized"),
+                                  ...) {
+    what = match.arg(what)
+    what <- switch(what,
+                   lm_betaselect = "lm_betaselect",
+                   beta = "beta",
+                   standardized = "standardized",
+                   raw = "raw",
+                   unstandardized = "unstandardized")
+    out <- switch(what,
+                  lm_betaselect = x$lm_betaselect$call,
+                  beta = x$call,
+                  raw = x$lm_betaselect$ustd$call)
+    return(out)
+  }

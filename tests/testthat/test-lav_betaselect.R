@@ -75,6 +75,15 @@ test_that("All est", {
                 "Standardized")
 })
 
+# Check skipping the search for product terms
+
+test_that("All est", {
+  out1 <- lav_betaselect(fit, progress = FALSE)
+  out2 <- lav_betaselect(fit, find_product_terms = FALSE, progress = FALSE)
+  expect_equal(out1,
+               out2,
+               ignore_attr = TRUE)
+})
 
 
 # (which(std_nox$est.std != std$est.std))

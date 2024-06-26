@@ -16,7 +16,7 @@ lav_betaselect()."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
     
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,11 +147,130 @@ function is adapted from
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co"># TO ADD</span></span></span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">med ~ iv + mod + iv:mod</span></span></span>
+<span class="r-in"><span><span class="st">dv ~ med + iv</span></span></span>
+<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>,</span></span>
+<span class="r-in"><span>           <span class="va">data_test_medmod</span>,</span></span>
+<span class="r-in"><span>           fixed.x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6-18 ended normally after 3 iterations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Number of model parameters                         7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Number of observations                           200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model Test User Model:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Test statistic                                 2.685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Degrees of freedom                                 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   P-value (Chi-square)                           0.261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter Estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Standard errors                             Standard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Information                                 Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Information saturated (h1) model          Structured</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Regressions:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Estimate   Std.Err  z-value  P(&gt;|z|)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   med ~                                                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv                -6.339    0.997   -6.357    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mod               -3.903    0.622   -6.277    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv:mod             0.286    0.039    7.248    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   dv ~                                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     med                0.093    0.011    8.298    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv                 0.229    0.039    5.917    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variances:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Estimate   Std.Err  z-value  P(&gt;|z|)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .med               61.851    6.185   10.000    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .dv                 2.104    0.210   10.000    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">fit_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="lav_betaselect.html">lav_betaselect</a></span><span class="op">(</span><span class="va">fit</span>,</span></span>
+<span class="r-in"><span>                           to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"dv"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit_beta</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       lhs op    rhs       est    se      z pvalue  ci.lower  ci.upper    std.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     med  ~     iv    -6.339 0.997 -6.357      0    -8.293    -4.385  -17.697</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     med  ~    mod    -3.903 0.622 -6.277      0    -5.122    -2.684   -3.903</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     med  ~ iv:mod     0.286 0.039  7.248      0     0.208     0.363    0.797</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      dv  ~    med     0.093 0.011  8.298      0     0.071     0.115    0.049</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      dv  ~     iv     0.229 0.039  5.917      0     0.153     0.304    0.333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     med ~~    med    61.851 6.185 10.000      0    49.728    73.974   61.851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      dv ~~     dv     2.104 0.210 10.000      0     1.692     2.517    0.574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      iv ~~     iv     7.795 0.000     NA     NA     7.795     7.795    1.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      iv ~~    mod     5.287 0.000     NA     NA     5.287     5.287    1.894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     iv ~~ iv:mod   274.291 0.000     NA     NA   274.291   274.291   35.189</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    mod ~~    mod    23.129 0.000     NA     NA    23.129    23.129   23.129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    mod ~~ iv:mod   488.157 0.000     NA     NA   488.157   488.157  174.847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 iv:mod ~~ iv:mod 14521.504 0.000     NA     NA 14521.504 14521.504 1862.983</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    std.p.by</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        dv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     iv,dv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        dv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       iv</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit_beta</span>,</span></span>
+<span class="r-in"><span>      output <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter Estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Standard errors                             Standard</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Information                                 Expected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Information saturated (h1) model          Structured</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Selected Standardization (Bs):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Only selected variables are standardized</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Regressions:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Estimate   Std.Err  z-value  P(&gt;|z|)    CI.Lo     CI.Hi </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   med ~                                                                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv                -6.339    0.997   -6.357    0.000    -8.293    -4.385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mod               -3.903    0.622   -6.277    0.000    -5.122    -2.684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv:mod             0.286    0.039    7.248    0.000     0.208     0.363</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   dv ~                                                                     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     med                0.093    0.011    8.298    0.000     0.071     0.115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     iv                 0.229    0.039    5.917    0.000     0.153     0.304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Bs    Bs.by</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -17.697    iv   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -3.903         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.797    iv   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.049    dv   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.333 iv,dv   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variances:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Estimate   Std.Err  z-value  P(&gt;|z|)    CI.Lo     CI.Hi </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .med               61.851    6.185   10.000    0.000    49.728    73.974</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .dv                 2.104    0.210   10.000    0.000     1.692     2.517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        Bs    Bs.by</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    61.851         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.574    dv   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The column 'Bs.by' lists variable(s) standardized when computing the</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   standardized coefficient of a parameter. ('NA' for user-defined</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   parameters because they are computed from other standardized</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   parameters.)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - These variables are standardized: iv, dv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Product terms (iv:mod) have variables standardized before computing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   them. That is, the product terms themselves are not standardized.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

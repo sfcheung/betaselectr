@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.3
+# betaselectr 0.0.1.4
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -14,3 +14,8 @@
 
 - Added some examples for the main
   functions. (0.0.1.3)
+
+- Added `glm_betaselect()` and
+  related methods to
+  support models fitted by
+  `stats::glm()`. (0.0.1.4)

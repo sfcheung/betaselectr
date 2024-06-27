@@ -2,12 +2,22 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{vcov.lm_betaselect}
 \alias{vcov.lm_betaselect}
-\title{The 'vcov' Method for an
-'lm_betaselect'-Class Object}
+\alias{vcov.glm_betaselect}
+\title{The 'vcov' Method for
+'lm_betaselect' and \code{glm_betaselect}
+Objects}
 \usage{
 \method{vcov}{lm_betaselect}(
   object,
-  method = c("boot", "bootstrap", "ls"),
+  method = c("boot", "bootstrap", "ls", "default"),
+  type = c("beta", "standardized", "raw", "unstandardized"),
+  warn = TRUE,
+  ...
+)
+
+\method{vcov}{glm_betaselect}(
+  object,
+  method = c("boot", "bootstrap", "ls", "default"),
   type = c("beta", "standardized", "raw", "unstandardized"),
   warn = TRUE,
   ...
@@ -16,18 +26,22 @@
 \arguments{
 \item{object}{The output of
 \code{\link[=lm_betaselect]{lm_betaselect()}}
-or an \code{lm_betaselect}-class object.}
+or an \code{lm_betaselect}-class object,
+or the output of \code{\link[=glm_betaselect]{glm_betaselect()}}
+or a \code{glm_betaselect}-class object.}
 
 \item{method}{The method used to
 compute the variance-covariance
 matrix. If bootstrapping was
 requested when calling
-\code{\link[=lm_betaselect]{lm_betaselect()}} and this argument
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}} and this argument
 is set to \code{"bootstrap"} or \code{"boot"},
 the bootstrap variance-covariance
 matrix is returned. If bootstrapping
 was not requested or if this argument
-is set to \code{"ls"}, then the usual \code{lm}
+is set to \code{"ls"} or \code{"default"},
+then the usual \code{lm} or \code{glm}
 variance-covariance matrix is
 returned, with a warning raised
 unless \code{type} is \code{"raw"} or
@@ -65,7 +79,8 @@ estimates.
 Compute the
 variance-covariance matrix of
 estimates in the output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}.
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}.
 }
 \details{
 The type of
@@ -74,7 +89,7 @@ on the object. If bootstrapping
 was requested, by default it returns
 the bootstrap variance-covariance
 matrix. Otherwise, it returns the
-OLS (or WLS) variance-covariance
+default variance-covariance
 matrix and raises a warning.
 
 Support for other type of
@@ -93,10 +108,33 @@ lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                            bootstrap = 100,
                            iseed = 1234)
 vcov(lm_beta_x)
+# A warning is expected for the following call
 vcov(lm_beta_x, method = "ls")
 vcov(lm_beta_x, type = "raw")
 
 
+
+data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+                              yes = 1,
+                              no = 0)
+# bootstrap should be set to 2000 or 5000 in real studies
+logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+                                  data = data_test_mod_cat,
+                                  family = binomial,
+                                  to_standardize = "iv",
+                                  do_boot = TRUE,
+                                  bootstrap = 100,
+                                  iseed = 1234)
+vcov(logistic_beta_x)
+# A warning is expected for the following call
+vcov(logistic_beta_x, method = "default")
+vcov(logistic_beta_x, type = "raw")
+
+}
+\seealso{
+\code{\link[=lm_betaselect]{lm_betaselect()}} and
+\code{\link[=glm_betaselect]{glm_betaselect()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

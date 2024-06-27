@@ -2,17 +2,29 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{anova.lm_betaselect}
 \alias{anova.lm_betaselect}
-\title{ANOVA Tables for an
-'lm_betaselect'-Class Object}
+\alias{anova.glm_betaselect}
+\title{ANOVA Tables For
+'lm_betaselect' and 'glm_betaselect'
+Objects}
 \usage{
 \method{anova}{lm_betaselect}(object, ..., type = c("beta", "standardized", "raw", "unstandardized"))
+
+\method{anova}{glm_betaselect}(
+  object,
+  ...,
+  type = c("beta", "standardized", "raw", "unstandardized"),
+  dispersion = NULL,
+  test = NULL
+)
 }
 \arguments{
 \item{object}{The output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}.}
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}.}
 
 \item{...}{Additional outputs
-of \code{\link[=lm_betaselect]{lm_betaselect()}}.}
+of \code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}.}
 
 \item{type}{String. If
 \code{"unstandardized"} or \code{"raw"}, the
@@ -22,6 +34,15 @@ are used If \code{"beta"} or
 output \emph{after} selected
 variables standardized are returned.
 Default is \code{"beta"}.}
+
+\item{dispersion}{To be passed to
+\code{\link[stats:anova.glm]{stats::anova.glm()}}. The dispersion
+parameter. Default ia \code{NULL} and it
+is extracted from the model.}
+
+\item{test}{String. The test to be
+conducted. Please refer to
+\code{\link[stats:anova.glm]{stats::anova.glm()}} for details.}
 }
 \value{
 It returns an object of class
@@ -33,7 +54,8 @@ structure.
 Return the analysis
 of variance tables for
 the outputs of
-\code{\link[=lm_betaselect]{lm_betaselect()}}.
+\code{\link[=lm_betaselect]{lm_betaselect()}} and
+\code{\link[=glm_betaselect]{glm_betaselect()}}.
 }
 \details{
 By default, it calls \code{\link[stats:anova]{stats::anova()}}
@@ -53,6 +75,18 @@ lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                            do_boot = FALSE)
 anova(lm_beta_x)
 anova(lm_beta_x, type = "raw")
+
+
+data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+                              yes = 1,
+                              no = 0)
+logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+                                  data = data_test_mod_cat,
+                                  family = binomial,
+                                  to_standardize = "iv")
+anova(logistic_beta_x)
+anova(logistic_beta_x, type = "raw")
 
 }
 \seealso{

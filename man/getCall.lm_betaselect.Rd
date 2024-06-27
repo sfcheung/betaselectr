@@ -2,23 +2,34 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{getCall.lm_betaselect}
 \alias{getCall.lm_betaselect}
-\title{Extract the Call From an
-'lm_betaselect' Object}
+\alias{getCall.glm_betaselect}
+\title{Call in an
+'lm_betaselect' or 'glm_betaselect'
+Object}
 \usage{
 \method{getCall}{lm_betaselect}(
   x,
   what = c("lm_betaselect", "beta", "standardized", "raw", "unstandardized"),
   ...
 )
+
+\method{getCall}{glm_betaselect}(
+  x,
+  what = c("glm_betaselect", "beta", "standardized", "raw", "unstandardized"),
+  ...
+)
 }
 \arguments{
 \item{x}{An \code{lm_betaselect}-class
+or \code{glm_betaselect}-class
 object from which the call is to
 be extracted.}
 
 \item{what}{Which call to extract.
-For \code{"lm_betaselect"}, the call
-to \code{\link[=lm_betaselect]{lm_betaselect()}} is extracted.
+For \code{"lm_betaselect"} or
+\code{"glm_betaselect"} the call
+to \code{\link[=lm_betaselect]{lm_betaselect()}}
+or \code{\link[=glm_betaselect]{glm_betaselect()}} is extracted.
 For
 \code{"beta"} or \code{"standardized"}, the
 call used to fit the model \emph{after}
@@ -37,12 +48,14 @@ It returns the call requested.
 }
 \description{
 The \code{getCall}-method
-for an \code{lm_betaselect}-class objects.
+for an \code{lm_betaselect}-class or
+\code{glm_betaselectd}-class objects.
 }
 \details{
 This works in the same way
 the default \code{getCall}-method does for
-the output of \code{\link[stats:lm]{stats::lm()}}.
+the outputs of \code{\link[stats:lm]{stats::lm()}}
+and \code{\link[stats:glm]{stats::glm()}}.
 }
 \examples{
 
@@ -57,7 +70,8 @@ getCall(lm_beta_x, what = "raw")
 
 }
 \seealso{
-\code{\link[=lm_betaselect]{lm_betaselect()}} and \code{\link[stats:update]{stats::getCall()}}
+\code{\link[=lm_betaselect]{lm_betaselect()}},
+\code{\link[=glm_betaselect]{glm_betaselect()}}, and \code{\link[stats:update]{stats::getCall()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

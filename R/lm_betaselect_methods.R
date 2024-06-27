@@ -1,9 +1,10 @@
-#' @title Coefficients of an
-#' 'lm_betaselect'-Class Object
+#' @title Coefficients of
+#' Beta-Select in Linear Models
 #'
 #' @description Return the estimates of
 #' coefficients in an
-#' `lm_betaselect`-class object.
+#' `lm_betaselect`-class or
+#' `glm_betaselect`-class object.
 #
 #' @details By default, it extracts the
 #' regression coefficients *after* the
@@ -18,8 +19,10 @@
 #' regression coefficients.
 #'
 #' @param object The output of
-#' [lm_betaselect()], or an
-#' `lm_betaselect`-class object.
+#' [lm_betaselect()] or
+#' [glm_betaselect()], or an
+#' `lm_betaselect`-class or
+#' `glm_betaselect`-class object.
 #'
 #' @param complete If `TRUE`, it returns
 #' the full vector of coefficients,
@@ -40,7 +43,8 @@
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
-#' @seealso [lm_betaselect()]
+#' @seealso [lm_betaselect()] and
+#' [glm_betaselect()]
 #'
 #' @examples
 #'
@@ -69,13 +73,33 @@ coef.lm_betaselect <- function(object,
       }
   }
 
-#' @title The 'vcov' Method for an
-#' 'lm_betaselect'-Class Object
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv")
+#' coef(logistic_beta_x)
+#' coef(logistic_beta_x, type = "raw")
+#'
+#' @rdname coef.lm_betaselect
+#' @export
+
+coef.glm_betaselect <- coef.lm_betaselect
+
+#' @title The 'vcov' Method for
+#' 'lm_betaselect' and `glm_betaselect`
+#' Objects
 #'
 #' @description Compute the
 #' variance-covariance matrix of
 #' estimates in the output of
-#' [lm_betaselect()].
+#' [lm_betaselect()] or
+#' [glm_betaselect()].
 #'
 #' @details The type of
 #' variance-covariance matrix depends
@@ -83,7 +107,7 @@ coef.lm_betaselect <- function(object,
 #' was requested, by default it returns
 #' the bootstrap variance-covariance
 #' matrix. Otherwise, it returns the
-#' OLS (or WLS) variance-covariance
+#' default variance-covariance
 #' matrix and raises a warning.
 #'
 #' Support for other type of
@@ -92,6 +116,10 @@ coef.lm_betaselect <- function(object,
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
+#'
+#' @seealso [lm_betaselect()] and
+#' [glm_betaselect()]
+#'
 #' @return
 #' A matrix of the variances and
 #' covariances of the parameter
@@ -99,18 +127,22 @@ coef.lm_betaselect <- function(object,
 #'
 #' @param object The output of
 #' [lm_betaselect()]
-#' or an `lm_betaselect`-class object.
+#' or an `lm_betaselect`-class object,
+#' or the output of [glm_betaselect()]
+#' or a `glm_betaselect`-class object.
 #'
 #' @param method The method used to
 #' compute the variance-covariance
 #' matrix. If bootstrapping was
 #' requested when calling
-#' [lm_betaselect()] and this argument
+#' [lm_betaselect()] or
+#' [glm_betaselect()] and this argument
 #' is set to `"bootstrap"` or `"boot"`,
 #' the bootstrap variance-covariance
 #' matrix is returned. If bootstrapping
 #' was not requested or if this argument
-#' is set to `"ls"`, then the usual `lm`
+#' is set to `"ls"` or `"default"`,
+#' then the usual `lm` or `glm`
 #' variance-covariance matrix is
 #' returned, with a warning raised
 #' unless `type` is `"raw"` or
@@ -151,6 +183,7 @@ coef.lm_betaselect <- function(object,
 #'                            bootstrap = 100,
 #'                            iseed = 1234)
 #' vcov(lm_beta_x)
+#' # A warning is expected for the following call
 #' vcov(lm_beta_x, method = "ls")
 #' vcov(lm_beta_x, type = "raw")
 #'
@@ -159,7 +192,7 @@ coef.lm_betaselect <- function(object,
 # Adapted from vcov.std_selected()
 
 vcov.lm_betaselect <- function(object,
-                               method = c("boot", "bootstrap", "ls"),
+                               method = c("boot", "bootstrap", "ls", "default"),
                                type = c("beta",
                                         "standardized",
                                         "raw",
@@ -171,7 +204,8 @@ vcov.lm_betaselect <- function(object,
     method <- switch(method,
                      boot = "boot",
                      bootstrap = "boot",
-                     ls = "ls")
+                     ls = "ls",
+                     default = "ls")
     type <- switch(type,
                    beta = "beta",
                    standardized = "beta",
@@ -193,7 +227,7 @@ vcov.lm_betaselect <- function(object,
           } else {
             if (warn) {
                 warning("With standardization, the variance-covariance matrix ",
-                        "using OLS or WLS should not be used.")
+                        "from 'lm()' or 'glm()' should not be used.")
               }
             NextMethod()
           }
@@ -212,13 +246,39 @@ vcov.lm_betaselect <- function(object,
       }
   }
 
-#' @title Confidence Interval for an
-#' 'lm_betaselect'-Class Object
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' # bootstrap should be set to 2000 or 5000 in real studies
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv",
+#'                                   do_boot = TRUE,
+#'                                   bootstrap = 100,
+#'                                   iseed = 1234)
+#' vcov(logistic_beta_x)
+#' # A warning is expected for the following call
+#' vcov(logistic_beta_x, method = "default")
+#' vcov(logistic_beta_x, type = "raw")
+#'
+#' @rdname vcov.lm_betaselect
+#' @export
+
+vcov.glm_betaselect <- vcov.lm_betaselect
+
+#' @title Confidence Interval for
+#' 'lm_betaselect' or 'glm_betaselect'
+#' Objects
 #'
 #' @description Return the confidence
 #' interval of the regression
 #' coefficients in the output of
-#' [lm_betaselect()].
+#' [lm_betaselect()] or
+#' [glm_betaselect()].
 #'
 #' @details
 #' The type of
@@ -227,7 +287,7 @@ vcov.lm_betaselect <- function(object,
 #' was requested, by default it returns
 #' the percentile bootstrap confidence
 #' intervals. Otherwise, it returns the
-#' OLS (or WLS) confidence intervals
+#' default confidence intervals
 #' and raises a warning for the
 #' standardized solution.
 #'
@@ -241,7 +301,8 @@ vcov.lm_betaselect <- function(object,
 #' of coefficients.
 #'
 #' @param object The output of
-#' [lm_betaselect()].
+#' [lm_betaselect()] or
+#' [glm_betaselect()].
 #'
 #' @param parm The terms for which
 #' the confidence intervals are returned.
@@ -412,13 +473,151 @@ confint.lm_betaselect <- function(object,
       }
   }
 
-#' @title ANOVA Tables for an
-#' 'lm_betaselect'-Class Object
+#' @param trace Logical. Whether profiling
+#' will be traced. See
+#' [stats::confint.glm()] for details.
+#' ignored if `method` is `"boot"` or
+#' `"bootstrap"`.
+#'
+#' @param test The test used for
+#' profiling. See [stats::confint.glm]
+#' for details.
+#' ignored if `method` is `"boot"` or
+#' `"bootstrap"`.
+#'
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' # bootstrap should be set to 2000 or 5000 in real studies
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv",
+#'                                   do_boot = TRUE,
+#'                                   bootstrap = 100,
+#'                                   iseed = 1234)
+#'
+#' confint(logistic_beta_x, method = "default")
+#' confint(logistic_beta_x, type = "raw")
+#'
+#' @rdname confint.lm_betaselect
+#' @export
+
+# Code duplication is intentional
+confint.glm_betaselect <- function(object,
+                                   parm,
+                                   level = .95,
+                                   trace = FALSE,
+                                   test = c("LRT", "Rao"),
+                                   method = c("boot", "bootstrap", "default", "ls"),
+                                   type = c("beta",
+                                            "standardized",
+                                            "raw",
+                                            "unstandardized"),
+                                   warn = TRUE,
+                                   boot_type = c("perc", "bc"),
+                                   ...) {
+    test <- match.arg(test)
+    method <- match.arg(method)
+    type <- match.arg(type)
+    boot_type <- match.arg(boot_type)
+    if (missing(parm)) {
+        parm <- stats::variable.names(object)
+      }
+    method <- switch(method,
+                     boot = "boot",
+                     bootstrap = "boot",
+                     ls = "ls",
+                     default = "ls")
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
+        warning("Bootstrap estimates not available; ",
+                "'method' changed to 'ls' or 'default'.")
+        method <- "ls"
+      }
+    if (type == "beta") {
+        if (method == "boot") {1
+            boot_out <- object$lm_betaselect$boot_out
+            boot_idx <- attr(boot_out, "boot_idx")
+            boot_est <- lapply(parm, function(y) {
+                            out <- sapply(boot_out, function(x) {
+                                      x$coef_std[y]
+                                    })
+                            out
+                          })
+            est <- stats::coef(object,
+                               type = type)[parm]
+            out <- mapply(boot_ci_internal,
+                          t0 = est,
+                          t = boot_est,
+                          level = level,
+                          boot_type = boot_type,
+                          add_names = TRUE,
+                          SIMPLIFY = FALSE)
+            out <- do.call(rbind, out)
+            return(out)
+          } else {
+            if (warn) {
+                warning("With standardization, the confidence interval",
+                        "from 'lm()' or 'glm()' should not be used.")
+              }
+            class(object) <- "glm"
+            out <- stats::confint(object,
+                                  parm = parm,
+                                  level = level,
+                                  trace = trace,
+                                  test = test,
+                                  ...)
+            return(out)
+          }
+      } else {
+        if (method == "boot") {
+            boot_out <- object$lm_betaselect$boot_out
+            boot_idx <- attr(boot_out, "boot_idx")
+            boot_est <- lapply(parm, function(y) {
+                            out <- sapply(boot_out, function(x) {
+                                      x$coef_ustd[y]
+                                    })
+                            out
+                          })
+            est <- stats::coef(object,
+                               type = type)[parm]
+            out <- mapply(boot_ci_internal,
+                          t0 = est,
+                          t = boot_est,
+                          level = level,
+                          boot_type = boot_type,
+                          add_names = TRUE,
+                          SIMPLIFY = FALSE)
+            out <- do.call(rbind, out)
+            return(out)
+          } else {
+            out <- stats::confint(object$lm_betaselect$ustd,
+                                  parm = parm,
+                                  level = level,
+                                  trace = trace,
+                                  test = test)
+            return(out)
+          }
+      }
+  }
+
+#' @title ANOVA Tables For
+#' 'lm_betaselect' and 'glm_betaselect'
+#' Objects
 #'
 #' @description Return the analysis
 #' of variance tables for
 #' the outputs of
-#' [lm_betaselect()].
+#' [lm_betaselect()] and
+#' [glm_betaselect()].
 #'
 #' @details
 #' By default, it calls [stats::anova()]
@@ -435,10 +634,12 @@ confint.lm_betaselect <- function(object,
 #' structure.
 #'
 #' @param object The output of
-#' [lm_betaselect()].
+#' [lm_betaselect()] or
+#' [glm_betaselect()].
 #'
 #' @param ...  Additional outputs
-#' of [lm_betaselect()].
+#' of [lm_betaselect()] or
+#' [glm_betaselect()].
 #'
 #' @param type String. If
 #' `"unstandardized"` or `"raw"`, the
@@ -448,6 +649,15 @@ confint.lm_betaselect <- function(object,
 #' output *after* selected
 #' variables standardized are returned.
 #' Default is `"beta"`.
+#'
+#' @param dispersion To be passed to
+#' [stats::anova.glm()]. The dispersion
+#' parameter. Default ia `NULL` and it
+#' is extracted from the model.
+#'
+#' @param test String. The test to be
+#' conducted. Please refer to
+#' [stats::anova.glm()] for details.
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -479,6 +689,48 @@ anova.lm_betaselect <- function(object,
                    raw = "raw",
                    unstandardized = "raw")
     if (type == "beta") {
+        NextMethod()
+      } else {
+        objects <- c(list(object), list(...))
+        ustds <- lapply(objects, function(x) x$lm_betaselect$ustd)
+        out <- do.call(stats::anova,
+                       ustds)
+        return(out)
+      }
+  }
+
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv")
+#' anova(logistic_beta_x)
+#' anova(logistic_beta_x, type = "raw")
+#'
+#' @rdname anova.lm_betaselect
+#' @export
+
+anova.glm_betaselect <- function(object,
+                                 ...,
+                                 type = c("beta",
+                                          "standardized",
+                                          "raw",
+                                          "unstandardized"),
+                                 dispersion = NULL,
+                                 test = NULL) {
+    type <- match.arg(type)
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    if (type == "beta") {
+        type <- NULL
         NextMethod()
       } else {
         objects <- c(list(object), list(...))
@@ -957,6 +1209,434 @@ print_fstatistic <- function(fstatistic,
      cat("ANOVA test of R-squared : ",
          f_txt, ", p ", p_txt, "\n", sep = "")
   }
+
+#' @title Summary of an
+#' 'glm_betaselect'-Class Object
+#'
+#' @description The `summary` method
+#' for `glm_betaselect`-class objects.
+#'
+#' @details
+#' By default, it returns a
+#' `summary.glm_betaselect`-class object
+#' for the results with selected variables
+#' standardized. By setting `type` to
+#' `"raw"` or `"unstandardized"`, it
+#' returns the summary for the results
+#' *before* standardization.
+#'
+#' @return
+#' It returns an object of class
+#' `summary.glm_betaselect`, which is
+#' similar to the output of
+#' [stats::summary.glm()], with additional
+#' information on the standardization
+#' and bootstrapping, if requested.
+#'
+#' @param object The output of
+#' [glm_betaselect()].
+#'
+#' @param dispersion The dispersion
+#' parameter. If `NULL`, then it is
+#' extracted from the object. If
+#' a scalar, it will be used as
+#' the dispersion parameter. See
+#' [stats::summary.glm()] for details.
+#'
+#' @param correlation If `TRUE`, the
+#' correlation matrix of the estimates
+#' will be returned. The same argument
+#' in [stats::summary.glm()]. Default
+#' is `FALSE`.
+#'
+#' @param symbolic.cor If `TRUE`,
+#' correlations are printed in symbolic
+#' form as in [stats::summary.glm()].
+#' Default is `FALSE`.
+#'
+#' @param trace Logical. Whether
+#' profiling will be traced when forming
+#' the confidence interval if
+#' `se_method` is `"default"`, `"z"`, or
+#' `"glm"`. Ignored if `ci` is `FALSE`.
+#' See [stats::confint.glm()] for
+#' details.
+#'
+#' @param test The test used for
+#' `se_method` is `"default"`, `"z"`, or
+#' `"glm"`. Ignored if `ci` is `FALSE`.
+#' See [stats::confint.glm()] for
+#' details.
+#'
+#' @param se_method The method used to
+#' compute the standard errors and
+#' confidence intervals (if requested).
+#' If bootstrapping was
+#' requested when calling
+#' [glm_betaselect()] and this argument
+#' is set to `"bootstrap"` or `"boot"`,
+#' the bootstrap standard errors are
+#' returned. If bootstrapping
+#' was not requested or if this argument
+#' is set to `"z"`, `"glm"`, or `"default"`,
+#' then the usual `glm`
+#' standard errors are
+#' returned, with a warning raised
+#' unless `type` is `"raw"` or
+#' `"unstandardized".`
+#' Default is `"boot"`.
+#'
+#' @param ci Logical. Whether
+#' confidence intervals are computed.
+#' Default is `FALSE.`
+#'
+#' @param level The level of confidence,
+#' default is .95, returning the 95%
+#' confidence interval.
+#'
+#' @param boot_type The type of
+#' bootstrap confidence intervals,
+#' if requested.
+#' Currently, it supports `"perc"`,
+#' percentile bootstrap confidence
+#' intervals, and `"bc"`, bias-corrected
+#' bootstrap confidence interval.
+#'
+#' @param boot_pvalue_type The type
+#' of *p*-values if `se_method` is
+#' `"boot"` or `"bootstrap"`. If `"norm"`,
+#' then the *z* score is used to compute
+#' the *p*-value using a
+#' standard normal distribution.
+#' If `"asymmetric"`, the default, then
+#' the method presented in
+#' Asparouhov and Muthén (2021) is used
+#' to compute the *p*-value based on the
+#' bootstrap distribution.
+#'
+#' @param type String. If
+#' `"unstandardized"` or `"raw"`, the
+#' output *before* standardization
+#' are used If `"beta"` or
+#' `"standardized"`, then the
+#' output *after* selected
+#' variables standardized are returned.
+#' Default is `"beta"`.
+#'
+#' @param ...  Additional arguments
+#' passed to other methods.
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @references
+#' Asparouhov, A., & Muthén, B. (2021). Bootstrap p-value computation.
+#' Retrieved from https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf
+#'
+#' @seealso [glm_betaselect()]
+#'
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' # bootstrap should be set to 2000 or 5000 in real studies
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv",
+#'                                   do_boot = TRUE,
+#'                                   bootstrap = 100,
+#'                                   iseed = 1234)
+#' summary(logistic_beta_x)
+#'
+#' @rdname summary.glm_betaselect
+#'
+#' @export
+# Code duplication intentional
+summary.glm_betaselect <- function(object,
+                                   dispersion = NULL,
+                                   correlation = FALSE,
+                                   symbolic.cor = FALSE,
+                                   trace = FALSE,
+                                   test = c("LRT", "Rao"),
+                                   se_method = c("boot", "bootstrap",
+                                                 "z", "glm", "default"),
+                                   ci = FALSE,
+                                   level = .95,
+                                   boot_type = c("perc", "bc"),
+                                   boot_pvalue_type = c("asymmetric", "norm"),
+                                   type = c("beta",
+                                            "standardized",
+                                            "raw",
+                                            "unstandardized"),
+                                   ...) {
+    se_method <- match.arg(se_method)
+    type <- match.arg(type)
+    se_method <- switch(se_method,
+                        boot = "boot",
+                        bootstrap = "boot",
+                        z = "default",
+                        glm = "default",
+                        default = "default")
+    type <- switch(type,
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    boot_type <- match.arg(boot_type)
+    boot_pvalue_type <- match.arg(boot_pvalue_type)
+    if (identical(se_method, "boot") && is.null(object$lm_betaselect$boot_out)) {
+        warning("Bootstrap estimates not available; ",
+                "'se_method' changed to 'default'.")
+        se_method <- "default"
+      }
+    if (type == "beta") {
+        out <- NextMethod()
+      } else {
+        # type = "raw"
+        out <- stats::summary.glm(object = object$lm_betaselect$ustd,
+                                  dispersion = dispersion,
+                                  correlation = correlation,
+                                  symbolic.cor = symbolic.cor,
+                                  ...)
+      }
+    out$lm_betaselect$summary_call <- match.call()
+    out$lm_betaselect$call <- object$lm_betaselect$call
+    out$lm_betaselect$to_standardize <- object$lm_betaselect$to_standardize
+    out$lm_betaselect$se_method <- se_method
+    out$lm_betaselect$ci <- ci
+    out$lm_betaselect$level <- level
+    out$lm_betaselect$boot_type <- boot_type
+    out$lm_betaselect$type <- type
+    out$lm_betaselect$boot_pvalue_type <- boot_pvalue_type
+    class(out) <- c("summary.glm_betaselect", class(out))
+    if (se_method == "boot") {
+        boot_out <- object$lm_betaselect$boot_out
+        out$lm_betaselect$bootstrap <- length(boot_out)
+        boot_est <- sapply(boot_out, function(x) {
+                        x$coef_std
+                      })
+        boot_est_se <- apply(boot_est, 1, stats::sd, simplify = TRUE)
+        out$coefficients[, "Std. Error"] <- boot_est_se
+        z_values <- out$coefficients[, "Estimate"] / boot_est_se
+        out$coefficients[, "z value"] <- z_values
+        i <- which(colnames(out$coefficients) == "z value")
+        colnames(out$coefficients)[i] <- "z value"
+        if (boot_pvalue_type == "asymmetric") {
+            boot_est_list <- split(boot_est, rownames(boot_est))
+            boot_pvalues <- sapply(boot_est_list,
+                                   est2p,
+                                   h0 = 0)
+          } else {
+            # boot_pvalue_type == "norm"
+            boot_pvalues <- stats::pnorm(abs(z_values),
+                                         lower.tail = FALSE) * 2
+          }
+        out$coefficients[, "Pr(>|z|)"] <- boot_pvalues
+        i <- which(colnames(out$coefficients) == "Pr(>|z|)")
+        colnames(out$coefficients)[i] <- switch(boot_pvalue_type,
+                    asymmetric = "Pr(Boot)",
+                    norm = "Pr(>|z|)")
+      } else {
+        # se_method == "default"
+        # No need to change
+      }
+    if (ci) {
+        out_ci <- confint.glm_betaselect(object,
+                                         level = level,
+                                         trace = trace,
+                                         test = test,
+                                         method = se_method,
+                                         type = type,
+                                         warn = FALSE,
+                                         boot_type = boot_type)
+        colnames(out_ci) <- c("CI.Lower", "CI.Upper")
+        i <- which(colnames(out$coefficients) == "Estimate")
+        out_coef <- out$coefficients
+        out_coef <- cbind(out_coef[, seq_len(i), drop = FALSE],
+                          out_ci,
+                          out_coef[, -seq_len(i), drop = FALSE])
+        out$coefficients <- out_coef
+      }
+    out
+  }
+
+#' @details
+#' The `print` method of
+#' `summary.glm_betaselect`-class objects
+#' is adapted from
+#' [stdmod::print.summary.std_selected()].
+#'
+#' @return
+#' The `print`-method of
+#' `summary.glm_betaselect` is called
+#' for its side effect. The object `x`
+#' is returned invisibly.
+#'
+#' @param x The output of
+#' [summary.glm_betaselect()].
+#'
+#' @param est_digits The number of
+#' digits after the decimal to be
+#' displayed for the coefficient
+#' estimates, their standard errors, and
+#' confidence intervals (if present).
+#' Note that the values will be rounded
+#' to this number of digits before
+#' printing. If all digits at this
+#' position are zero for all values, the
+#' values may be displayed with fewer
+#' digits. Note that the coefficient
+#' table is printed by
+#' [stats::printCoefmat()]. If some
+#' numbers are vary large, the number of
+#' digits after the decimal may be
+#' smaller than `est_digits` due to a
+#' limit on the column width.
+#'
+#' @param signif.stars Whether "stars"
+#' (asterisks) are printed to denote
+#' the level of significance achieved
+#' for each coefficient. Default is
+#' `TRUE`.
+#'
+#' @param z_digits The number of digits
+#' after the decimal to be displayed for
+#' the *z* or similar statistic (in the
+#' column `"z value"`).
+#'
+#' @param show.residuals If `TRUE`,
+#' a summary of the deviance residuals
+#' will be printed. Default is `FALSE`.
+#'
+#' @param pvalue_less_than If a
+#' *p*-value is less than this value, it
+#' will be displayed with `"<(this
+#' value)".` For example, if
+#' `pvalue_less_than` is .001, the
+#' default, *p*-values less than .001
+#' will be displayed as `<.001`. This
+#' value also determines the printout of
+#' the *p*-value of the *F* statistic.
+#' (This argument does what `eps.Pvalue`
+#' does in [stats::printCoefmat()].)
+#'
+#'
+#' @rdname summary.glm_betaselect
+#'
+#' @export
+# Code duplication intentional
+print.summary.glm_betaselect <- function(x,
+                                         est_digits = 3,
+                                         symbolic.cor = x$symbolic.cor,
+                                         signif.stars = getOption("show.signif.stars"),
+                                         show.residuals = FALSE,
+                                         z_digits = 3,
+                                         pvalue_less_than = .001,
+                                         ...) {
+    cat("Call to glm_betaselect():\n")
+    print(x$lm_betaselect$call)
+    to_standardize <- x$lm_betaselect$to_standardize
+    type <- x$lm_betaselect$type
+    level <- x$lm_betaselect$level
+    level_str <- paste0(formatC(level * 100, digits = 1,
+                                format = "f"),
+                        "%")
+    if (length(to_standardize) > 0) {
+        tmp <- paste(to_standardize, collapse = ", ")
+        tmp <- strwrap(tmp)
+      } else {
+        tmp <- "[Nil]"
+      }
+    cat("\nVariable(s) standardized:",
+        tmp, "\n")
+
+    x$coefficients[, "Estimate"] <- round(x$coefficients[, "Estimate"], est_digits)
+    x$coefficients[, "Std. Error"] <- round(x$coefficients[, "Std. Error"], est_digits)
+    if (x$lm_betaselect$ci) {
+        x$coefficients[, "CI.Lower"] <- round(x$coefficients[, "CI.Lower"], est_digits)
+        x$coefficients[, "CI.Upper"] <- round(x$coefficients[, "CI.Upper"], est_digits)
+      }
+    i <- match(c("t value", "z value"), colnames(x$coefficients))
+    i <- i[!is.na(i)]
+    x$coefficients[, i] <- round(x$coefficients[, i], z_digits)
+    NextMethod(digits = est_digits,
+               eps.Pvalue = pvalue_less_than,
+               dig.tst = z_digits)
+
+    cat("\n")
+
+    tmp <- character(0)
+    tmp <- c(tmp, "Note:")
+    tmp <- c(tmp,
+             strwrap(switch(type,
+                beta = "- Results *after* standardization are reported.",
+                raw = "- Results *before* standardization are reported."),
+                exdent = 2))
+    if (x$lm_betaselect$se_method == "boot") {
+        tmp <- c(tmp,
+                 strwrap("- Nonparametric bootstrapping conducted.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap(paste0("- The number of bootstrap samples is ",
+                                x$lm_betaselect$bootstrap, "."),
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- Standard errors are bootstrap standard errors.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- Z values are computed by 'Estimate / Std. Error'.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap(switch(x$lm_betaselect$boot_pvalue_type,
+                           asymmetric = "- The bootstrap p-values are asymmetric p-values by Asparouhov and Muth\u00e9n (2021).",
+                           norm = "- The bootstrap p-values are based on standard normal distribution using z values."),
+                         exdent = 2))
+        if (x$lm_betaselect$ci) {
+            boot_type_str <- switch(x$lm_betaselect$boot_type,
+                               perc = "Percentile",
+                               bc = "Bias-corrected")
+            tmp <- c(tmp,
+                     strwrap(paste0("- ",
+                                   boot_type_str,
+                                   " bootstrap ",
+                                   level_str,
+                                   " confidence interval reported."),
+                             exdent = 2))
+          }
+      } else {
+        # se_method == "ls"
+        tmp <- c(tmp,
+                 strwrap("- Standard errors are least-squares standard errors.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- Z values are computed by 'Estimate / Std. Error'.",
+                         exdent = 2))
+        tmp <- c(tmp,
+                 strwrap("- P-values are usual z-test p-values.",
+                         exdent = 2))
+        if ((length(to_standardize) > 0) &&
+            type == "beta") {
+            tmp <- c(tmp,
+                     strwrap(paste0("- Default standard errors, z values, p-values, and confidence intervals (if reported) ",
+                                    "should not be used for coefficients involved in standardization."),
+                            exdent = 2))
+          }
+        if (x$lm_betaselect$ci) {
+            tmp <- c(tmp,
+                     strwrap(paste0("- ",
+                                    "Default ",
+                                    level_str,
+                                    " confidence interval reported."),
+                             exdent = 2))
+          }
+      }
+    cat(tmp, sep = "\n")
+    invisible(x)
+  }
+
+
 
 # #' @title Extract Log-Likelihood
 # #'
@@ -1441,22 +2121,125 @@ predict.lm_betaselect <- function(object,
       }
   }
 
+#' @title Predict Method for a 'glm_betaselect' Object
+#'
+#' @description Compute the predicted
+#' values in a model fitted by
+#' [glm_betaselect()].
+#'
+#' @details
+#' It simply passes the model *before*
+#' or *after* selected variables
+#' are standardized to the
+#' `predict`-method of a `glm` object.
+#'
+#' ## IMPORTANT
+#'
+#' Some statistics, such as prediction
+#' or confidence interval, which make use
+#' of the sampling variances and
+#' covariances of coefficient estimates
+#' *may* not be applicable to the
+#' models with one or more variables
+#' standardized. Therefore, they should
+#' only be used for exploratory purpose.
+#'
+#' @return
+#' It returns the output of [stats::predict.glm()].
+#'
+#' @param object A `glm_betaselect`-class
+#' object.
+#'
+#' @param model_type The model from which the
+#' the predicted values are computed.
+#' For
+#' `"beta"` or `"standardized"`, the
+#' model is the one after selected
+#' variables standardized. For `"raw"`
+#' or `"unstandardized"`, the model is
+#' the one before standardization was
+#' done.
+#'
+#' @param newdata If set to a data
+#' frame, the predicted values are
+#' computed using this data frame.
+#' The data must be unstandardized.
+#' That is, the variables are of the
+#' same units as in the data frame
+#' used in [glm_betaselect()]. If
+#' `model_type` is `"beta"` or
+#' `"standardized"`, it will be
+#' standardized using the setting
+#' of `to_standardize` when `object`
+#' is created in [glm_betaselect()].
+#'
+#' @param ...  Arguments
+#' to be passed to [stats::predict.glm()].
+#' Please refer to the help page of
+#' [stats::predict.glm()].
+#'
+#' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
+#'
+#' @seealso [glm_betaselect()] and [stats::predict.glm()]
+#'
+#' @examples
+#'
+#' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+#' data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+#'                               yes = 1,
+#'                               no = 0)
+#' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+#'                                   data = data_test_mod_cat,
+#'                                   family = binomial,
+#'                                   to_standardize = "iv")
+#'
+#' predict(logistic_beta_x)
+#' predict(logistic_beta_x, model_type = "raw")
+#'
+#' @export
+
+predict.glm_betaselect <- function(object,
+                                   model_type = c("beta", "standardized",
+                                                 "raw", "unstandardized"),
+                                   newdata,
+                                   ...) {
+    model_type <- match.arg(model_type)
+    model_type <- switch(model_type,
+                         beta = "beta",
+                         standardized = "beta",
+                         raw = "raw",
+                         unstandardized = "raw")
+    to_standardize <- object$lm_betaselect$to_standardize
+    if (model_type == "beta") {
+        if (!missing(newdata)) {
+            newdata_std <- std_data(newdata,
+                                to_standardize = to_standardize)
+            NextMethod(newdata = newdata_std)
+          } else {
+            NextMethod()
+          }
+      } else {
+        object <- object$lm_betaselect$ustd
+        NextMethod()
+      }
+  }
+
 # #' @title Update and Re-fit a Call to
-# #' 'lm_betaselect()'
+# #' 'glm_betaselect()'
 # #'
 # #' @description The `update`-method
-# #' for an `lm_betaselect`-class objects.
+# #' for a `glm_betaselect`-class objects.
 # #'
 # #' @details This works in the same way
 # #' the default `update`-method does for
-# #' the output of [stats::lm()].
+# #' the output of [stats::glm()].
 # #'
 # #' @return
 # #' It returns the output of
-# #' [lm_betaselect()] with the updated
+# #' [glm_betaselect()] with the updated
 # #' call, such as the updated model.
 # #'
-# #' @param object An `lm_betaselect`-class
+# #' @param object An `glm_betaselect`-class
 # #' object.
 # #'
 # #' @param formula. Changes to the formula,
@@ -1466,7 +2249,7 @@ predict.lm_betaselect <- function(object,
 # #' additional arguments
 # #' to the call, as in the default
 # #' [update()] method. Ignored by
-# #' [getCall.lm_betaselect()].
+# #' [getCall.glm_betaselect()].
 # #'
 # #' @param evaluate Whether the updated
 # #' call will be evaluated. Default is
@@ -1474,25 +2257,29 @@ predict.lm_betaselect <- function(object,
 # #'
 # #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 # #'
-# #' @seealso [lm_betaselect()] and [stats::update()]
+# #' @seealso [glm_betaselect()] and [stats::update()]
 # #'
 # #' @examples
 # #'
 # #' data(data_test_mod_cat)
 # #'
-# #' lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1,
-# #'                            data = data_test_mod_cat,
-# #'                            to_standardize = "iv")
-# #' summary(lm_beta_x)
-# #' lm_beta_x2 <- update(lm_beta_x, ~ . + cat1)
-# #' summary(lm_beta_x2)
+# #' data_test_mod_cat$p <- ifelse(data_test_mod_cat$dv >
+# #'                               mean(data_test_mod_cat$dv),
+# #'                               yes = 1,
+# #'                               no = 0)
+# #' logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1,
+# #'                                   data = data_test_mod_cat,
+# #'                                   to_standardize = "iv")
+# #' summary(logistic_beta_x)
+# #' logistic_beta_x2 <- update(logistic_beta_x, ~ . + cat1)
+# #' summary(logistic_beta_x)
 # #'
 # #' @export
 
-# update.lm_betaselect <- function(object,
-#                                  formula.,
-#                                  ...,
-#                                  evaluate = TRUE) {
+# update.glm_betaselect <- function(object,
+#                                   formula.,
+#                                   ...,
+#                                   evaluate = TRUE) {
 #     # Adapted from the default update
 #     # By default, get the call to lm_betaselect()
 #     # call <- object$lm_betaselect$call
@@ -1513,27 +2300,32 @@ predict.lm_betaselect <- function(object,
 #     # else call
 #   }
 
-#' @title Extract the Call From an
-#' 'lm_betaselect' Object
+#' @title Call in an
+#' 'lm_betaselect' or 'glm_betaselect'
+#' Object
 #'
 #' @description The `getCall`-method
-#' for an `lm_betaselect`-class objects.
+#' for an `lm_betaselect`-class or
+#' `glm_betaselectd`-class objects.
 #'
 #' @details This works in the same way
 #' the default `getCall`-method does for
-#' the output of [stats::lm()].
+#' the outputs of [stats::lm()]
+#' and [stats::glm()].
 #'
 #' @return
 #' It returns the call requested.
 #'
-
 #' @param x An `lm_betaselect`-class
+#' or `glm_betaselect`-class
 #' object from which the call is to
 #' be extracted.
 #'
 #' @param what Which call to extract.
-#' For `"lm_betaselect"`, the call
-#' to [lm_betaselect()] is extracted.
+#' For `"lm_betaselect"` or
+#' `"glm_betaselect"` the call
+#' to [lm_betaselect()]
+#' or [glm_betaselect()] is extracted.
 #' For
 #' `"beta"` or `"standardized"`, the
 #' call used to fit the model *after*
@@ -1549,7 +2341,8 @@ predict.lm_betaselect <- function(object,
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
-#' @seealso [lm_betaselect()] and [stats::getCall()]
+#' @seealso [lm_betaselect()],
+#' [glm_betaselect()], and [stats::getCall()]
 #'
 #' @examples
 #'
@@ -1575,6 +2368,30 @@ getCall.lm_betaselect <- function(x,
     what <- match.arg(what)
     what <- switch(what,
                    lm_betaselect = "lm_betaselect",
+                   beta = "beta",
+                   standardized = "beta",
+                   raw = "raw",
+                   unstandardized = "raw")
+    out <- switch(what,
+                  lm_betaselect = x$lm_betaselect$call,
+                  beta = x$call,
+                  raw = x$lm_betaselect$ustd$call)
+    return(out)
+  }
+
+#' @rdname getCall.lm_betaselect
+#' @export
+
+getCall.glm_betaselect <- function(x,
+                                  what = c("glm_betaselect",
+                                           "beta",
+                                           "standardized",
+                                           "raw",
+                                           "unstandardized"),
+                                  ...) {
+    what <- match.arg(what)
+    what <- switch(what,
+                   glm_betaselect = "lm_betaselect",
                    beta = "beta",
                    standardized = "beta",
                    raw = "raw",

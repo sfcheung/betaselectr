@@ -2,10 +2,18 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{coef.lm_betaselect}
 \alias{coef.lm_betaselect}
-\title{Coefficients of an
-'lm_betaselect'-Class Object}
+\alias{coef.glm_betaselect}
+\title{Coefficients of
+Beta-Select in Linear Models}
 \usage{
 \method{coef}{lm_betaselect}(
+  object,
+  complete = FALSE,
+  type = c("beta", "standardized", "raw", "unstandardized"),
+  ...
+)
+
+\method{coef}{glm_betaselect}(
   object,
   complete = FALSE,
   type = c("beta", "standardized", "raw", "unstandardized"),
@@ -14,8 +22,10 @@
 }
 \arguments{
 \item{object}{The output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}, or an
-\code{lm_betaselect}-class object.}
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}, or an
+\code{lm_betaselect}-class or
+\code{glm_betaselect}-class object.}
 
 \item{complete}{If \code{TRUE}, it returns
 the full vector of coefficients,
@@ -41,7 +51,8 @@ regression coefficients.
 \description{
 Return the estimates of
 coefficients in an
-\code{lm_betaselect}-class object.
+\code{lm_betaselect}-class or
+\code{glm_betaselect}-class object.
 }
 \details{
 By default, it extracts the
@@ -62,9 +73,22 @@ lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
 coef(lm_beta_x)
 coef(lm_beta_x, type = "raw")
 
+
+data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+                              yes = 1,
+                              no = 0)
+logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+                                  data = data_test_mod_cat,
+                                  family = binomial,
+                                  to_standardize = "iv")
+coef(logistic_beta_x)
+coef(logistic_beta_x, type = "raw")
+
 }
 \seealso{
-\code{\link[=lm_betaselect]{lm_betaselect()}}
+\code{\link[=lm_betaselect]{lm_betaselect()}} and
+\code{\link[=glm_betaselect]{glm_betaselect()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

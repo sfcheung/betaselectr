@@ -4,7 +4,14 @@
 \alias{print.lav_betaselect}
 \title{Print a 'lav_betaselect' Object}
 \usage{
-\method{print}{lav_betaselect}(x, ..., nd = 3, output = c("table", "text"), standardized_only = FALSE)
+\method{print}{lav_betaselect}(
+  x,
+  ...,
+  nd = 3,
+  output = c("table", "text"),
+  standardized_only = FALSE,
+  show_Bs.by = FALSE
+)
 }
 \arguments{
 \item{x}{Object of the class
@@ -39,6 +46,14 @@ alongside the unstandardized solution,
 as in the printout of the output
 of \code{\link[=summary]{summary()}} of a \linkS4class{lavaan}
 object.}
+
+\item{show_Bs.by}{Logical. If \code{TRUE}
+and \code{output} is \code{"text"}, then the
+column \code{"Bs.by"} is shown,
+indicating, for each parameter, the
+variables standardized. Otherwise,
+this column is not shown if \code{output}
+is not \code{"text"}.}
 }
 \value{
 \code{x} is returned invisibly. Called for its side effect.

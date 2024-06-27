@@ -56,6 +56,14 @@
 #' of [summary()] of a [lavaan-class]
 #' object.
 #'
+#' @param show_Bs.by Logical. If `TRUE`
+#' and `output` is `"text"`, then the
+#' column `"Bs.by"` is shown,
+#' indicating, for each parameter, the
+#' variables standardized. Otherwise,
+#' this column is not shown if `output`
+#' is not `"text"`.
+#'
 #' @seealso [lav_betaselect()]. This
 #' function is adapted from
 #' [semhelpinghands::print.std_solution_boot()].
@@ -89,7 +97,8 @@ print.lav_betaselect <- function(x,
                                  ...,
                                  nd = 3,
                                  output = c("table", "text"),
-                                 standardized_only = FALSE) {
+                                 standardized_only = FALSE,
+                                 show_Bs.by = FALSE) {
     output <- match.arg(output)
     x_call <- attr(x, "call")
     if (output == "table") {
@@ -173,11 +182,13 @@ print.lav_betaselect <- function(x,
     footer_stdp <- character(0)
     footer_stdp <- c(footer_stdp,
                      "Note:")
-    footer_stdp <- c(footer_stdp,
-                     strwrap(paste("- The column 'Bs.by' lists variable(s) standardized when computing the",
-                                    "standardized coefficient of a parameter.",
-                                    "('NA' for user-defined parameters because they are computed from other standardized parameters.)"),
-                             exdent = 2))
+    if (show_Bs.by) {
+        footer_stdp <- c(footer_stdp,
+                        strwrap(paste("- The column 'Bs.by' lists variable(s) standardized when computing the",
+                                        "standardized coefficient of a parameter.",
+                                        "('NA' for user-defined parameters because they are computed from other standardized parameters.)"),
+                                exdent = 2))
+      }
     if (length(std.p.by.vars) > 0) {
         if (length(std.p.by.vars) == 1) {
             footer_stdp <- c(footer_stdp,
@@ -224,6 +235,9 @@ print.lav_betaselect <- function(x,
                 "Covariances:",
                 "Variances:")
     if (!standardized_only) {
+        if (!show_Bs.by) {
+            est1$std.p.by <- NULL
+          }
         tmp <- colnames(est1)
         # tmp[tmp == "std.p"] <- "Std.p"
         # tmp[tmp == "std.p.ci.lower"] <- "Std.p.ci.lower"
@@ -260,6 +274,9 @@ print.lav_betaselect <- function(x,
         est2$std.p.pvalue <- NULL
         est2$std.p.ci.lower <- NULL
         est2$std.p.ci.upper <- NULL
+        if (!show_Bs.by) {
+            est2$std.p.by <- NULL
+          }
 
         tmp <- colnames(est2)
         tmp <- gsub("std.p.", "Bs.", tmp, fixed = TRUE)

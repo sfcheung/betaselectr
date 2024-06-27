@@ -18,7 +18,7 @@ standardization."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,10 +73,32 @@ standardization.</p>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ncpus <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  load_balancing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  model_call <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lm"</span>, <span class="st">"glm"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">glm_betaselect</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  to_standardize <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  not_to_standardize <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  do_boot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bootstrap <span class="op">=</span> <span class="fl">100L</span>,</span>
+<span>  iseed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ncpus <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  load_balancing <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for lm_betaselect</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"digits"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3L</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"standardized"</span>, <span class="st">"raw"</span>, <span class="st">"unstandardized"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glm_betaselect</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"digits"</span><span class="op">)</span> <span class="op">-</span> <span class="fl">3L</span><span class="op">)</span>,</span>
@@ -90,10 +112,14 @@ standardization.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>For <code>lm_betaselect()</code>,
+<dd><p>For <code>lm_betaselect()</code>.
 these arguments will be
 passed directly to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>. For
+<code>glm_betaselect()</code>, these arguments
+will be passed to <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>.
+For
 the <code>print</code>-method of <code>lm_betaselect</code>
+or <code>glm_betaselect</code>
 objects, this will be passed to
 other methods.</p></dd>
 
@@ -145,8 +171,8 @@ generator. Default is <code>NULL</code>.</p></dd>
 <code>TRUE</code> and this argument is <code>TRUE</code>,
 parallel processing will be used to
 do bootstrapping. Default is <code>FALSE</code>
-because bootstrapping in regression
-by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> is rarely slow.</p></dd>
+because bootstrapping for models fitted
+by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> is rarely slow.</p></dd>
 
 
 <dt>ncpus</dt>
@@ -171,8 +197,20 @@ whether load balancing will be used.
 Default is <code>TRUE</code>.</p></dd>
 
 
+<dt>model_call</dt>
+<dd><p>The model function
+to be called.
+If <code>"lm"</code>, the default, the model will be fitted
+by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>. If <code>"glm"</code>, the
+model will be fitted by <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>.
+Users should call the corresponding
+function directly rather than setting
+this argument manually.</p></dd>
+
+
 <dt>x</dt>
-<dd><p>A <code>lm_betaselect</code>-class object.</p></dd>
+<dd><p>An <code>lm_betaselect</code> or
+<code>glm_betaselect</code> object.</p></dd>
 
 
 <dt>digits</dt>
@@ -200,32 +238,44 @@ be printed.</p></dd>
 
 
 <p>returns an object of the class <code>lm_betaselect</code>,
-which is similar to the output
-of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>, with additional information
-stored.</p>
+The function <code>glm_betaselect()</code></p>
+
+
+<p>returns an object of the class
+<code>glm_betaselect</code>. They are similar
+in structure to the output of
+<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>,
+with additional information stored.</p>
 
 
 <p>The function <code>raw_output()</code> returns
-an object of the class <code>lm</code>, which are
+an object of the class <code>lm</code> or
+<code>glm</code>, which are
 the results of fitting the model
-to the data by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> without
+to the data by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code></p>
+
+
+<p>or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code> without
 standardization.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function <code>lm_betaselect()</code>
-lets users
+    <p>The functions <code>lm_betaselect()</code>
+and <code>glm_betaselect()</code>
+let users
 select which variables to be
 standardized when computing the
-standardized solution. It has the
-following features:</p><ul><li><p>It automatically skips categorical
+standardized solution. They have the
+following features:</p><ul><li><p>They automatically skip categorical
 predictors (i.e., factor or string
 variables).</p></li>
-<li><p>It does not standardize product
-term, which is incorrect. Instead, it
+<li><p>They do not standardize a product
+term, which is incorrect. Instead,
+they
 compute the product term with its
-component variables standardized.</p></li>
-<li><p>It standardizes the selected
+component variables standardized,
+if requested.</p></li>
+<li><p>They standardize the selected
 variables <em>before</em> fitting a model.
 Therefore, If a model has the term
 <code>log(x)</code> and <code>x</code> is one of the
@@ -234,20 +284,22 @@ the logarithm of the <em>standardized</em>
 <code>x</code> in the model, instead of
 standardized <code>log(x)</code> which is
 difficult to interpret.</p></li>
-<li><p>It can be used to generate
+<li><p>They can be used to generate
 nonparametric
 bootstrap confidence intervals for
 the standardized solution. Bootstrap
 confidence interval is better than
-the least square confidence interval
+the default confidence interval
 ignoring the standardization
 because it
 takes into account the sampling
 variance of the standard deviations.
-It is one of the recommended methods
+Preliminary support for bootstrap
+confidence has been found
 for forming confidence intervals for
 coefficients involving standardized
-variables (Jones &amp; Waller, 2013).</p></li>
+variables in linear regression
+(Jones &amp; Waller, 2013).</p></li>
 </ul><div class="section">
 <h3 id="problems-with-common-approaches">Problems With Common Approaches<a class="anchor" aria-label="anchor" href="#problems-with-common-approaches"></a></h3>
 
@@ -273,14 +325,14 @@ they are standardized (e.g., age).</p></li>
 </ul></div>
 
 <div class="section">
-<h3 id="how-it-works">How It Works<a class="anchor" aria-label="anchor" href="#how-it-works"></a></h3>
+<h3 id="how-the-function-work">How The Function Work<a class="anchor" aria-label="anchor" href="#how-the-function-work"></a></h3>
 
 
-<p>It standardizes the original variables
+<p>They standardize the original variables
 <em>before</em> they are used in the
-regression model. Therefore, strictly
-speaking, it does not standardize
-the predictors in a regression model,
+model. Therefore, strictly
+speaking, they do not standardize
+the predictors in model,
 but standardize the <em>input variable</em>
 (Gelman et al., 2021).</p>
 <p>The requested model is then fitted to
@@ -300,35 +352,48 @@ by <code>raw_output()</code>.</p>
 
 
 <p>The output of <code>lm_betaselect()</code> is
-an <code>lm_betaselect</code>-class object.
-It has the following methods:add</p><ul><li><p>A <code>coef</code>-method for extracting
+an <code>lm_betaselect</code>-class object,
+and the output of <code>glm_betaselect()</code>
+is a <code>glm_betaselect</code>-class object.
+They have the following methods:</p><ul><li><p>A <code>coef</code>-method for extracting
 the coefficients of the model.
-(See <code><a href="coef.lm_betaselect.html">coef.lm_betaselect()</a></code> for details.)</p></li>
+(See <code><a href="coef.lm_betaselect.html">coef.lm_betaselect()</a></code>
+and <code><a href="coef.lm_betaselect.html">coef.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>A <code>vcov</code>-method for extracting the
 variance-covariance matrix of the
 estimates of the coefficients.
 If bootstrapping is requested, it
 can return the matrix based on the
 bootstrapping estimates.
-(See <code><a href="vcov.lm_betaselect.html">vcov.lm_betaselect()</a></code> for details.)</p></li>
+(See <code><a href="vcov.lm_betaselect.html">vcov.lm_betaselect()</a></code>
+and <code><a href="vcov.lm_betaselect.html">vcov.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>A <code>confint</code>-method for forming the
 confidence intervals of the
 estimates of the coefficients.
 If bootstrapping is requested, it
 can return the bootstrap confidence
 intervals.
-(See <code><a href="confint.lm_betaselect.html">confint.lm_betaselect()</a></code> for details.)</p></li>
+(See <code><a href="confint.lm_betaselect.html">confint.lm_betaselect()</a></code> and
+<code><a href="confint.lm_betaselect.html">confint.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>A <code>summary</code>-method for printing the
 summary of the results, with additional
 information such as the number of
 bootstrap samples and which variables
 have been standardized.
-(See <code><a href="summary.lm_betaselect.html">summary.lm_betaselect()</a></code> for details.)</p></li>
+(See <code><a href="summary.lm_betaselect.html">summary.lm_betaselect()</a></code> and
+<code><a href="summary.glm_betaselect.html">summary.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>An <code>anova</code>-method for printing the
 ANOVA table. Can also be used to
 compare two or more outputs of
-<code>lm_betaselect()</code>.
-(See <code><a href="anova.lm_betaselect.html">anova.lm_betaselect()</a></code> for details.)</p></li>
+<code>lm_betaselect()</code> or
+<code>glm_betaselect()</code>
+(See <code><a href="anova.lm_betaselect.html">anova.glm_betaselect()</a></code>
+and <code><a href="anova.lm_betaselect.html">anova.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>A <code>predict</code>-method for computing
 predicted values. It can be used to
 compute the predicted values given
@@ -336,40 +401,50 @@ a set of new unstandardized data.
 The data will be standardized before
 computing the predicted values in
 the models with standardization.
-(See <code><a href="predict.lm_betaselect.html">predict.lm_betaselect()</a></code> for details.)</p></li>
+(See <code><a href="predict.lm_betaselect.html">predict.lm_betaselect()</a></code> and
+<code><a href="predict.glm_betaselect.html">predict.glm_betaselect()</a></code>
+for details.)</p></li>
 <li><p>The default <code>update</code>-method for updating
 a call also works for an
-<code>lm_betaselect</code> object. It can
+<code>lm_betaselect</code> object or
+a <code>glm_betaselect()</code> object. It can
 update the model in the same
 way it updates a model fitted by
-<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>, and also update
-arguments of <code>lm_betaselect()</code>,
+<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>,
+and also update
+the arguments of <code>lm_betaselect()</code>
+or <code>glm_betaselect()</code>
 such as the variables to be
 standardized.
 (See <code><a href="https://rdrr.io/r/stats/update.html" class="external-link">stats::update()</a></code> for details.)</p></li>
 </ul><p>Most other methods for the output
-of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> should also work
-on an <code>lm_betaselect</code>-class object.
+of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>
+should also work
+on an <code>lm_betaselect</code>-class object
+or a <code>glm_betaselect</code>-class object,
+respectively.
 Some of them will give the same
 results regardless of the variables
-standardized. For example,
+standardized. Examples are
 <code><a href="https://rdrr.io/r/stats/influence.measures.html" class="external-link">rstandard()</a></code> and <code><a href="https://rdrr.io/r/stats/influence.measures.html" class="external-link">cooks.distance()</a></code>.
 For some others, they should be used
 with cautions if they make use of
 the variance-covariance matrix
-of the estimates because they may use
-the least square version.</p>
+of the estimates.</p>
 <p>To use the methods for <code>lm</code> objects
+or <code>glm</code> objects
 on the results without standardization,
 simply use <code>raw_output()</code>. For example,
 to get the fitted values without
 standardization, call
 <code>fitted(raw_output(x))</code>, where <code>x</code>
-is the output of <code>lm_betaselect()</code>.</p>
+is the output of <code>lm_betaselect()</code>
+or <code>glm_betaselect()</code>.</p>
 </div>
 
 <p>The function <code>raw_output()</code> simply extracts
 the regression output by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code>
+or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">stats::glm()</a></code>
 on the variables without standardization.</p>
     </div>
     <div class="section level2">
@@ -392,7 +467,9 @@ intervals for standardized regression coefficients.
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="print.lav_betaselect.html">print.lav_betaselect()</a></code> for its print method.</p></div>
+    <div class="dont-index"><p><code>print.lm_betaselect()</code> and
+<code>print.glm_betaselect()</code> for the
+<code>print</code>-methods.</p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -526,6 +603,194 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> R-squared                : 0.602</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adjusted R-squared       : 0.597</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ANOVA test of R-squared : F(6, 493) = 124.344, p &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Nonparametric bootstrapping conducted.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The number of bootstrap samples is 100.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors are bootstrap standard errors.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">data_test_mod_cat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data_test_mod_cat</span><span class="op">$</span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">data_test_mod_cat</span><span class="op">$</span><span class="va">dv</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">data_test_mod_cat</span><span class="op">$</span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data_test_mod_cat</span><span class="op">$</span><span class="va">p</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>                              yes <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                              no <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Standardize only iv</span></span></span>
+<span class="r-in"><span><span class="va">logistic_beta_x</span> <span class="op">&lt;-</span> <span class="fu">glm_betaselect</span><span class="op">(</span><span class="va">p</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span></span>
+<span class="r-in"><span>                                  family <span class="op">=</span> <span class="va">binomial</span>,</span></span>
+<span class="r-in"><span>                                  data <span class="op">=</span> <span class="va">data_test_mod_cat</span>,</span></span>
+<span class="r-in"><span>                                  to_standardize <span class="op">=</span> <span class="st">"iv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">logistic_beta_x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call to glm_betaselect():</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> betaselectr::lm_betaselect(formula = p ~ iv * mod + cov1 + cat1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     family = binomial, data = data_test_mod_cat, to_standardize = "iv", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     model_call = "glm")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable(s) standardized: iv </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::glm(formula = p ~ iv * mod + cov1 + cat1, family = binomial, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = "iv"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205      3.337  -4.856   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148      4.062  -0.283     0.48    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165      0.034   4.918     0.60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004      0.048  -0.091     0.92    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.344  -0.611     0.80    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.307  -0.616     0.42    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031      0.041   0.757   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 692.86  on 499  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 440.10  on 493  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 454.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Nonparametric bootstrapping conducted.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The number of bootstrap samples is 100.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors are bootstrap standard errors.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">logistic_beta_x</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call to lm_betaselect():</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> betaselectr::lm_betaselect(formula = p ~ iv * mod + cov1 + cat1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     family = binomial, data = data_test_mod_cat, to_standardize = "iv", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     model_call = "glm")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable(s) standardized: iv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model *after* standardization:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:  stats::glm(formula = p ~ iv * mod + cov1 + cat1, family = binomial, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = "iv"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)           iv          mod         cov1      cat1gp2      cat1gp3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -16.205362    -1.148483     0.165202    -0.004369    -0.210518    -0.189053  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      iv:mod  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.030878  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Degrees of Freedom: 499 Total (i.e. Null);  493 Residual</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Null Deviance:	    692.9 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual Deviance: 440.1 	AIC: 454.1</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">logistic_beta_x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call to glm_betaselect():</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> betaselectr::lm_betaselect(formula = p ~ iv * mod + cov1 + cat1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     family = binomial, data = data_test_mod_cat, to_standardize = "iv", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     model_call = "glm")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable(s) standardized: iv </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::glm(formula = p ~ iv * mod + cov1 + cat1, family = binomial, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = "iv"))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205      3.337  -4.856   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148      4.062  -0.283     0.48    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165      0.034   4.918     0.60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004      0.048  -0.091     0.92    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.344  -0.611     0.80    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.307  -0.616     0.42    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031      0.041   0.757   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 692.86  on 499  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 440.10  on 493  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 454.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Nonparametric bootstrapping conducted.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The number of bootstrap samples is 100.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors are bootstrap standard errors.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Manually standardize iv and call glm()</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data_test_mod_cat</span><span class="op">$</span><span class="va">iv_z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html" class="external-link">scale</a></span><span class="op">(</span><span class="va">data_test_mod_cat</span><span class="op">[</span>, <span class="st">"iv"</span><span class="op">]</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">logistic_beta_x_manual</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">p</span> <span class="op">~</span> <span class="va">iv_z</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span></span>
+<span class="r-in"><span>                              family <span class="op">=</span> <span class="va">binomial</span>,</span></span>
+<span class="r-in"><span>                              data <span class="op">=</span> <span class="va">data_test_mod_cat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">logistic_beta_x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   (Intercept)            iv           mod          cov1       cat1gp2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -16.205361985  -1.148482578   0.165201690  -0.004369295  -0.210517691 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cat1gp3        iv:mod </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.189052500   0.030878129 </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">logistic_beta_x_manual</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   (Intercept)          iv_z           mod          cov1       cat1gp2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -16.205361985  -1.148482578   0.165201690  -0.004369295  -0.210517691 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cat1gp3      iv_z:mod </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.189052500   0.030878129 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Standardize all numeric predictors</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">logistic_beta_allx</span> <span class="op">&lt;-</span> <span class="fu">glm_betaselect</span><span class="op">(</span><span class="va">p</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span></span>
+<span class="r-in"><span>                                     family <span class="op">=</span> <span class="va">binomial</span>,</span></span>
+<span class="r-in"><span>                                     data <span class="op">=</span> <span class="va">data_test_mod_cat</span>,</span></span>
+<span class="r-in"><span>                                     to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"mod"</span>, <span class="st">"cov1"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Note that cat1 is not standardized</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">logistic_beta_allx</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call to glm_betaselect():</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> betaselectr::lm_betaselect(formula = p ~ iv * mod + cov1 + cat1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     family = binomial, data = data_test_mod_cat, to_standardize = c("iv", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         "mod", "cov1"), model_call = "glm")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variable(s) standardized: iv, mod, cov1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats::glm(formula = p ~ iv * mod + cov1 + cat1, family = binomial, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = c("iv", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     "mod", "cov1")))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.280      0.256   1.093     0.18    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             1.941      0.202   9.603     0.32    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.827      0.158   5.229     0.40    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.013      0.116  -0.113     0.98    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.311  -0.677   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.329  -0.575     0.32    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.155      0.210   0.736   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Dispersion parameter for binomial family taken to be 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Null deviance: 692.86  on 499  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Residual deviance: 440.10  on 493  degrees of freedom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AIC: 454.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>

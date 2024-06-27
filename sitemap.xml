@@ -46,6 +46,9 @@
     <loc>https://sfcheung.github.io/betaselectr/reference/lm_betaselect.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/predict.glm_betaselect.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/betaselectr/reference/predict.lm_betaselect.html</loc>
   </url>
   <url>
@@ -53,6 +56,9 @@
   </url>
   <url>
     <loc>https://sfcheung.github.io/betaselectr/reference/std_data.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/betaselectr/reference/summary.glm_betaselect.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/betaselectr/reference/summary.lm_betaselect.html</loc>

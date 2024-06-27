@@ -52,6 +52,8 @@ reference:
   - predict.lm_betaselect
   - summary.lm_betaselect
   - vcov.lm_betaselect
+  - predict.glm_betaselect
+  - summary.glm_betaselect
 
 - title: Datasets
   desc: Datasets used in examples.

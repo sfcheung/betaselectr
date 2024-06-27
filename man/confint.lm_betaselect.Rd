@@ -2,8 +2,10 @@
 % Please edit documentation in R/lm_betaselect_methods.R
 \name{confint.lm_betaselect}
 \alias{confint.lm_betaselect}
-\title{Confidence Interval for an
-'lm_betaselect'-Class Object}
+\alias{confint.glm_betaselect}
+\title{Confidence Interval for
+'lm_betaselect' or 'glm_betaselect'
+Objects}
 \usage{
 \method{confint}{lm_betaselect}(
   object,
@@ -15,10 +17,24 @@
   boot_type = c("perc", "bc"),
   ...
 )
+
+\method{confint}{glm_betaselect}(
+  object,
+  parm,
+  level = 0.95,
+  trace = FALSE,
+  test = c("LRT", "Rao"),
+  method = c("boot", "bootstrap", "default", "ls"),
+  type = c("beta", "standardized", "raw", "unstandardized"),
+  warn = TRUE,
+  boot_type = c("perc", "bc"),
+  ...
+)
 }
 \arguments{
 \item{object}{The output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}.}
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}.}
 
 \item{parm}{The terms for which
 the confidence intervals are returned.
@@ -73,6 +89,18 @@ bootstrap confidence interval.}
 
 \item{...}{Optional arguments.
 Ignored.}
+
+\item{trace}{Logical. Whether profiling
+will be traced. See
+\code{\link[stats:confint]{stats::confint.glm()}} for details.
+ignored if \code{method} is \code{"boot"} or
+\code{"bootstrap"}.}
+
+\item{test}{The test used for
+profiling. See \link[stats:confint]{stats::confint.glm}
+for details.
+ignored if \code{method} is \code{"boot"} or
+\code{"bootstrap"}.}
 }
 \value{
 A \emph{p} by 2 matrix of the confidence
@@ -83,7 +111,8 @@ of coefficients.
 Return the confidence
 interval of the regression
 coefficients in the output of
-\code{\link[=lm_betaselect]{lm_betaselect()}}.
+\code{\link[=lm_betaselect]{lm_betaselect()}} or
+\code{\link[=glm_betaselect]{glm_betaselect()}}.
 }
 \details{
 The type of
@@ -92,7 +121,7 @@ on the object. If bootstrapping
 was requested, by default it returns
 the percentile bootstrap confidence
 intervals. Otherwise, it returns the
-OLS (or WLS) confidence intervals
+default confidence intervals
 and raises a warning for the
 standardized solution.
 
@@ -114,6 +143,23 @@ lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
 confint(lm_beta_x)
 confint(lm_beta_x, method = "ls")
 confint(lm_beta_x, type = "raw")
+
+
+data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
+data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
+                              yes = 1,
+                              no = 0)
+# bootstrap should be set to 2000 or 5000 in real studies
+logistic_beta_x <- glm_betaselect(p ~ iv*mod + cov1 + cat1,
+                                  data = data_test_mod_cat,
+                                  family = binomial,
+                                  to_standardize = "iv",
+                                  do_boot = TRUE,
+                                  bootstrap = 100,
+                                  iseed = 1234)
+
+confint(logistic_beta_x, method = "default")
+confint(logistic_beta_x, type = "raw")
 
 }
 \seealso{

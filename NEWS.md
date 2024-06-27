@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.4
+# betaselectr 0.0.1.5
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -19,3 +19,10 @@
   related methods to
   support models fitted by
   `stats::glm()`. (0.0.1.4)
+
+- Set the column "Bs.by" to hidden
+  by default when the output of
+  `lav_betaselect()` is printed with
+  `output` set to `"text"`. Can be
+  displayed with `"show_Bs.by"` set
+  to `TRUE`. (0.0.1.5)

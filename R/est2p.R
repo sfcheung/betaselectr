@@ -42,6 +42,7 @@ est2p <- function(x,
     # https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf
     x <- x[!is.na(x)]
     if (length(x) == 0) return(NA)
+    if (isTRUE(all.equal(min(x), max(x)))) return(NA)
     if (length(x) < min_size) {
         if (warn) {
           warning(paste("Bootstrap p-value not computed. Less than ",

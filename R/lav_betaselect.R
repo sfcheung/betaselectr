@@ -131,14 +131,10 @@
 #' this argument to `FALSE`.
 #'
 #' @param output The format of the
-#' output. If set to `"data.frame"`,
-#' the output will be a data frame like
-#' the one from [lavaan::parameterEstimates()].
-#' If set to `"text"`, it will be printed
-#' in a format similar to the one in
-#' the `summary`-method of `lavaan`.
-#' (NOTE: `"text"` supported but not
-#' fully implemented.)
+#' output. Not used because the format
+#' of the print out is now controlled
+#' by the `print`-method of the output
+#' of this function.
 #'
 #' @param std_se String. If set to `"none"`,
 #' the default, standard errors will not
@@ -330,8 +326,7 @@
 #' fit_beta <- lav_betaselect(fit,
 #'                            to_standardize = c("iv", "dv"))
 #' fit_beta
-#' print(fit_beta,
-#'       output = "text")
+#' print(fit_beta, standardized_only = FALSE)
 #'
 #' # In real studies:
 #' # - should set bootstrap to at least 5000
@@ -343,13 +338,11 @@
 #'                                 bootstrap = 100,
 #'                                 iseed = 1234)
 #' fit_beta_boot
-#' print(fit_beta_boot,
-#'       output = "text")
+#' print(fit_beta_boot, standardized_only = FALSE)
 #'
-#' # Print only beta_selects
+#' # Print full results
 #' print(fit_beta_boot,
-#'       output = "text",
-#'       standardized_only = TRUE)
+#'       standardized_only = FALSE)
 #'
 #'
 #' @export
@@ -544,6 +537,14 @@ lav_betaselect <- function(object,
           }
       }
 
+    # Fix 0 SE
+
+    if (has_se) {
+        i <- (std$std.p.se < sqrt(.Machine$double.eps))
+        std[which(i), "std.p.se"] <- NA
+      }
+
+
     # z statistic
     if (has_se && std_z) {
         # Same for delta and bootstrap
@@ -575,6 +576,9 @@ lav_betaselect <- function(object,
                                    x_se = c(est_std_se, est_std_user_se),
                                    level = level)
           }
+        i1 <- (ci[, "ci.upper"] - ci[, "ci.lower"] < sqrt(.Machine$double.eps))
+        ci[i1, "ci.lower"] <- NA
+        ci[i1, "ci.upper"] <- NA
         std[i0, "std.p.ci.lower"] <- ci[, "ci.lower"]
         std[i0, "std.p.ci.upper"] <- ci[, "ci.upper"]
       }

@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.5
+# betaselectr 0.0.1.6
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -26,3 +26,19 @@
   `output` set to `"text"`. Can be
   displayed with `"show_Bs.by"` set
   to `TRUE`. (0.0.1.5)
+
+- Updated to use `lavaan.printer`
+  to print the output. The default
+  format of the print out is changed
+  to the `lavaan`-style format. (0.0.1.6)
+
+- For the `print`-method of `lav_betaselect()`,
+  symbols can be added to denote
+  significant results by p-values
+  or by confidence intervals. Controlled
+  by the argument `sig_stars` and
+  `ci_sig` in the `print`-method. (0.0.1.6)
+
+- The `print`-method of `lav_betaselect()`
+  now print only the standardized solution
+  by default (0.0.1.6)

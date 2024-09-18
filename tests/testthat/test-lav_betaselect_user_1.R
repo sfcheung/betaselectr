@@ -46,20 +46,23 @@ test_that("User parameters", {
   # std[24:27, c("lhs", "op", "rhs", "se", "ci.lower", "ci.upper")]
   # out[24:27, c("lhs", "op", "rhs", "std.p.se", "std.p.ci.lower", "std.p.ci.upper")]
 
-  expect_equal(out$std.p.se,
-               std$se,
+  i <- !is.na(out$std.p.se)
+  expect_equal(out$std.p.se[i],
+               std$se[i],
                ignore_attr = TRUE,
                tolerance = 1e-4)
-  expect_equal(out$std.p.ci.lower,
-               std$ci.lower,
+  i <- !is.na(out$std.p.ci.lower)
+  expect_equal(out$std.p.ci.lower[i],
+               std$ci.lower[i],
                ignore_attr = TRUE,
                tolerance = 1e-4)
-  expect_equal(out$std.p.ci.upper,
-               std$ci.upper,
+  i <- !is.na(out$std.p.ci.upper)
+  expect_equal(out$std.p.ci.upper[i],
+               std$ci.upper[i],
                ignore_attr = TRUE,
                tolerance = 1e-4)
-  expect_output(print(out, output = "text"),
+  expect_output(print(out, standardized_only = FALSE),
                 "Estimates")
-  expect_output(print(out, output = "text", standardized_only = TRUE),
+  expect_output(print(out, standardized_only = TRUE),
                 "Estimates")
 })

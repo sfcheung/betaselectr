@@ -6,22 +6,22 @@
 #' [lav_betaselect()].
 #'
 #' @details
-#' The default format of the printout
-#' is that of [lavaan::parameterEstimates()],
-#' which is compact but not easy to
-#' read. Users can request a format
-#' similar to that of the printout
-#' of the summary of a `lavaan` output
-#' by setting `output` to `"text"`.
-#'
-#' For the `"text"` format, users can
-#' also select whether
+#' The default format of the printout,
+#' `"lavaan.printer"`,
+#' is similar to that of the `summary()`
+#' of a `lavaan` object.
+#' Users can also select whether
 #' only the standardized solution is
 #' printed or whether
 #' the standardized solution is appended
-#' to the right of the printout, as
-#' in the output of [summary()]
-#' for a `lavaan` output.
+#' to the right of the printout.
+#'
+#' If `output` is set to `"table"'
+#' the format is that of
+#' [lavaan::parameterEstimates()]
+#' with `output = "data.frame"`,
+#' which is compact but not easy to
+#' read.
 #'
 #' @param x Object of the class
 #' `std_solution_boot`.
@@ -34,16 +34,17 @@
 #' is 3.
 #'
 #' @param output String. How the results
-#' are printed. Default is `"table"` and
-#' the results are printed in a table
+#' are printed. Default is `"lavaan.printer"`,
+#' and the results will be
+#' printed in a format similar to
+#' the printout of the output of
+#' the `summary`-method of a
+#' `lavaan-class` object.
+#' If set to `"table"`, the results are
+#' printed in a table
 #' format similar to that of
 #' [lavaan::parameterEstimates()]
-#' with `output` set to `"table"`.
-#' If `"text"`, the results will be
-#' printed in a text format similar to
-#' the printout of the output of
-#' [summary()] of
-#' a [lavaan-class] object.
+#' with `output` set to `"data.frame"`.
 #'
 #' @param standardized_only Logical.
 #' If `TRUE`, only the
@@ -57,12 +58,35 @@
 #' object.
 #'
 #' @param show_Bs.by Logical. If `TRUE`
-#' and `output` is `"text"`, then the
+#' and `output` is `"lavaan.printer"`, then the
 #' column `"Bs.by"` is shown,
 #' indicating, for each parameter, the
 #' variables standardized. Otherwise,
 #' this column is not shown if `output`
-#' is not `"text"`.
+#' is not `"lavaan.printer"`.
+#'
+#' @param by_group If `TRUE`, the
+#' default, and the model has more than
+#' one groups, sections will be grouped
+#' by groups first, as in the print
+#' out of `summary()` in `lavaan`.
+#' If `FALSE`, then the sections will
+#' be grouped by sections first.
+#'
+#' @param na_str The string to be used
+#' for cells with `NA``. Default is
+#' `" "``, a white space.
+#'
+#' @param sig_stars If `TRUE`, the
+#' default, symbols such as asterisks
+#' (`*`, `**`, `***`) will be used to
+#' denote whether a beta-select is
+#' significant.
+#'
+#' @param ci_sig If `TRUE`, the default,
+#' a beta-select will be denoted as
+#' significant or not significant based
+#' on its confidence interval.
 #'
 #' @seealso [lav_betaselect()]. This
 #' function is adapted from
@@ -82,8 +106,9 @@
 #' fit_beta <- lav_betaselect(fit,
 #'                            to_standardize = c("iv", "dv"))
 #' fit_beta
-#' print(fit_beta,
-#'       output = "text")
+#' print(fit_beta)
+#' print(fit_beta, show_Bs.by = TRUE)
+#' print(fit_beta, output = "table")
 #'
 #' @return
 #'  `x` is returned invisibly. Called for its side effect.
@@ -96,9 +121,13 @@
 print.lav_betaselect <- function(x,
                                  ...,
                                  nd = 3,
-                                 output = c("table", "text"),
-                                 standardized_only = FALSE,
-                                 show_Bs.by = FALSE) {
+                                 output = c("lavaan.printer", "table"),
+                                 standardized_only = TRUE,
+                                 show_Bs.by = FALSE,
+                                 by_group = TRUE,
+                                 na_str = " ",
+                                 sig_stars = TRUE,
+                                 ci_sig = TRUE) {
     output <- match.arg(output)
     x_call <- attr(x, "call")
     if (output == "table") {
@@ -113,19 +142,17 @@ print.lav_betaselect <- function(x,
         return(invisible(x))
       }
 
+    # List variables standardized
     tmp <- stats::na.omit(x$std.p.by)
     tmp <- unique(unlist(strsplit(tmp, ",", fixed = TRUE)))
     std.p.by.vars <- tmp
 
-    # Add columns required for print
+    # Add columns required for printing in lavaan-style
     ptable <- attr(x, "partable")
     est0 <- attr(x, "est")
     est1 <- x
     est1$id <- seq_len(nrow(est1))
-    i0 <- colnames(x) %in% c("se", "z", "pvalue",
-                             "ci.lower", "ci.upper")
-    # est1 <- merge(est1,
-    #               x[, !i0])
+    class(est1) <- class(x)[-match("lav_betaselect", class(x))]
     i0 <- colnames(ptable) %in% c("est", "se",
                                   "user", "free",
                                   "ustart", "plabel",
@@ -133,12 +160,32 @@ print.lav_betaselect <- function(x,
                                   "id")
     est1 <- merge(est1, ptable[, !i0])
     est1 <- est1[order(est1$id), ]
+    rownames(est1) <- seq_len(nrow(est1))
     est1$id <- NULL
 
     # Move std.p.by to the right
     i <- match("std.p.by", colnames(est1))
     est1 <- cbind(est1[, -i], est1[, i, drop = FALSE])
 
+    # Add "stars"?
+    if (all(is.na(est1$std.p.pvalue)) || is.null(est1$std.p.pvalue)) {
+        sig_stars <- FALSE
+      }
+    if (sig_stars && ("std.p.pvalue" %in% colnames(est1))) {
+        est1 <- add_sig(est1, sig = "std.p.sig")
+        sig_legend <- attr(est1, "sig_legend")
+      } else {
+        sig_legend <- NULL
+      }
+    # Check CI sig?
+    if (ci_sig && ("std.p.ci.lower" %in% colnames(est1))) {
+        est1 <- add_ci_sig(est1,
+                           ci_lo = "std.p.ci.lower",
+                           ci_up = "std.p.ci.upper",
+                           sig = "std.p.ci.sig")
+      }
+
+    # Convert to a lavaan.parameterEstimates object
     class(est1) <- class(est0)
     pe_attrib <- attr(x, "pe_attrib")
     tmp <- !(names(pe_attrib) %in% names(attributes(est1)))
@@ -147,162 +194,306 @@ print.lav_betaselect <- function(x,
     if (!inherits(est1, "lavaan.parameterEstimates")) {
         class(est1) <- c("lavaan.parameterEstimates", class(est1))
       }
-    header_stdp <- character(0)
-    header_stdp <- c(header_stdp,
-                     "Selected Standardization (Bs):",
-                     "",
-                     "  Only selected variables are standardized")
-    # TODO:
-    # - Get the width from the output
-    std_se <- attr(x, "std_se")
-    header_width <- 54
-    if ("std.p.se" %in% colnames(est1)) {
-        tmp1 <- "  Standard errors"
-        tmp2 <- switch(std_se,
-                       delta = "Delta Method",
-                       bootstrap = "Bootstrap")
-        header_stdp <- c(header_stdp,
-                         paste0(tmp1,
-                                paste0(rep(" ",
-                                           header_width - nchar(tmp1) - nchar(tmp2)),
-                                           collapse = ""),
-                                tmp2))
-        if ("bootstrap" %in% std_se) {
-            tmp1 <- "  Bootstrap samples"
-            tmp2 <- as.character(attr(x, "R"))
-            header_stdp <- c(header_stdp,
-                            paste0(tmp1,
-                                    paste0(rep(" ",
-                                                header_width - nchar(tmp1) - nchar(tmp2)),
-                                                collapse = ""),
-                                    tmp2))
-          }
-      }
 
-    footer_stdp <- character(0)
-    footer_stdp <- c(footer_stdp,
-                     "Note:")
-    if (show_Bs.by) {
-        footer_stdp <- c(footer_stdp,
-                        strwrap(paste("- The column 'Bs.by' lists variable(s) standardized when computing the",
-                                        "standardized coefficient of a parameter.",
-                                        "('NA' for user-defined parameters because they are computed from other standardized parameters.)"),
-                                exdent = 2))
-      }
-    if (length(std.p.by.vars) > 0) {
-        if (length(std.p.by.vars) == 1) {
-            footer_stdp <- c(footer_stdp,
-                            strwrap(paste("- This variable is standardized:",
-                                          std.p.by.vars),
-                                    exdent = 2))
-          } else {
-            footer_stdp <- c(footer_stdp,
-                            strwrap(paste("- These variables are standardized:",
-                                          paste0(std.p.by.vars, collapse = ", ")),
-                                    exdent = 2))
-          }
-      }
+    # Add header sections
+    has_std_se <- "std.p.se" %in% colnames(est1)
+    has_std_pvalue <- "std.p.pvalue" %in% colnames(est1)
+    std_se <- if (has_std_se) {
+                  attr(x, "std_se")
+                } else {
+                  "nil"
+                }
+    std_r <- attr(x, "R")
     prods <- attr(x, "prods")
-    if (length(prods) > 0) {
-        footer_stdp <- c(footer_stdp,
-                        strwrap(paste0("- Product terms (",
-                                      paste0(names(prods), collapse = ", "),
-                                      ") have variables standardized before computing them. ",
-                                      "That is, the product terms themselves are not standardized."),
-                                exdent = 2))
-      }
     cat_vars <- attr(x, "categorical")
-    if (length(cat_vars)) {
-        footer_stdp <- c(footer_stdp,
-                        strwrap(paste0("- Dummy variables (",
-                                paste0(cat_vars, collapse = ", "),
-                                ") which are predictors are not standardied."),
-                                exdent = 2))
-      }
-    if ("delta" %in% std_se) {
-        footer_stdp <- c(footer_stdp,
-                         strwrap(paste("- Delta method standard errors, p-values, and confidence intervals are",
-                                       "not recommended for parameters which have variable(s) standardized."),
-                                 exdent = 2))
+    has_std_ci <- "std.p.ci.lower" %in% colnames(x)
+    has_std_p <- length(std.p.by.vars) > 0
+    if (has_std_ci) {
+        level <- attr(x, "level")
+        level_str <- paste0(formatC(level * 100,
+                                    digits = 1,
+                                    format = "f"), "%")
+      } else {
+        level <- NULL
+        level_str <- character(0)
       }
 
-    # if (("std.ci.lower" %in% colnames(est1)) &&
-    #     ("bootstrap" %in% std_se)) {
-
-    #   }
-    comps <- c("Latent Variables:",
-                "Regressions:",
-                "Covariances:",
-                "Variances:")
-    if (!standardized_only) {
-        if (!show_Bs.by) {
-            est1$std.p.by <- NULL
+    hdr_select <- function(x) {
+        force(std_se)
+        force(has_std_ci)
+        force(level_str)
+        out1 <- data.frame(Field = "Standard Error:",
+                           Value = switch(std_se,
+                                          delta = "Delta method",
+                                          bootstrap = "Nonparametric bootstrap",
+                                          "Nil"))
+        if ("bootstrap" %in% std_se) {
+            out2 <- data.frame(Field = "Bootstrap samples:",
+                               Value = as.character(std_r))
+            out1 <- rbind(out1, out2)
           }
-        tmp <- colnames(est1)
-        # tmp[tmp == "std.p"] <- "Std.p"
-        # tmp[tmp == "std.p.ci.lower"] <- "Std.p.ci.lower"
-        # tmp[tmp == "std.p.ci.upper"] <- "Std.p.ci.upper"
-        # tmp[tmp == "std.p.se"] <- "Std.p.SE"
-        # tmp[tmp == "std.p.z"] <- "Std.p.z"
-        # tmp[tmp == "std.p.pvalue"] <- "Std.p.Pvalue"
-        # tmp[tmp == "std.p.by"] <- "Std.by.Vars"
-        tmp <- gsub("std.p.", "Bs.", tmp, fixed = TRUE)
-        tmp <- gsub("std.p", "Bs", tmp, fixed = TRUE)
-        tmp <- gsub("ci.lower", "CI.Lo", tmp, fixed = TRUE)
-        tmp <- gsub("ci.upper", "CI.Hi", tmp, fixed = TRUE)
-        colnames(est1) <- tmp
-        out <- utils::capture.output(print(est1, ..., nd = nd))
-        i <- sort(match(comps, out))[1]
-        out <- append(out,
-                      c(header_stdp, ""),
-                      after = i - 1)
-        out <- c(out, footer_stdp)
-        cat(out, sep = "\n")
+        if (has_std_ci) {
+            out2 <- data.frame(Field = c("Confidence Interval:",
+                                         "Level of Confidence:"),
+                               Value = c(switch(std_se,
+                                              delta = "Delta method",
+                                              bootstrap = "Percentile",
+                                              "Nil"),
+                                         level_str))
+            out1 <- rbind(out1, out2)
+          }
+        colnames(out1) <- NULL
+        attr(out1, "section_title") <- "Selected Standardization:"
+        # attr(out1, "print_args") <- list(right = TRUE)
+        out1
+      }
+
+    ftr_select <- function(x) {
+        force(has_std_se)
+        force(has_std_p)
+        force(show_Bs.by)
+        force(std.p.by.vars)
+        force(prods)
+        force(cat_vars)
+        force(standardized_only)
+        out0 <- character(0)
+        if (has_std_p) {
+            tmp <- sort(std.p.by.vars)
+            std.p.by.vars.str <- paste0("  ",
+                                        paste0(tmp, collapse = ", "))
+            tmp <- paste("- Variable(s) standardized",
+                          std.p.by.vars.str,
+                          sep = ":")
+            out0 <- c(out0,
+                      tmp)
+          } else {
+            out0 <- c(out0,
+                      "- No variable standardized.")
+          }
+        if (sig_stars && has_std_pvalue) {
+            sig_legend2 <- strsplit(sig_legend, "\t")[[1]][1]
+            tmp <- paste("- Sig codes:",
+                         sig_legend2)
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (has_std_se) {
+            tmp <- paste("- Standard errors, p-values, and confidence ",
+                         "intervals are not computed for betas-select ",
+                         "which are fixed in the standardized solution.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (has_std_pvalue && (std_se == "bootstrap")) {
+            if (std_r < 100) {
+                tmp <- paste("- Asymmetric bootstrap p-value not computed ",
+                             "when the number of bootstrap samples is less ",
+                             "than 100.")
+                out0 <- c(out0,
+                          tmp)
+              } else {
+                tmp <- paste("- P-values for betas-select are ",
+                             "asymmetric bootstrap p-value computed ",
+                             "by the method of Asparouhov and Muth\u00e9n (2021).")
+                out0 <- c(out0,
+                          tmp)
+              }
+          }
+        if (!standardized_only && has_std_p) {
+            tmp <- paste("- Betas-select are shown in column 'BSelect'.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (!standardized_only && has_std_p) {
+            tmp <- paste("- Column(s) prefixed by 'BS.*'",
+                         "are for betas-select.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (!standardized_only && has_std_p) {
+            tmp <- paste("- Call 'print()' and set ",
+                         "'standardized_only' to 'TRUE' to ",
+                         "print only betas-select.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (standardized_only && has_std_p) {
+            tmp <- paste("- Call 'print()' and set ",
+                         "'standardized_only' to 'FALSE' to ",
+                         "print both original estimates and betas-select.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (show_Bs.by) {
+            tmp <- paste("- The column 'Selected' lists variable(s)",
+                         "standardized when computing the",
+                         "standardized coefficient of a parameter.",
+                         "('NA' for user-defined parameters because",
+                         "they are computed from other standardized",
+                         "parameters.)")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (length(prods) > 0) {
+            tmp <- paste0("- Product terms (",
+                          paste0(names(prods), collapse = ", "),
+                          ") have variables standardized before ",
+                          "computing them. ",
+                          "The product term(s) is/are ",
+                          "not standardized.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if (length(cat_vars)) {
+            tmp <- paste0("- Dummy variables (",
+                          paste0(cat_vars, collapse = ", "),
+                          ") which are predictors are not standardized.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        if ("delta" %in% std_se) {
+            tmp <- paste0("- Delta method standard errors, ",
+                          "p-values, and confidence intervals are ",
+                          "usually not recommended for parameters ",
+                          "which have variable(s) standardized unless ",
+                          "the sample size is large enough.")
+            out0 <- c(out0,
+                      tmp)
+          }
+        attr(out0, "section_title") <- "Footnote:"
+        attr(out0, "print_fun") <- "cat"
+        attr(out0, "strwrap_args") <- list(exdent = 2)
+        out0
+      }
+
+    if (!show_Bs.by) {
+        est1$std.p.by <- NULL
+      }
+
+    if (!standardized_only) {
+        # Print both original and standardized estimates
+        out <- lavaan.printer::parameterEstimates_table_list(est1,
+                  rename_cols = c("std.p" = "BSelect",
+                                  "std.p.se" = "BS.SE",
+                                  "std.p.z" = "BS.Z",
+                                  "std.p.pvalue" = "BS.p",
+                                  "std.p.sig" = "BS.Sig",
+                                  "std.p.ci.lower" = "BS.CI.Lo",
+                                  "std.p.ci.upper" = "BS.CI.Hi",
+                                  "std.p.ci.sig" = "BS.CI.Sig",
+                                  "std.p.by" = "Selected"),
+                  header_funs = list(hdr_select),
+                  footer_funs = list(ftr_select))
+        lavaan.printer::print_parameterEstimates_table_list(out,
+                                                            nd = nd,
+                                                            by_group = by_group,
+                                                            na_str = na_str)
         return(invisible(x))
       } else {
-        level <- attr(x, "level")
-        est2 <- est1
-        est2$est <- est2$std.p
-        est2$se <- est2$std.p.se
-        est2$z <- est2$std.p.z
-        est2$pvalue <- est2$std.p.pvalue
-        est2$ci.lower <- est2$std.p.ci.lower
-        est2$ci.upper <- est2$std.p.ci.upper
-        est2$std.p <- NULL
-        est2$std.p.se <- NULL
-        est2$std.p.z <- NULL
-        est2$std.p.pvalue <- NULL
-        est2$std.p.ci.lower <- NULL
-        est2$std.p.ci.upper <- NULL
-        if (!show_Bs.by) {
-            est2$std.p.by <- NULL
-          }
-
-        tmp <- colnames(est2)
-        tmp <- gsub("std.p.", "Bs.", tmp, fixed = TRUE)
-        # tmp <- gsub("std.p", "Bs", tmp, fixed = TRUE)
-        # tmp <- gsub("ci.lower", "CI.Lo", tmp, fixed = TRUE)
-        # tmp <- gsub("ci.upper", "CI.Hi", tmp, fixed = TRUE)
-        colnames(est2) <- tmp
-
-        out <- utils::capture.output(print(est2, nd = nd))
-        i <- which(grepl("Parameter Estimates:", out, fixed = TRUE))
-        j <- sort(match(comps, out))[1]
-        out <- out[-c(i:max(i, (j - 2)))]
-        i <- which(out == "")[1]
-        header_stdp[i] <- "Selected Standardized Estimates Only (Bs):"
-        out <- append(out,
-                      header_stdp,
-                      after = i)
-        out <- gsub("         Estimate ",
-                    "Standardized (Bs) ",
-                    out)
-        out <- gsub("P(>|z|)",
-                    "p-value",
-                    out,
-                    fixed = TRUE)
-        out <- c(out, footer_stdp)
-        cat(out, sep = "\n")
+        # Print only standardized estimates
+        out <- lavaan.printer::parameterEstimates_table_list(est1,
+                  drop_cols = c("ci.lower",
+                                "ci.upper",
+                                "est",
+                                "se",
+                                "z",
+                                "pvalue",
+                                "std.all",
+                                "std.lv",
+                                "std.ov"),
+                  rename_cols = c("std.p" = "BetaSelect",
+                                  "std.p.se" = "SE",
+                                  "std.p.z" = "Z",
+                                  "std.p.pvalue" = "p-value",
+                                  "std.p.sig" = "Sig",
+                                  "std.p.ci.lower" = "CI.Lo",
+                                  "std.p.ci.upper" = "CI.Hi",
+                                  "std.p.ci.sig" = "CI.Sig",
+                                  "std.p.by" = "Selected"),
+                  header_funs = list(hdr_select),
+                  footer_funs = list(ftr_select))
+        lavaan.printer::print_parameterEstimates_table_list(out,
+                                                            nd = nd,
+                                                            by_group = by_group,
+                                                            na_str = na_str)
         return(invisible(x))
       }
+  }
+
+#' @noRd
+
+add_lavaan_pe_attrib <- function(object) {
+    pe_attrib <- attr(object, "pe_attrib")
+    pe_attrib$names <- NULL
+    pe_attrib$row.names <- NULL
+    pe_attrib$class <- NULL
+    # Do not overwrite existing attributes
+    for (x in names(pe_attrib)) {
+        if (!(x %in% names(attr(object, x)))) {
+            attr(object, x) <- pe_attrib[[x]]
+          }
+      }
+    object
+  }
+
+#' @noRd
+
+add_sig <- function(object,
+                    pvalue = "std.p.pvalue",
+                    sig = "Sig") {
+    tmp <- as.numeric(object[, pvalue, drop = TRUE])
+    if (!is.null(tmp)) {
+        tmp2 <- stats::symnum(tmp,
+                              cutpoints = c(0,
+                                            .001,
+                                            .01,
+                                            .05,
+                                            .1,
+                                            1),
+                              symbols = c("***",
+                                          "**",
+                                          "*",
+                                          ".",
+                                          " "),
+                              na = "--")
+        tmp2_legend <- attr(tmp2, "legend")
+        i <- match(pvalue, colnames(object))
+        out0 <- list(object[, 1:i],
+                     tmp2,
+                     object[, seq(i + 1, ncol(object))])
+        names(out0) <- c("", sig, "")
+        out <- do.call(data.frame, out0)
+       attr(out, "sig_legend") <- tmp2_legend
+      } else {
+        out
+      }
+    out
+  }
+
+
+#' @noRd
+
+add_ci_sig <- function(object,
+                       ci_lo = "std.p.ci.lower",
+                       ci_up = "std.p.ci.upper",
+                       sig = "CI.Sig") {
+    cilo <- object[, ci_lo, drop = TRUE]
+    ciup <- object[, ci_up, drop = TRUE]
+    if (!is.null(cilo) && !is.null(ciup)) {
+        ci_sig <- (cilo > 0) | (ciup < 0)
+        ci_sig <- ifelse(ci_sig,
+                         "Sig.",
+                         "n.s.")
+        ci_sig[(ciup - cilo) < sqrt(.Machine$double.eps)] <- ""
+        ci_sig[is.na(ciup) | is.na(cilo)] <- ""
+        i <- match(ci_up, colnames(object))
+        out0 <- list(object[, 1:i],
+                     ci_sig,
+                     object[, seq(i + 1, ncol(object))])
+        names(out0) <- c("", sig, "")
+        out <- do.call(data.frame, out0)
+      } else {
+        out
+      }
+    out
   }

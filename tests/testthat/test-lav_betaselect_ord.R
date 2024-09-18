@@ -61,8 +61,8 @@ out <- lav_betaselect(fit_gp, standardized = TRUE)
 test_that("Ordinal variables: Multigroup", {
   i <- which(round(out$std.all, 3) != round(out$std.p, 3))
   expect_equal(length(i), 0)
-  expect_output(print(out, output = "text"),
+  expect_output(print(out, standardized_only = FALSE),
                 "Estimates")
-  expect_output(print(out, output = "text", standardized_only = TRUE),
+  expect_output(print(out, standardized_only = TRUE),
                 "Estimates")
 })

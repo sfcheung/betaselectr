@@ -133,8 +133,8 @@ test_that("to_standardize", {
                ignore_attr = TRUE)
   expect_equal(std_nox_out1$std.p, std_out$std.p,
                ignore_attr = TRUE)
-  expect_output(print(std_out, output = "text"),
+  expect_output(print(std_out, standardized_only = FALSE),
                 "Estimates")
-  expect_output(print(std_out, output = "text", standardized_only = TRUE),
-                "Standardized")
+  expect_output(print(std_out, standardized_only = TRUE),
+                "BetaSelect")
 })

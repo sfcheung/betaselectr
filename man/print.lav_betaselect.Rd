@@ -8,9 +8,13 @@
   x,
   ...,
   nd = 3,
-  output = c("table", "text"),
-  standardized_only = FALSE,
-  show_Bs.by = FALSE
+  output = c("lavaan.printer", "table"),
+  standardized_only = TRUE,
+  show_Bs.by = FALSE,
+  by_group = TRUE,
+  na_str = " ",
+  sig_stars = TRUE,
+  ci_sig = TRUE
 )
 }
 \arguments{
@@ -25,16 +29,17 @@ after the decimal place. Default
 is 3.}
 
 \item{output}{String. How the results
-are printed. Default is \code{"table"} and
-the results are printed in a table
+are printed. Default is \code{"lavaan.printer"},
+and the results will be
+printed in a format similar to
+the printout of the output of
+the \code{summary}-method of a
+\code{lavaan-class} object.
+If set to \code{"table"}, the results are
+printed in a table
 format similar to that of
 \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}
-with \code{output} set to \code{"table"}.
-If \code{"text"}, the results will be
-printed in a text format similar to
-the printout of the output of
-\code{\link[=summary]{summary()}} of
-a \linkS4class{lavaan} object.}
+with \code{output} set to \code{"data.frame"}.}
 
 \item{standardized_only}{Logical.
 If \code{TRUE}, only the
@@ -48,12 +53,34 @@ of \code{\link[=summary]{summary()}} of a \linkS4class{lavaan}
 object.}
 
 \item{show_Bs.by}{Logical. If \code{TRUE}
-and \code{output} is \code{"text"}, then the
+and \code{output} is \code{"lavaan.printer"}, then the
 column \code{"Bs.by"} is shown,
 indicating, for each parameter, the
 variables standardized. Otherwise,
 this column is not shown if \code{output}
-is not \code{"text"}.}
+is not \code{"lavaan.printer"}.}
+
+\item{by_group}{If \code{TRUE}, the
+default, and the model has more than
+one groups, sections will be grouped
+by groups first, as in the print
+out of \code{summary()} in \code{lavaan}.
+If \code{FALSE}, then the sections will
+be grouped by sections first.}
+
+\item{na_str}{The string to be used
+for cells with \verb{NA``. Default is }" "``, a white space.}
+
+\item{sig_stars}{If \code{TRUE}, the
+default, symbols such as asterisks
+(\code{*}, \verb{**}, \verb{***}) will be used to
+denote whether a beta-select is
+significant.}
+
+\item{ci_sig}{If \code{TRUE}, the default,
+a beta-select will be denoted as
+significant or not significant based
+on its confidence interval.}
 }
 \value{
 \code{x} is returned invisibly. Called for its side effect.
@@ -65,22 +92,19 @@ is the output of
 \code{\link[=lav_betaselect]{lav_betaselect()}}.
 }
 \details{
-The default format of the printout
-is that of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}},
-which is compact but not easy to
-read. Users can request a format
-similar to that of the printout
-of the summary of a \code{lavaan} output
-by setting \code{output} to \code{"text"}.
-
-For the \code{"text"} format, users can
-also select whether
+The default format of the printout,
+\code{"lavaan.printer"},
+is similar to that of the \code{summary()}
+of a \code{lavaan} object.
+Users can also select whether
 only the standardized solution is
 printed or whether
 the standardized solution is appended
-to the right of the printout, as
-in the output of \code{\link[=summary]{summary()}}
-for a \code{lavaan} output.
+to the right of the printout.
+
+If \code{output} is set to \verb{"table"' the format is that of [lavaan::parameterEstimates()] with }output = "data.frame"`,
+which is compact but not easy to
+read.
 }
 \examples{
 library(lavaan)
@@ -96,8 +120,9 @@ summary(fit)
 fit_beta <- lav_betaselect(fit,
                            to_standardize = c("iv", "dv"))
 fit_beta
-print(fit_beta,
-      output = "text")
+print(fit_beta)
+print(fit_beta, show_Bs.by = TRUE)
+print(fit_beta, output = "table")
 
 }
 \seealso{

@@ -16,7 +16,7 @@ out <- lav_betaselect(fit, standardized = TRUE, std_se = "delta")
 out
 std <- standardizedSolution(fit)
 
-out3 <- lav_betaselect(fit, standardized = TRUE, output = "text")
+out3 <- lav_betaselect(fit, standardized = TRUE)
 out3
 
 # Difference

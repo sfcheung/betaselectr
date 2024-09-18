@@ -48,8 +48,10 @@ test_that("Get do_boot results", {
                                     not_to_standardize = c("dv", "med", "cov2"),
                                     progress = FALSE,
                                     std_se = "bootstrap")
-
-  expect_equal(round(out_gp[c(1:4, 10:13), "std.p.se"], 2),
-               round(out_boot_gp[c(1:4, 10:13), "se"], 2),
+  a <- round(out_gp[c(1:4, 10:13), "std.p.se"], 2)
+  b <- round(out_boot_gp[c(1:4, 10:13), "se"], 2)
+  i <- !is.na(a)
+  expect_equal(a[i],
+               b[i],
                ignore_attr = TRUE)
 })

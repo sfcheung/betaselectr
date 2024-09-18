@@ -51,10 +51,10 @@ test_that("Get do_boot results", {
                round(out_boot[5:8, "se"], 2),
                tolerance = 1e-2,
                ignore_attr = TRUE)
-  expect_output(print(out, output = "text"),
+  expect_output(print(out, standardized_only = FALSE),
                 "Estimates")
-  expect_output(print(out, output = "text", standardized_only = TRUE),
-                "Standardized")
+  expect_output(print(out, standardized_only = TRUE),
+                "BetaSelect")
 })
 
 test_that("boot_out error", {

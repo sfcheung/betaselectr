@@ -69,10 +69,10 @@ test_that("All est", {
   expect_equal(out$std.all,
                out$std.p,
                ignore_attr = TRUE)
-  expect_output(print(out, output = "text"),
+  expect_output(print(out, standardized_only = FALSE),
                 "Estimates")
-  expect_output(print(out, output = "text", standardized_only = TRUE),
-                "Standardized")
+  expect_output(print(out, standardized_only = TRUE),
+                "BetaSelect")
 })
 
 # Check skipping the search for product terms

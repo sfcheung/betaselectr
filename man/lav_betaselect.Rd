@@ -65,14 +65,10 @@ standardized even if listed in
 this argument to \code{FALSE}.}
 
 \item{output}{The format of the
-output. If set to \code{"data.frame"},
-the output will be a data frame like
-the one from \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
-If set to \code{"text"}, it will be printed
-in a format similar to the one in
-the \code{summary}-method of \code{lavaan}.
-(NOTE: \code{"text"} supported but not
-fully implemented.)}
+output. Not used because the format
+of the print out is now controlled
+by the \code{print}-method of the output
+of this function.}
 
 \item{std_se}{String. If set to \code{"none"},
 the default, standard errors will not
@@ -344,8 +340,7 @@ summary(fit)
 fit_beta <- lav_betaselect(fit,
                            to_standardize = c("iv", "dv"))
 fit_beta
-print(fit_beta,
-      output = "text")
+print(fit_beta, standardized_only = FALSE)
 
 # In real studies:
 # - should set bootstrap to at least 5000
@@ -357,13 +352,11 @@ fit_beta_boot <- lav_betaselect(fit,
                                 bootstrap = 100,
                                 iseed = 1234)
 fit_beta_boot
-print(fit_beta_boot,
-      output = "text")
+print(fit_beta_boot, standardized_only = FALSE)
 
-# Print only beta_selects
+# Print full results
 print(fit_beta_boot,
-      output = "text",
-      standardized_only = TRUE)
+      standardized_only = FALSE)
 
 
 }

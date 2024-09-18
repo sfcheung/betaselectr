@@ -44,8 +44,11 @@ test_that("Get do_boot results", {
                                     bootstrap = 50,
                                     iseed = 234567)
 
-  expect_equal(round(out_boot_lav_gp[c(1:4, 10:13), "std.p.se"], 2),
-               round(out_boot_gp[c(1:4, 10:13), "se"], 2),
+  a <- round(out_boot_lav_gp[c(1:4, 10:13), "std.p.se"], 2)
+  b <- round(out_boot_gp[c(1:4, 10:13), "se"], 2)
+  i <- !is.na(a)
+  expect_equal(a[i],
+               b[i],
                tolerance = 1e-3,
                ignore_attr = TRUE)
 

@@ -1,0 +1,191 @@
+---
+title: "Beta-Select Demonstration: SEM by 'lavaan'"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Beta-Select Demonstration: SEM by 'lavaan'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+```{r, echo = FALSE}
+format_str <- function(x, digits = 3) {
+    formatC(x, digits = digits, format = "f")
+  }
+```
+
+# Introduction
+
+This article demonstrates how to use
+`lav_betaselect()` from the package
+`betaselectr`
+to standardize
+selected variables in a model fitted
+by `lavaan` and forming confidence
+intervals for the parameters.
+
+# Data and model
+
+The demonstration dataset from the package
+`betaselectr` will be used for demonstration:
+
+```{r}
+library(betaselectr)
+head(data_test_medmod)
+```
+
+This is the path model, fitted by
+`lavaan::sem()`:
+
+```{r}
+library(lavaan)
+mod <-
+"
+med ~ iv + mod + iv:mod + cov1 + cov2
+dv ~ med + iv + cov1 + cov2
+"
+fit <- sem(mod,
+           data_test_medmod)
+```
+
+These are the results:
+
+```{r}
+summary(fit)
+```
+
+# Problems With Standardization
+
+We can request the standardized solution
+using `lavaan::standardizedSolution()`:
+
+```{r}
+standardizedSolution(fit,
+                     output = "text")
+```
+
+However, for this model, there are two
+problems.
+
+- The product term, `iv:mod`, is also
+  standardized. This is inappropriate.
+  One simple but underused solution is
+  standardized the variables *before*
+  forming the product term (Friedrich, 1982).
+
+- The confidence intervals are formed using
+  the delta-method, which has been found
+  to be inferior to methods such as
+  nonparametric percentile bootstrap
+  confidence interval for the standardized
+  solution (Falk, 2018).
+
+- There are cases in which some variabLes
+  are measured by meaningful units and
+  do not need to be standardized. for
+  example, if `cov1` is age measured by
+  year, then age is more
+  meaningful than the "standardized age".
+
+# Beta-Select `lav_betaselect()`
+
+The function `lav_betaselect()` can be used
+to solve this problem.
+
+## Estimates Only
+
+Suppose we only need to
+solve the first problem, with the product
+term computed after `iv` and `mod`
+are standardized:
+
+```{r}
+fit_beta <- lav_betaselect(fit)
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta))
+```
+
+```{r, eval = FALSE}
+fit_beta
+```
+
+```{r, echo = FALSE}
+cat(tmp[-c(25:51)], sep = "\n")
+```
+
+```{r, echo = FALSE}
+b_std <- standardizedSolution(fit)$est.std[3]
+b_select <- fit_beta$est[3]
+```
+
+Compared to the solution with the product
+term standardized, the coefficient of
+`iv:mod` changed substantially from
+`r format_str(b_std)` to
+`r format_str(b_select)`.
+
+## Estimates and Bootstrap Confidence Interval
+
+Suppose we want to address
+the first and the second problems, with the product
+term computed after `iv` and `mod`
+are standardized and bootstrap confidence
+interval are used:
+
+```{r}
+fit_beta <- lav_betaselect(fit,
+                           std_se = "bootstrap",
+                           bootstrap = 5000,
+                           iseed = 2345,
+                           parallel = "snow",
+                           ncpus = 20)
+```
+
+```{r, echo = FALSE}
+# TODO: Describe the arguments
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta))
+```
+
+```{r, eval = FALSE}
+fit_beta
+```
+
+```{r, echo = FALSE}
+cat(tmp[c(1:27, 55:66)], sep = "\n")
+```
+
+```{r, echo = FALSE}
+# TODO: Describe output
+```
+
+```{r, echo = FALSE}
+# TODO:
+# - to_standardize
+# - not_to_standardize
+# - skip_categorical_x
+# TODO:
+# - do_boot
+```
+
+# References
+
+Falk, C. F. (2018). Are robust standard errors the best approach for interval estimation with nonnormal data in structural equation modeling? *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2), 244--266. https://doi.org/10.1080/10705511.2017.1367254
+
+
+Friedrich, R. J. (1982). In defense of multiplicative terms in multiple regression equations. *American Journal of Political Science, 26*(4), 797--833. https://doi.org/10.2307/2110973
+

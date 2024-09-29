@@ -1,0 +1,311 @@
+---
+title: "Beta-Select Demonstration: SEM by 'lavaan'"
+date: "2024-09-29"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Beta-Select Demonstration: SEM by 'lavaan'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+
+
+# Introduction
+
+This article demonstrates how to use
+`lav_betaselect()` from the package
+`betaselectr`
+to standardize
+selected variables in a model fitted
+by `lavaan` and forming confidence
+intervals for the parameters.
+
+# Data and model
+
+The demonstration dataset from the package
+`betaselectr` will be used for demonstration:
+
+
+``` r
+library(betaselectr)
+head(data_test_medmod)
+#>          dv       iv      mod      med     cov1     cov2
+#> 1  7.487873 11.42573 16.65805 42.28988 54.14051 15.56069
+#> 2  8.474931 16.64790 22.66332 42.08692 39.21125 17.61286
+#> 3 11.206539 14.81278 22.80955 32.76869 31.97963 20.77333
+#> 4 10.148827 15.79632 22.94451 43.96807 42.72187 15.66971
+#> 5  7.421606 14.29621 24.51562 37.10942 42.74174 21.97132
+#> 6  6.846435 12.00819 25.22163 35.46051 30.85914 22.35444
+```
+
+This is the path model, fitted by
+`lavaan::sem()`:
+
+
+``` r
+library(lavaan)
+mod <-
+"
+med ~ iv + mod + iv:mod + cov1 + cov2
+dv ~ med + iv + cov1 + cov2
+"
+fit <- sem(mod,
+           data_test_medmod)
+```
+
+These are the results:
+
+
+``` r
+summary(fit)
+#> lavaan 0.6-19 ended normally after 2 iterations
+#> 
+#>   Estimator                                         ML
+#>   Optimization method                           NLMINB
+#>   Number of model parameters                        11
+#> 
+#>   Number of observations                           200
+#> 
+#> Model Test User Model:
+#>                                                       
+#>   Test statistic                                 2.303
+#>   Degrees of freedom                                 2
+#>   P-value (Chi-square)                           0.316
+#> 
+#> Parameter Estimates:
+#> 
+#>   Standard errors                             Standard
+#>   Information                                 Expected
+#>   Information saturated (h1) model          Structured
+#> 
+#> Regressions:
+#>                    Estimate   Std.Err  z-value  P(>|z|)
+#>   med ~                                                
+#>     iv                -6.373    0.985   -6.473    0.000
+#>     mod               -3.899    0.614   -6.346    0.000
+#>     iv:mod             0.286    0.039    7.340    0.000
+#>     cov1              -0.093    0.070   -1.327    0.185
+#>     cov2               0.242    0.133    1.823    0.068
+#>   dv ~                                                 
+#>     med                0.092    0.011    8.098    0.000
+#>     iv                 0.227    0.038    5.896    0.000
+#>     cov1              -0.006    0.013   -0.454    0.650
+#>     cov2               0.030    0.025    1.230    0.219
+#> 
+#> Variances:
+#>                    Estimate   Std.Err  z-value  P(>|z|)
+#>    .med               60.292    6.029   10.000    0.000
+#>    .dv                 2.087    0.209   10.000    0.000
+```
+
+# Problems With Standardization
+
+We can request the standardized solution
+using `lavaan::standardizedSolution()`:
+
+
+``` r
+standardizedSolution(fit,
+                     output = "text")
+#> 
+#> Regressions:
+#>                     est.std  Std.Err  z-value  P(>|z|) ci.lower ci.upper
+#>   med ~                                                                 
+#>     iv               -1.855    0.259   -7.158    0.000   -2.363   -1.347
+#>     mod              -1.956    0.280   -6.988    0.000   -2.504   -1.407
+#>     iv:mod            3.588    0.428    8.390    0.000    2.750    4.426
+#>     cov1             -0.077    0.058   -1.332    0.183   -0.189    0.036
+#>     cov2              0.105    0.057    1.836    0.066   -0.007    0.218
+#>   dv ~                                                                  
+#>     med               0.459    0.052    8.845    0.000    0.357    0.560
+#>     iv                0.331    0.053    6.279    0.000    0.228    0.434
+#>     cov1             -0.024    0.054   -0.454    0.650   -0.130    0.081
+#>     cov2              0.066    0.054    1.233    0.218   -0.039    0.171
+#> 
+#> Variances:
+#>                     est.std  Std.Err  z-value  P(>|z|) ci.lower ci.upper
+#>    .med               0.656    0.050   13.243    0.000    0.559    0.753
+#>    .dv                0.569    0.050   11.353    0.000    0.471    0.667
+```
+
+However, for this model, there are two
+problems.
+
+- The product term, `iv:mod`, is also
+  standardized. This is inappropriate.
+  One simple but underused solution is
+  standardized the variables *before*
+  forming the product term (Friedrich, 1982).
+
+- The confidence intervals are formed using
+  the delta-method, which has been found
+  to be inferior to methods such as
+  nonparametric percentile bootstrap
+  confidence interval for the standardized
+  solution (Falk, 2018).
+
+- There are cases in which some variabLes
+  are measured by meaningful units and
+  do not need to be standardized. for
+  example, if `cov1` is age measured by
+  year, then age is more
+  meaningful than the "standardized age".
+
+# Beta-Select `lav_betaselect()`
+
+The function `lav_betaselect()` can be used
+to solve this problem.
+
+## Estimates Only
+
+Suppose we only need to
+solve the first problem, with the product
+term computed after `iv` and `mod`
+are standardized:
+
+
+``` r
+fit_beta <- lav_betaselect(fit)
+#> Finding product terms in the model ...
+#> Finished finding product terms.
+```
+
+
+
+
+``` r
+fit_beta
+```
+
+
+```
+#> 
+#> Selected Standardization:
+#>                     
+#>  Standard Error: Nil
+#> 
+#> Parameter Estimates Settings:
+#>                                              
+#>  Standard errors:                  Standard  
+#>  Information:                      Expected  
+#>  Information saturated (h1) model: Structured
+#> 
+#> Regressions:
+#>            BetaSelect
+#>  med ~               
+#>   iv           -1.855
+#>   mod          -1.956
+#>   iv:mod        0.400
+#>   cov1         -0.077
+#>   cov2          0.105
+#>  dv ~                
+#>   med           0.459
+#>   iv            0.331
+#>   cov1         -0.024
+#>   cov2          0.066
+#> 
+#> Footnote:
+#> - Variable(s) standardized: cov1, cov2, dv, iv, med, mod
+#> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
+#>   original estimates and betas-select.
+#> - Product terms (iv:mod) have variables standardized before computing
+#>   them. The product term(s) is/are not standardized.
+```
+
+
+
+Compared to the solution with the product
+term standardized, the coefficient of
+`iv:mod` changed substantially from
+3.588 to
+0.286.
+
+## Estimates and Bootstrap Confidence Interval
+
+Suppose we want to address
+the first and the second problems, with the product
+term computed after `iv` and `mod`
+are standardized and bootstrap confidence
+interval are used:
+
+
+``` r
+fit_beta <- lav_betaselect(fit,
+                           std_se = "bootstrap",
+                           bootstrap = 5000,
+                           iseed = 2345,
+                           parallel = "snow",
+                           ncpus = 20)
+#> Finding product terms in the model ...
+#> Finished finding product terms.
+#> 
+#> Compute bootstrapping standardized solution:
+```
+
+
+
+
+
+
+``` r
+fit_beta
+```
+
+
+```
+#> 
+#> Selected Standardization:
+#>                                              
+#>  Standard Error:      Nonparametric bootstrap
+#>  Bootstrap samples:   5000                   
+#>  Confidence Interval: Percentile             
+#>  Level of Confidence: 95.0%                  
+#> 
+#> Parameter Estimates Settings:
+#>                                              
+#>  Standard errors:                  Standard  
+#>  Information:                      Expected  
+#>  Information saturated (h1) model: Structured
+#> 
+#> Regressions:
+#>            BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
+#>  med ~                                                             
+#>   iv           -1.855 0.248 -7.490   0.000 *** -2.307 -1.332   Sig.
+#>   mod          -1.956 0.281 -6.950   0.000 *** -2.453 -1.348   Sig.
+#>   iv:mod        0.400 0.047  8.565   0.000 ***  0.298  0.481   Sig.
+#>   cov1         -0.077 0.057 -1.353   0.185     -0.186  0.038   n.s.
+#>   cov2          0.105 0.061  1.725   0.094   . -0.019  0.219   n.s.
+#>  dv ~                                                              
+#>   med           0.459 0.052  8.828   0.000 ***  0.348  0.553   Sig.
+#>   iv            0.331 0.051  6.480   0.000 ***  0.229  0.431   Sig.
+#>   cov1         -0.024 0.058 -0.418   0.686     -0.137  0.090   n.s.
+#>   cov2          0.066 0.058  1.139   0.259     -0.050  0.178   n.s.
+#> 
+#> Footnote:
+#> - Variable(s) standardized: cov1, cov2, dv, iv, med, mod
+#> - Sig codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> - Standard errors, p-values, and confidence intervals are not computed
+#>   for betas-select which are fixed in the standardized solution.
+#> - P-values for betas-select are asymmetric bootstrap p-value computed
+#>   by the method of Asparouhov and Muthén (2021).
+#> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
+#>   original estimates and betas-select.
+#> - Product terms (iv:mod) have variables standardized before computing
+#>   them. The product term(s) is/are not standardized.
+```
+
+
+
+
+
+# References
+
+Falk, C. F. (2018). Are robust standard errors the best approach for interval estimation with nonnormal data in structural equation modeling? *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2), 244--266. https://doi.org/10.1080/10705511.2017.1367254
+
+
+Friedrich, R. J. (1982). In defense of multiplicative terms in multiple regression equations. *American Journal of Political Science, 26*(4), 797--833. https://doi.org/10.2307/2110973
+

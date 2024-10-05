@@ -133,6 +133,10 @@ tmp <- capture.output(print(fit_beta))
 fit_beta
 ```
 
+This is the output
+if printed using the
+default options:
+
 ```{r, echo = FALSE}
 cat(tmp[-c(25:51)], sep = "\n")
 ```
@@ -154,15 +158,21 @@ properly standardized product term
 (the product of standardized `iv` and
 standardized `mod`).
 
+The footnote will also indicate
+variables that are standardized,
+and remarked that product terms
+are formed *after* standardization.
+
 ## Estimates and Bootstrap Confidence Interval
 
 Suppose we want to address
 both the first and the second problems,
 with the product
 term computed after `iv` and `mod`
-are standardized and bootstrap confidence
-interval are used, we can call `lav_betaselect()`
-again:
+standardized and bootstrap confidence
+interval used, we can call `lav_betaselect()`
+again, with additional arguments
+set:
 
 ```{r}
 fit_beta <- lav_betaselect(fit,
@@ -202,6 +212,10 @@ These are the additional arguments:
 tmp <- capture.output(print(fit_beta))
 ```
 
+This is the output if
+printed with default
+options:
+
 ```{r, eval = FALSE}
 fit_beta
 ```
@@ -209,6 +223,16 @@ fit_beta
 ```{r, echo = FALSE}
 cat(tmp[c(1:27, 55:66)], sep = "\n")
 ```
+
+In this dataset, with 200 cases,
+the delta-method confidence
+intervals are close to the
+bootstrap confidence intervals,
+except obviously for the
+product term because the coefficient
+of the product term has substantially
+different values in the two
+solutions.
 
 ```{r, echo = FALSE}
 # TODO: Describe output

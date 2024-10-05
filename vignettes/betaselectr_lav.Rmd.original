@@ -240,17 +240,49 @@ Suppose we want to address also the
 the third issue, and standardize only
 some of the variables. This can be
 done using either `to_standardize`
-or `not_to_standardize`:
+or `not_to_standardize`.
+Use `to_standardize` when
+the variables to standardize
+is much fewer than the variables
+not to standardize. Use `not_to_standardize`
+when the variables to standardize
+is much more than the
+variables not to standardize.
+
+For example, suppose we only
+need to standardize `dv` and
+`iv`, this is the call to do
+this:
 
 ```{r, results = FALSE}
-fit_beta <- lav_betaselect(fit,
+fit_beta_select <- lav_betaselect(fit,
                            std_se = "bootstrap",
-                           to_standardize = c(...),
+                           to_standardize = c("iv", "dv"),
                            bootstrap = 5000,
                            iseed = 2345,
                            parallel = "snow",
                            ncpus = 20)
 ```
+
+If we want to standardize all
+variables except for ｀dv`
+and `mod`, we can use
+this call:
+
+```{r, results = FALSE}
+fit_beta_select <- lav_betaselect(fit,
+                           std_se = "bootstrap",
+                           not_to_standardize = c("mod", "dv"),
+                           bootstrap = 5000,
+                           iseed = 2345,
+                           parallel = "snow",
+                           ncpus = 20)
+```
+Variables which are likely to
+be categorical or are dummy
+variables (with only two values)
+will not be standardized, by default.
+
 
 ```{r, echo = FALSE}
 # TODO:

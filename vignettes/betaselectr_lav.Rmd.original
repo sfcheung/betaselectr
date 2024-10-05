@@ -234,8 +234,22 @@ of the product term has substantially
 different values in the two
 solutions.
 
-```{r, echo = FALSE}
-# TODO: Describe output
+## Estimates and Bootstrap Confidence Intervals, Woth Only Selected Variables Standardized
+
+Suppose we want to address also the
+the third issue, and standardize only
+some of the variables. This can be
+done using either `to_standardize`
+or `not_to_standardize`:
+
+```{r, results = FALSE}
+fit_beta <- lav_betaselect(fit,
+                           std_se = "bootstrap",
+                           to_standardize = c(...),
+                           bootstrap = 5000,
+                           iseed = 2345,
+                           parallel = "snow",
+                           ncpus = 20)
 ```
 
 ```{r, echo = FALSE}

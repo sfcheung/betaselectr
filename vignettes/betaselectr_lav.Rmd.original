@@ -109,10 +109,34 @@ problems:
   year, then age is more
   meaningful than the "standardized age".
 
+- In path analysis, categorical variables
+  are usually represented by dummy variables,
+  each of them having only two possible
+  values (0 or 1). It is not meaningful
+  to standardize the dummy variables.
+
 # Beta-Select `lav_betaselect()`
 
 The function `lav_betaselect()` can be used
-to solve this problem.
+to solve this problem by:
+
+- Standardizing variables before product
+  terms are formed.
+
+- Standardizing only variables for which
+  standardization can facilitate
+  interpretation.
+
+- Forming confidence intervals that take
+  into account selected standardization.
+
+We call the coefficients computed by
+this kind of standardization *beta*s-Select
+($\beta{s}_{Select}$, $\beta_{Select}$
+in singular form),
+to differentiate them from coefficients
+computed by standardizing all variables,
+including product terms.
 
 ## Estimates Only
 
@@ -234,64 +258,124 @@ of the product term has substantially
 different values in the two
 solutions.
 
-## Estimates and Bootstrap Confidence Intervals, Woth Only Selected Variables Standardized
+## Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
 
 Suppose we want to address also the
 the third issue, and standardize only
 some of the variables. This can be
 done using either `to_standardize`
 or `not_to_standardize`.
-Use `to_standardize` when
+
+- Use `to_standardize` when
 the variables to standardize
 is much fewer than the variables
-not to standardize. Use `not_to_standardize`
+not to standardize.
+
+- Use `not_to_standardize`
 when the variables to standardize
 is much more than the
 variables not to standardize.
 
 For example, suppose we only
 need to standardize `dv` and
-`iv`, this is the call to do
-this:
+`iv`, `cov1`, and `cov2`,
+this is the call to do
+this, setting
+`to_standardize` to `c("iv", "dv", "cov1", "cov2")`:
 
 ```{r, results = FALSE}
-fit_beta_select <- lav_betaselect(fit,
-                           std_se = "bootstrap",
-                           to_standardize = c("iv", "dv"),
-                           bootstrap = 5000,
-                           iseed = 2345,
-                           parallel = "snow",
-                           ncpus = 20)
+fit_beta_select_1 <- lav_betaselect(fit,
+                                    std_se = "bootstrap",
+                                    to_standardize = c("iv", "dv", "cov1", "cov2"),
+                                    bootstrap = 5000,
+                                    iseed = 2345,
+                                    parallel = "snow",
+                                    ncpus = 20)
 ```
 
 If we want to standardize all
-variables except for ｀dv`
+variables except for `dv`
 and `mod`, we can use
-this call:
+this call, and set
+`not_to_standardize` to `c("mod", "dv")`:
 
 ```{r, results = FALSE}
-fit_beta_select <- lav_betaselect(fit,
-                           std_se = "bootstrap",
-                           not_to_standardize = c("mod", "dv"),
-                           bootstrap = 5000,
-                           iseed = 2345,
-                           parallel = "snow",
-                           ncpus = 20)
+fit_beta_select_2 <- lav_betaselect(fit,
+                                    std_se = "bootstrap",
+                                    not_to_standardize = c("mod", "dv"),
+                                    bootstrap = 5000,
+                                    iseed = 2345,
+                                    parallel = "snow",
+                                    ncpus = 20)
 ```
-Variables which are likely to
-be categorical or are dummy
-variables (with only two values)
-will not be standardized, by default.
 
+The results of these calls are identical,
+and only those of the first version are
+printed:
+
+```{r, eval = FALSE}
+fit_beta_select_2
+```
 
 ```{r, echo = FALSE}
-# TODO:
-# - to_standardize
-# - not_to_standardize
-# - skip_categorical_x
-# TODO:
-# - do_boot
+tmp <- capture.output(print(fit_beta_select_2))
+cat(tmp[c(2:27, 55:66)], sep = "\n")
 ```
+
+The footnotes confirmed that, by
+specifying that `dv` and `mod` are not
+standardized, all the other four variables
+are standardized: `iv`, `med`, `cov1`, and `cov2`.
+Therefore, in this case, it is more
+convenient to use `not_to_standardize`.
+
+For *beta*s-*select*, researchers need
+to state which variables
+are standardized and which are not.
+This can be done in table notes,
+or in a column of the parameter estimate
+tables. The output can of `lav_betaselect()`
+can be printed with `show_Bs.by` set
+to `TRUE` to demonstrate the second
+approach:
+
+```{r, eval = FALSE}
+print(fit_beta_select_2,
+      show_Bs.by = TRUE)
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta_select_2,
+                            show_Bs.by = TRUE))
+cat(tmp[c(15:27, 55:70)], sep = "\n")
+```
+
+## Categorical Variables
+
+When calling `lav_betaselect()`,
+variables with only two values in
+the dataset are assumed to be categorical
+and will not be standardized by default.
+This can be overriden by setting
+`skip_categorical_x` to `FALSE`, though
+not recommended.
+
+# Conclusion
+
+In structural equation modeling, there
+are situations in which standardizing
+all variables is not appropriate, or
+when standardization needs to be done
+before forming product terms. We are
+not aware of tools that can do appropriate
+standardization *and* form confidence
+intervals that takes into account the
+selective Standardization. By promoting
+the use of *beta*s-*select* using
+`lav_betaselect()`, we hope to make it
+easier for researchers to do appropriate
+Standardization in when reporting SEM
+results.
 
 # References
 

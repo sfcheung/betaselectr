@@ -1,0 +1,388 @@
+---
+title: "Beta-Select Demonstration: SEM by 'lavaan'"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Beta-Select Demonstration: SEM by 'lavaan'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+```{r, echo = FALSE}
+format_str <- function(x, digits = 3) {
+    formatC(x, digits = digits, format = "f")
+  }
+```
+
+# Introduction
+
+This article demonstrates how to use
+`lav_betaselect()` from the package
+`betaselectr`
+to standardize
+selected variables in a model fitted
+by `lavaan` and forming confidence
+intervals for the parameters.
+
+# Data and Model
+
+The sample dataset from the package
+`betaselectr` will be used for in this
+demonstration:
+
+```{r}
+library(betaselectr)
+head(data_test_medmod)
+```
+
+This is the path model, fitted by
+`lavaan::sem()`:
+
+```{r}
+library(lavaan)
+mod <-
+"
+med ~ iv + mod + iv:mod + cov1 + cov2
+dv ~ med + iv + cov1 + cov2
+"
+fit <- sem(mod,
+           data_test_medmod)
+```
+
+The model has a moderator, `mod`, posited
+to moderate the effect from `iv` to
+`med`. The product term is `iv:mod`.
+
+These are the results:
+
+```{r}
+summary(fit)
+```
+
+# Problems With Standardization
+
+We can request the standardized solution
+using `lavaan::standardizedSolution()`:
+
+```{r}
+standardizedSolution(fit,
+                     output = "text")
+```
+
+However, for this model, there are several
+problems:
+
+- The product term, `iv:mod`, is also
+  standardized. This is inappropriate.
+  One simple but underused solution is
+  standardized the variables *before*
+  forming the product term (Friedrich, 1982).
+
+- The confidence intervals are formed using
+  the delta-method, which has been found
+  to be inferior to methods such as
+  nonparametric percentile bootstrap
+  confidence interval for the standardized
+  solution (Falk, 2018). Although there
+  are situations in which the delta-method
+  confidence and the nonparametric
+  percentile bootstrap confidences can be
+  similar (e.g., sample size is large
+  and the sample estimates are not extreme),
+  it is still safe to at least try both
+  methods and compare the results.
+
+- There are cases in which some variabLes
+  are measured by meaningful units and
+  do not need to be standardized. for
+  example, if `cov1` is age measured by
+  year, then age is more
+  meaningful than the "standardized age".
+
+- In path analysis, categorical variables
+  are usually represented by dummy variables,
+  each of them having only two possible
+  values (0 or 1). It is not meaningful
+  to standardize the dummy variables.
+
+# Beta-Select `lav_betaselect()`
+
+The function `lav_betaselect()` can be used
+to solve this problem by:
+
+- Standardizing variables before product
+  terms are formed.
+
+- Standardizing only variables for which
+  standardization can facilitate
+  interpretation.
+
+- Forming confidence intervals that take
+  into account selected standardization.
+
+We call the coefficients computed by
+this kind of standardization *beta*s-Select
+($\beta{s}_{Select}$, $\beta_{Select}$
+in singular form),
+to differentiate them from coefficients
+computed by standardizing all variables,
+including product terms.
+
+## Estimates Only
+
+Suppose we only need to
+solve the first problem, with the product
+term computed after `iv` and `mod`
+are standardized:
+
+```{r, results = FALSE}
+fit_beta <- lav_betaselect(fit)
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta))
+```
+
+```{r, eval = FALSE}
+fit_beta
+```
+
+This is the output
+if printed using the
+default options:
+
+```{r, echo = FALSE}
+cat(tmp[-c(25:51)], sep = "\n")
+```
+
+```{r, echo = FALSE}
+b_std <- standardizedSolution(fit)$est.std[3]
+b_select <- fit_beta$est[3]
+```
+
+Compared to the solution with the product
+term standardized, the coefficient of
+`iv:mod` changed substantially from
+`r format_str(b_std)` to
+`r format_str(b_select)`. As shown by
+Cheung et al. (2022), the coefficient
+of *standardized* product term (`iv:mod`)
+can be severely biased estimate of the
+properly standardized product term
+(the product of standardized `iv` and
+standardized `mod`).
+
+The footnote will also indicate
+variables that are standardized,
+and remarked that product terms
+are formed *after* standardization.
+
+## Estimates and Bootstrap Confidence Interval
+
+Suppose we want to address
+both the first and the second problems,
+with the product
+term computed after `iv` and `mod`
+standardized and bootstrap confidence
+interval used, we can call `lav_betaselect()`
+again, with additional arguments
+set:
+
+```{r}
+fit_beta <- lav_betaselect(fit,
+                           std_se = "bootstrap",
+                           bootstrap = 5000,
+                           iseed = 2345,
+                           parallel = "snow",
+                           ncpus = 20)
+```
+
+These are the additional arguments:
+
+- `std_se`: The method to compute the
+  standard errors as well as confidence
+  intervals. Set to `"bootstrap"` for
+  nonparametric bootstrapping.
+
+- `iseed`: The seed for the random number
+  generator used for bootstrapping. Set
+  this to an integer to make the results
+  reproducible.
+
+- `parallel`: The method to be used for
+  parallel processing. It will be passed
+  to `lavaan::bootstrapLavaan()`. Supported
+  values are `"none"`, `"snow"`, and
+  `"multicore"`.
+
+- `ncpus`: The number of CPU cores to
+  use if `parallel` processing is not
+  `"none"`. Default is
+  `parallel::detectCores(logical = FALSE) - 1`,
+  or the number of *physical* cores
+  minus one.
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta))
+```
+
+This is the output if
+printed with default
+options:
+
+```{r, eval = FALSE}
+fit_beta
+```
+
+```{r, echo = FALSE}
+cat(tmp[c(1:27, 55:66)], sep = "\n")
+```
+
+In this dataset, with 200 cases,
+the delta-method confidence
+intervals are close to the
+bootstrap confidence intervals,
+except obviously for the
+product term because the coefficient
+of the product term has substantially
+different values in the two
+solutions.
+
+## Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
+
+Suppose we want to address also the
+the third issue, and standardize only
+some of the variables. This can be
+done using either `to_standardize`
+or `not_to_standardize`.
+
+- Use `to_standardize` when
+the variables to standardize
+is much fewer than the variables
+not to standardize.
+
+- Use `not_to_standardize`
+when the variables to standardize
+is much more than the
+variables not to standardize.
+
+For example, suppose we only
+need to standardize `dv` and
+`iv`, `cov1`, and `cov2`,
+this is the call to do
+this, setting
+`to_standardize` to `c("iv", "dv", "cov1", "cov2")`:
+
+```{r, results = FALSE}
+fit_beta_select_1 <- lav_betaselect(fit,
+                                    std_se = "bootstrap",
+                                    to_standardize = c("iv", "dv", "cov1", "cov2"),
+                                    bootstrap = 5000,
+                                    iseed = 2345,
+                                    parallel = "snow",
+                                    ncpus = 20)
+```
+
+If we want to standardize all
+variables except for `dv`
+and `mod`, we can use
+this call, and set
+`not_to_standardize` to `c("mod", "dv")`:
+
+```{r, results = FALSE}
+fit_beta_select_2 <- lav_betaselect(fit,
+                                    std_se = "bootstrap",
+                                    not_to_standardize = c("mod", "dv"),
+                                    bootstrap = 5000,
+                                    iseed = 2345,
+                                    parallel = "snow",
+                                    ncpus = 20)
+```
+
+The results of these calls are identical,
+and only those of the first version are
+printed:
+
+```{r, eval = FALSE}
+fit_beta_select_2
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta_select_2))
+cat(tmp[c(2:27, 55:66)], sep = "\n")
+```
+
+The footnotes confirmed that, by
+specifying that `dv` and `mod` are not
+standardized, all the other four variables
+are standardized: `iv`, `med`, `cov1`, and `cov2`.
+Therefore, in this case, it is more
+convenient to use `not_to_standardize`.
+
+For *beta*s-*select*, researchers need
+to state which variables
+are standardized and which are not.
+This can be done in table notes,
+or in a column of the parameter estimate
+tables. The output can of `lav_betaselect()`
+can be printed with `show_Bs.by` set
+to `TRUE` to demonstrate the second
+approach:
+
+```{r, eval = FALSE}
+print(fit_beta_select_2,
+      show_Bs.by = TRUE)
+```
+
+```{r, echo = FALSE}
+tmp <- capture.output(print(fit_beta_select_2,
+                            show_Bs.by = TRUE))
+cat(tmp[c(15:27, 55:70)], sep = "\n")
+```
+
+## Categorical Variables
+
+When calling `lav_betaselect()`,
+variables with only two values in
+the dataset are assumed to be categorical
+and will not be standardized by default.
+This can be overriden by setting
+`skip_categorical_x` to `FALSE`, though
+not recommended.
+
+# Conclusion
+
+In structural equation modeling, there
+are situations in which standardizing
+all variables is not appropriate, or
+when standardization needs to be done
+before forming product terms. We are
+not aware of tools that can do appropriate
+standardization *and* form confidence
+intervals that takes into account the
+selective Standardization. By promoting
+the use of *beta*s-*select* using
+`lav_betaselect()`, we hope to make it
+easier for researchers to do appropriate
+Standardization in when reporting SEM
+results.
+
+# References
+
+Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N. (2022). Improving an old way to measure moderation effect in standardized units. *Health Psychology, 41*(7), 502--505. https://doi.org/10.1037/hea0001188
+
+Falk, C. F. (2018). Are robust standard errors the best approach for interval estimation with nonnormal data in structural equation modeling? *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2), 244--266. https://doi.org/10.1080/10705511.2017.1367254
+
+Friedrich, R. J. (1982). In defense of multiplicative terms in multiple regression equations. *American Journal of Political Science, 26*(4), 797--833. https://doi.org/10.2307/2110973
+
+

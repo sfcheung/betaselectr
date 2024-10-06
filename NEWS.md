@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.6
+# betaselectr 0.0.1.7
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -42,3 +42,6 @@
 - The `print`-method of `lav_betaselect()`
   now print only the standardized solution
   by default (0.0.1.6)
+
+- Added a draft vignette for
+  `lav_betaselect()`.

@@ -260,6 +260,10 @@
 #' do bootstrapping. Default is `FALSE`
 #' because bootstrapping for models fitted
 #' by [lm()] or [glm()] is rarely slow.
+#' Actually, if both `parallel` and
+#' `progress` are set to `TRUE`, the
+#' speed may even be slower than serial
+#' processing.
 #'
 #' @param ncpus If `do_boot` is `TRUE`
 #' and `parallel` is also `TRUE`, this
@@ -270,12 +274,13 @@
 #'
 #' @param progress Logical. If `TRUE`,
 #' progress bars will be displayed
-#' for long process.
+#' for long process. Default is `TRUE`.
 #'
 #' @param load_balancing Logical. If
-#' `parallel` is `TRUE`, this determine
+#' `parallel` is `TRUE`, this determines
 #' whether load balancing will be used.
-#' Default is `TRUE`.
+#' Default is `FALSE` because the gain
+#' in speed is usually minor.
 #'
 #' @param model_call The model function
 #' to be called.
@@ -353,7 +358,7 @@ lm_betaselect <- function(...,
                           parallel = FALSE,
                           ncpus = parallel::detectCores(logical = FALSE) - 1,
                           progress = TRUE,
-                          load_balancing = TRUE,
+                          load_balancing = FALSE,
                           model_call = c("lm", "glm")) {
 
     # Workflow
@@ -511,7 +516,7 @@ glm_betaselect <- function(...,
                            parallel = FALSE,
                            ncpus = parallel::detectCores(logical = FALSE) - 1,
                            progress = TRUE,
-                           load_balancing = TRUE) {
+                           load_balancing = FALSE) {
     my_call <- match.call()
     my_call[[1]] <- str2lang("betaselectr::lm_betaselect")
     my_call$model_call <- "glm"
@@ -627,25 +632,32 @@ lm_boot <- function(lm_args,
       }
 
     if (parallel) {
-        if (load_balancing && progress) {
-            pbopt_old <- pbapply::pboptions(use_lb = TRUE)
-            on.exit(pbapply::pboptions(pbopt_old), add = TRUE)
-          }
         my_cl <- parallel::makeCluster(ncpus)
         on.exit(parallel::stopCluster(my_cl), add = TRUE)
         if (progress) {
+            if (load_balancing) {
+                pbopt_old <- pbapply::pboptions(use_lb = TRUE)
+                on.exit(pbapply::pboptions(pbopt_old), add = TRUE)
+              }
             boot_out <- pbapply::pblapply(
                 X = boot_idx,
                 FUN = tmpfct,
                 cl = my_cl
               )
           } else {
-            boot_out <- parallel::parLapplyLB(
-                cl = my_cl,
-                X = boot_idx,
-                fun = tmpfct,
-                chunk.size = 1
-              )
+            if (load_balancing) {
+                boot_out <- parallel::parLapplyLB(
+                    cl = my_cl,
+                    X = boot_idx,
+                    fun = tmpfct,
+                    chunk.size = NULL)
+              } else {
+                boot_out <- parallel::parLapply(
+                    cl = my_cl,
+                    X = boot_idx,
+                    fun = tmpfct,
+                    chunk.size = NULL)
+              }
           }
       } else {
         if (progress) {

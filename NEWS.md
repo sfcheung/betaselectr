@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.9
+# betaselectr 0.0.1.10
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -54,3 +54,5 @@
   case. (0.0.1.8)
 
 - Added `coef.lav_betaselect()`. (0.0.1.9)
+
+- Added `confint.lav_betaselect()`. (0.0.1.10)

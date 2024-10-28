@@ -46,6 +46,8 @@ reference:
   #   Section description.
 - contents:
   - print.lav_betaselect
+  - coef.lav_betaselect
+  - confint.lav_betaselect
   - anova.lm_betaselect
   - coef.lm_betaselect
   - confint.lm_betaselect

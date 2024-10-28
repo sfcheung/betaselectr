@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.8
+# betaselectr 0.0.1.10
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -52,3 +52,7 @@
   `parallel = TRUE`, and `load_balancing = FALSE`.
   Load balancing is no longer used in this
   case. (0.0.1.8)
+
+- Added `coef.lav_betaselect()`. (0.0.1.9)
+
+- Added `confint.lav_betaselect()`. (0.0.1.10)

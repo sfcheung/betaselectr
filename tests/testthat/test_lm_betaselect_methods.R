@@ -101,9 +101,9 @@ test_that("summary", {
     class(lm_beta_x_lm) <- "lm"
     expect_warning(summary(lm_beta_x),
                    "changed")
-    expect_equal(summary(lm_beta_x, type = "raw", se_method = "lm")$coefficients,
+    expect_equal(summary(lm_beta_x, type = "raw", se_method = "lm", ci = FALSE)$coefficients,
                  summary(lm_raw)$coefficients)
-    expect_equal(summary(lm_beta_x, type = "beta", se_method = "lm")$coefficients,
+    expect_equal(summary(lm_beta_x, type = "beta", se_method = "lm", ci = FALSE)$coefficients,
                  summary(lm_beta_x_lm)$coefficients)
     expect_no_error(summary(lm_beta_xyw_boot))
     expect_equal(summary(lm_beta_xyw_boot, ci = TRUE, level = .90)$coefficients[, 2:3],

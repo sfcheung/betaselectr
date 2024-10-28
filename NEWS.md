@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.10
+# betaselectr 0.0.1.11
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -56,3 +56,11 @@
 - Added `coef.lav_betaselect()`. (0.0.1.9)
 
 - Added `confint.lav_betaselect()`. (0.0.1.10)
+
+- Updated `summary.lm_betaselect()`
+  to allow including the estimates
+  before standardization. (0.0.1.11
+
+- Updated `print.summary.lm_betaselect()`
+  to print confidence intervals by
+  default, if available. (0.0.1.11)

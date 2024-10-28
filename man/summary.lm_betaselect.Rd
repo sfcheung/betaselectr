@@ -11,11 +11,12 @@
   correlation = FALSE,
   symbolic.cor = FALSE,
   se_method = c("boot", "bootstrap", "t", "lm", "ls"),
-  ci = FALSE,
+  ci = TRUE,
   level = 0.95,
   boot_type = c("perc", "bc"),
   boot_pvalue_type = c("asymmetric", "norm"),
   type = c("beta", "standardized", "raw", "unstandardized"),
+  print_raw = c("none", "before_ci", "after_ci"),
   ...
 )
 
@@ -64,7 +65,7 @@ Default is \code{"boot"}.}
 
 \item{ci}{Logical. Whether
 confidence intervals are computed.
-Default is \code{FALSE.}}
+Default is \code{TRUE}.}
 
 \item{level}{The level of confidence,
 default is .95, returning the 95\%
@@ -98,6 +99,18 @@ are used If \code{"beta"} or
 output \emph{after} selected
 variables standardized are returned.
 Default is \code{"beta"}.}
+
+\item{print_raw}{Control whether
+the estimates before selected
+standardization are printed when
+\code{type} is \code{"beta"} or \code{"standardized"}.
+If \code{"none"}, the default, then it
+will not be printed. If set to \code{"before_ci"}
+and \code{ci} is \code{TRUE}, then will be
+inserted to the left of the confidence
+intervals. If set to "after_ci"\code{and}ci\code{is}TRUE\verb{, then will be printed to the right of the confidence intervals. If }ci\code{is}FALSE`, then will
+be printed to the right of the
+standardized estimates.}
 
 \item{...}{Additional arguments
 passed to other methods.}

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.1.7" id="betaselectr-0017">betaselectr 0.0.1.7<a class="anchor" aria-label="anchor" href="#betaselectr-0017"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.1.11" id="betaselectr-00111">betaselectr 0.0.1.11<a class="anchor" aria-label="anchor" href="#betaselectr-00111"></a></h2>
 <ul><li><p>Added <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> and related methods and helper functions. (0.0.1.1)</p></li>
 <li><p>Added parallel processing support to the internal function <code>find_all_products()</code>. (0.0.1.2)</p></li>
 <li><p>For <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>, added an option to skip finding product terms. (0.0.1.2)</p></li>
@@ -47,7 +47,12 @@
 <li><p>Updated to use <code>lavaan.printer</code> to print the output. The default format of the print out is changed to the <code>lavaan</code>-style format. (0.0.1.6)</p></li>
 <li><p>For the <code>print</code>-method of <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>, symbols can be added to denote significant results by p-values or by confidence intervals. Controlled by the argument <code>sig_stars</code> and <code>ci_sig</code> in the <code>print</code>-method. (0.0.1.6)</p></li>
 <li><p>The <code>print</code>-method of <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code> now print only the standardized solution by default (0.0.1.6)</p></li>
-<li><p>Added a draft vignette for <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>.</p></li>
+<li><p>Added a draft vignette for <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>. (0.0.1.7)</p></li>
+<li><p>Set the default value of <code>load_balancing</code> to <code>FALSE</code> in <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>. Also fix the case of <code>progress = FALSE</code>, <code>parallel = TRUE</code>, and <code>load_balancing = FALSE</code>. Load balancing is no longer used in this case. (0.0.1.8)</p></li>
+<li><p>Added <code><a href="../reference/coef.lav_betaselect.html">coef.lav_betaselect()</a></code>. (0.0.1.9)</p></li>
+<li><p>Added <code><a href="../reference/confint.lav_betaselect.html">confint.lav_betaselect()</a></code>. (0.0.1.10)</p></li>
+<li><p>Updated <code><a href="../reference/summary.lm_betaselect.html">summary.lm_betaselect()</a></code> to allow including the estimates before standardization. (0.0.1.11</p></li>
+<li><p>Updated <code><a href="../reference/summary.lm_betaselect.html">print.summary.lm_betaselect()</a></code> to print confidence intervals by default, if available. (0.0.1.11)</p></li>
 </ul></div>
   </main></div>
 

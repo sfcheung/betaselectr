@@ -15,7 +15,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ standardization.</p>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ncpus <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  load_balancing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  load_balancing <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  model_call <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lm"</span>, <span class="st">"glm"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -79,7 +79,7 @@ standardization.</p>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ncpus <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span>logical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  load_balancing <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  load_balancing <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'lm_betaselect'</span></span>
@@ -166,7 +166,11 @@ generator. Default is <code>NULL</code>.</p></dd>
 parallel processing will be used to
 do bootstrapping. Default is <code>FALSE</code>
 because bootstrapping for models fitted
-by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> is rarely slow.</p></dd>
+by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> is rarely slow.
+Actually, if both <code>parallel</code> and
+<code>progress</code> are set to <code>TRUE</code>, the
+speed may even be slower than serial
+processing.</p></dd>
 
 
 <dt id="arg-ncpus">ncpus<a class="anchor" aria-label="anchor" href="#arg-ncpus"></a></dt>
@@ -181,14 +185,15 @@ is <code>parallel::detectCores(logical = FALSE) - 1</code></p></dd>
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
 <dd><p>Logical. If <code>TRUE</code>,
 progress bars will be displayed
-for long process.</p></dd>
+for long process. Default is <code>TRUE</code>.</p></dd>
 
 
 <dt id="arg-load-balancing">load_balancing<a class="anchor" aria-label="anchor" href="#arg-load-balancing"></a></dt>
 <dd><p>Logical. If
-<code>parallel</code> is <code>TRUE</code>, this determine
+<code>parallel</code> is <code>TRUE</code>, this determines
 whether load balancing will be used.
-Default is <code>TRUE</code>.</p></dd>
+Default is <code>FALSE</code> because the gain
+in speed is usually minor.</p></dd>
 
 
 <dt id="arg-model-call">model_call<a class="anchor" aria-label="anchor" href="#arg-model-call"></a></dt>
@@ -506,14 +511,14 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> -1987.03  -463.99     0.25   455.14  2152.48 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  790.550    628.105   1.259     0.16    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv           -94.302    721.336  -0.131     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod           57.578      6.133   9.388     0.54    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          10.024     10.126   0.990     0.34    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2     -112.588     76.889  -1.464     0.82    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      -53.106     77.879  -0.682     0.26    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         8.661      7.200   1.203   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              Estimate  CI.Lower  CI.Upper Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   790.550  -616.077  2200.706    628.105   1.259     0.16    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -94.302 -1608.007  1514.014    721.336  -0.131     0.22    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            57.578    43.098    70.722      6.133   9.388     0.54    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           10.024   -10.567    33.103     10.126   0.990     0.34    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      -112.588  -276.419    57.141     76.889  -1.464     0.82    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -53.106  -217.405    90.518     77.879  -0.682     0.26    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod          8.661    -7.435    24.082      7.200   1.203   &lt;0.001 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -531,6 +536,7 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Percentile bootstrap 95.0% confidence interval reported.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Manually standardize iv and call lm()</span></span></span>
 <span class="r-in"><span></span></span>
@@ -571,14 +577,14 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> -1.85143 -0.43232  0.00024  0.42408  2.00559 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.051      0.042   1.217     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720      0.022  32.675     0.12    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269      0.025  10.584     0.38    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           0.028      0.025   1.105     0.28    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105      0.075  -1.393   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049      0.065  -0.759     0.16    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040      0.030   1.366   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.051   -0.047    0.146      0.042   1.217     0.22    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720    0.671    0.758      0.022  32.675     0.12    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269    0.228    0.325      0.025  10.584     0.38    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           0.028   -0.016    0.082      0.025   1.105     0.28    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105   -0.259    0.056      0.075  -1.393   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049   -0.191    0.088      0.065  -0.759     0.16    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040   -0.022    0.099      0.030   1.366   &lt;0.001 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -596,6 +602,7 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Percentile bootstrap 95.0% confidence interval reported.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">data_test_mod_cat</span><span class="op">)</span></span></span>

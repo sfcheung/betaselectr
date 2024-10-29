@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.11
+# betaselectr 0.0.1.12
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -64,3 +64,7 @@
 - Updated `print.summary.lm_betaselect()`
   to print confidence intervals by
   default, if available. (0.0.1.11)
+
+- Fixed a bug in printing the bootstrap
+  *p*-values for `summary.lm_betaselect()`.
+  (0.0.1.12)

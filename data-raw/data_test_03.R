@@ -39,5 +39,5 @@ out <- lm(dv ~ iv * mod + cov1 + cat1,
           dat1)
 summary(out)
 summary(lm.beta::lm.beta(out))
-data_test_mod_cat2 <- dat
+data_test_mod_cat2 <- dat1
 usethis::use_data(data_test_mod_cat2, overwrite = TRUE)

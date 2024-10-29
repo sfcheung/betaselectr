@@ -1,0 +1,619 @@
+---
+title: "Beta-Select Demonstration: Regression by `lm()`"
+date: "2024-10-29"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{Beta-Select Demonstration: Regression by `lm()`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: "references.bib"
+csl: apa.csl
+---
+
+
+
+
+
+# Introduction
+
+This article demonstrates how to use
+`lm_betaselect()` from the package
+`betaselectr`
+to standardize
+selected variables in a model fitted
+by `lm()` and forming confidence
+intervals for the parameters.
+
+# Data and Model
+
+The sample dataset from the package
+`betaselectr` will be used for in this
+demonstration:
+
+
+``` r
+library(betaselectr)
+head(data_test_mod_cat2)
+#>      dv    iv   mod  cov1 cat1
+#> 1 15.53 13.95 50.75 25.33  gp2
+#> 2 17.69 15.07 49.67 20.96  gp1
+#> 3 28.56 14.43 53.42 19.22  gp3
+#> 4 25.00 11.22 42.55 20.18  gp2
+#> 5 19.33 14.93 52.12 22.82  gp2
+#> 6 20.62 10.22 39.36 18.41  gp1
+```
+
+This is the regression model, fitted by
+`lm()`:
+
+
+``` r
+lm_out <- lm(dv ~ iv * mod + cov1 + cat1,
+             data = data_test_mod_cat2)
+```
+
+The model has a moderator, `mod`, posited
+to moderate the effect from `iv` to
+`med`. The product term is `iv:mod`.
+The variable `cat1` is a categorical variable
+with three groups: `gp1`, `gp2`, `gp3`.
+
+These are the results:
+
+
+``` r
+summary(lm_out)
+#> 
+#> Call:
+#> lm(formula = dv ~ iv * mod + cov1 + cat1, data = data_test_mod_cat2)
+#> 
+#> Residuals:
+#>      Min       1Q   Median       3Q      Max 
+#> -17.0892  -4.6312   0.0057   5.0186  18.7053 
+#> 
+#> Coefficients:
+#>             Estimate Std. Error t value Pr(>|t|)   
+#> (Intercept) 90.87211   34.04462   2.669  0.00803 **
+#> iv          -6.06932    2.33701  -2.597  0.00988 **
+#> mod         -1.61636    0.68840  -2.348  0.01954 * 
+#> cov1         0.09885    0.19433   0.509  0.61136   
+#> cat1gp2      1.71248    1.15064   1.488  0.13775   
+#> cat1gp3      2.47838    1.10562   2.242  0.02574 * 
+#> iv:mod       0.13230    0.04656   2.841  0.00481 **
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 6.743 on 293 degrees of freedom
+#> Multiple R-squared:  0.1149,	Adjusted R-squared:  0.09676 
+#> F-statistic: 6.338 on 6 and 293 DF,  p-value: 2.759e-06
+```
+
+# Problems With Standardization
+
+One common type of standardized coefficients,
+called "betas" in some programs, is
+computed by standardizing *all* terms
+in the model.
+
+First, all variables in the model,
+including the product term and dummy
+variables, are computed:
+
+
+``` r
+data_test_mod_cat2_z <- data_test_mod_cat2
+data_test_mod_cat2_z$iv_x_mod <- data_test_mod_cat2_z$iv *
+                                data_test_mod_cat2_z$mod
+data_test_mod_cat2_z$cat_gp2 <- as.numeric(data_test_mod_cat2_z$cat1 == "gp2")
+data_test_mod_cat2_z$cat_gp3 <- as.numeric(data_test_mod_cat2_z$cat1 == "gp3")
+head(data_test_mod_cat2_z)
+#>      dv    iv   mod  cov1 cat1 iv_x_mod cat_gp2 cat_gp3
+#> 1 15.53 13.95 50.75 25.33  gp2 707.9625       1       0
+#> 2 17.69 15.07 49.67 20.96  gp1 748.5269       0       0
+#> 3 28.56 14.43 53.42 19.22  gp3 770.8506       0       1
+#> 4 25.00 11.22 42.55 20.18  gp2 477.4110       1       0
+#> 5 19.33 14.93 52.12 22.82  gp2 778.1516       1       0
+#> 6 20.62 10.22 39.36 18.41  gp1 402.2592       0       0
+```
+
+All the variables are then standardized:
+
+
+``` r
+data_test_mod_cat2_z <- data.frame(scale(data_test_mod_cat2_z[, -5]))
+head(data_test_mod_cat2_z)
+#>           dv          iv         mod         cov1    iv_x_mod   cat_gp2
+#> 1 -0.9458226 -0.44874323  0.23147783  2.553777460 -0.24816181  1.331109
+#> 2 -0.6414005  0.13926755 -0.03378874  0.390649940  0.06187143 -0.748749
+#> 3  0.8905756 -0.19673861  0.88727574 -0.470641109  0.23249121 -0.748749
+#> 4  0.3888429 -1.88201951 -1.78258317  0.004553953 -2.01026427  1.331109
+#> 5 -0.4102652  0.06576621  0.56797339  1.311340372  0.28829267  1.331109
+#> 6 -0.2284575 -2.40702913 -2.56610202 -0.871586942 -2.58464861 -0.748749
+#>      cat_gp3
+#> 1 -0.9401258
+#> 2 -0.9401258
+#> 3  1.0601418
+#> 4 -0.9401258
+#> 5 -0.9401258
+#> 6 -0.9401258
+```
+
+The regression model is then fitted to the
+standardized variables:
+
+
+``` r
+lm_std_common <- lm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
+                    data = data_test_mod_cat2_z)
+```
+
+The "betas" commonly reported are the
+coefficients in this model:
+
+
+``` r
+lm_std_common_summary <- summary(lm_std_common)
+printCoefmat(lm_std_common_summary$coefficients,
+             digits = 5,
+             zap.ind = 1,
+             P.values = TRUE,
+             has.Pvalue = TRUE,
+             signif.stars = TRUE)
+#>              Estimate Std. Error t value Pr(>|t|)   
+#> (Intercept)  0.000000   0.054871  0.0000 1.000000   
+#> iv          -1.629280   0.627360 -2.5970 0.009878 **
+#> mod         -0.927480   0.395006 -2.3480 0.019539 * 
+#> cov1         0.028140   0.055329  0.5087 0.611359   
+#> cat_gp2      0.116040   0.077970  1.4883 0.137753   
+#> cat_gp3      0.174620   0.077901  2.2416 0.025735 * 
+#> iv_x_mod     2.439510   0.858601  2.8413 0.004809 **
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+However, for this model, there are several
+problems:
+
+- The product term, `iv:mod`, is also
+  standardized. This is inappropriate.
+  One simple but underused solution is
+  standardizing the variables *before*
+  forming the product term [@friedrich_defense_1982].
+
+- The confidence intervals are formed using
+  the ordinary least squares (OLS), which does not
+  take into account the sampling variation
+  of the standardizers (the sample standard
+  deviations used in standardization) and
+  so the standard errors may be
+  biased [@yuan_biases_2011].
+  Although there
+  are situations in which the OLS
+  confidence and the nonparametric
+  percentile bootstrap confidences can be
+  similar (e.g., sample size is large
+  and the population values are not extreme),
+  it is recommended to use bootstrap
+  confidence intervals when computation
+  cost is low [@jones_computing_2013].
+
+- There are cases in which some variabLes
+  are measured by meaningful units and
+  do not need to be standardized. for
+  example, if `cov1` is age measured by
+  year, then age is more
+  meaningful than "standardized age".
+
+- In regression models, categorical variables
+  are usually represented by dummy variables,
+  each of them having only two possible
+  values (0 or 1). It is not meaningful
+  to standardize the dummy variables.
+
+# Beta-Select by `lm_betaselect()`
+
+The function `lm_betaselect()` can be used
+to solve these problems by:
+
+- standardizing variables before product
+  terms are formed,
+
+- standardizing only variables for which
+  standardization can facilitate
+  interpretation, and
+
+- forming bootstrap confidence intervals
+  that take
+  into account selected standardization.
+
+We call the coefficients computed by
+this kind of standardization *beta*s-Select
+($\beta{s}_{Select}$, $\beta_{Select}$
+in singular form),
+to differentiate them from coefficients
+computed by standardizing all variables,
+including product terms.
+
+## Estimates Only
+
+Suppose we only need to
+solve the first problem, standardizing all
+numeric variables,
+with the product
+term computed after `iv`, `mod`, and `dv`
+are standardized.
+
+
+``` r
+lm_beta_select <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                               data = data_test_mod_cat2,
+                               do_boot = FALSE)
+```
+
+The function `lm_beta_iv_mod()` can be
+used as `lm()`, with applicable arguments
+such as the model formula and `data` passed
+to `lm()`.
+
+By default, *all* numeric variables will
+be standardized before fitting the models.
+Terms such as product terms are created
+*after* standardization.
+
+Moreover, categorical variables (factors and
+string variables) will not be standardized.
+
+Bootstrapping is done by default. In this
+illustration, `do_boot = FALSE` is added
+to disabled it because we only want to
+address the first problem. We will do bootstrapping when
+addressing the issue with confidence intervals.
+
+The `summary()` method can be used
+ont the output of `lm_betaselect()`:
+
+
+``` r
+summary(lm_beta_select)
+#> Warning in summary.lm_betaselect(lm_beta_select): Bootstrap estimates not
+#> available; 'se_method' changed to 'ls'.
+#> Call to lm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     data = data_test_mod_cat2, do_boot = FALSE)
+#> 
+#> Variable(s) standardized: dv, iv, mod, cov1 
+#> 
+#> Call:
+#> stats::lm(formula = dv ~ iv * mod + cov1 + cat1, data = betaselectr::std_data(data = data_test_mod_cat2, 
+#>     to_standardize = c("dv", "iv", "mod", "cov1")))
+#> 
+#> Residuals:
+#>     Min      1Q  Median      3Q     Max 
+#> -2.4085 -0.6527  0.0008  0.7073  2.6363 
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error t value Pr(>|t|)   
+#> (Intercept)   -0.308   -0.576   -0.040      0.136  -2.259  0.02461 * 
+#> iv             0.140    0.021    0.258      0.060   2.324  0.02082 * 
+#> mod            0.196    0.078    0.315      0.060   3.264  0.00123 **
+#> cov1           0.028   -0.081    0.137      0.055   0.509  0.61136   
+#> cat1gp2        0.241   -0.078    0.561      0.162   1.488  0.13775   
+#> cat1gp3        0.349    0.043    0.656      0.156   2.242  0.02574 * 
+#> iv:mod         0.145    0.044    0.245      0.051   2.841  0.00481 **
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 0.9504 on 293 degrees of freedom
+#> 
+#> R-squared                : 0.115
+#> Adjusted R-squared       : 0.097
+#> ANOVA test of R-squared : F(6, 293) = 6.338, p < 0.001
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Standard errors are least-squares standard errors.
+#> - T values are computed by 'Estimate / Std. Error'.
+#> - P-values are usual t-test p-values.
+#> - Least squares standard errors, t values, p-values, and confidence
+#>   intervals (if reported) should not be used for coefficients involved
+#>   in standardization.
+#> - Least squares 95.0% confidence interval reported.
+```
+
+A warning is always issued if standardization
+is done but bootstrapping not requested.
+
+
+
+
+
+Compared to the solution with the product
+term standardized, the coefficient of
+`iv:mod` changed substantially from
+2.440 to
+0.145. As shown by
+@cheung_improving_2022, the coefficient
+of *standardized* product term (`iv:mod`)
+can be a severely biased estimate of the
+properly standardized product term
+(the product of standardized `iv` and
+standardized `mod`).
+
+## Estimates and Bootstrap Confidence Interval
+
+Suppose we want to address
+both the first and the second problems,
+with the product
+term computed after `iv`, `mod`, and `dv` are
+standardized and bootstrap confidence
+interval used, we can call `lm_betaselect()`
+again, with additional arguments
+set:
+
+
+``` r
+lm_beta_select_boot <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                     data = data_test_mod_cat2,
+                                     bootstrap = 5000,
+                                     iseed = 4567)
+```
+
+These are the additional arguments:
+
+- `bootstrap`: The number of bootstrap
+  samples to draw. Default is 100. It should
+  be set to 5000 or even 10000.
+
+- `iseed`: The seed for the random number
+  generator used for bootstrapping. Set
+  this to an integer to make the results
+  reproducible.
+
+
+
+
+This is the output of `summary()`
+
+
+``` r
+summary(lm_beta_select_boot)
+#> Call to lm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     data = data_test_mod_cat2, bootstrap = 5000, iseed = 4567)
+#> 
+#> Variable(s) standardized: dv, iv, mod, cov1 
+#> 
+#> Call:
+#> stats::lm(formula = dv ~ iv * mod + cov1 + cat1, data = betaselectr::std_data(data = data_test_mod_cat2, 
+#>     to_standardize = c("dv", "iv", "mod", "cov1")))
+#> 
+#> Residuals:
+#>     Min      1Q  Median      3Q     Max 
+#> -2.4085 -0.6527  0.0008  0.7073  2.6363 
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)   
+#> (Intercept)   -0.308   -0.536   -0.080      0.117  -2.636   0.0056 **
+#> iv             0.140    0.009    0.268      0.066   2.109   0.0384 * 
+#> mod            0.196    0.075    0.317      0.061   3.208   0.0016 **
+#> cov1           0.028   -0.075    0.131      0.052   0.537   0.5700   
+#> cat1gp2        0.241   -0.067    0.540      0.155   1.560   0.1276   
+#> cat1gp3        0.349    0.064    0.631      0.146   2.394   0.0152 * 
+#> iv:mod         0.145    0.059    0.228      0.043   3.356   0.0020 **
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 0.9504 on 293 degrees of freedom
+#> 
+#> R-squared                : 0.115
+#> Adjusted R-squared       : 0.097
+#> ANOVA test of R-squared : F(6, 293) = 6.338, p < 0.001
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Nonparametric bootstrapping conducted.
+#> - The number of bootstrap samples is 5000.
+#> - Standard errors are bootstrap standard errors.
+#> - Z values are computed by 'Estimate / Std. Error'.
+#> - The bootstrap p-values are asymmetric p-values by Asparouhov and
+#>   Muthén (2021).
+#> - Percentile bootstrap 95.0% confidence interval reported.
+```
+
+By default, 95% percentile bootstrap
+confidence intervals are printed
+(`CI.Lower` and `CI.Upper`). The *p*-values
+(`Pr(Boot)`) are asymmetric bootstrap
+*p*-values.
+
+## Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
+
+Suppose we want to address also the
+the third issue, and standardize only
+some of the variables. This can be
+done using either `to_standardize`
+or `not_to_standardize`.
+
+- Use `to_standardize` when
+the variables to standardize
+is much fewer than the variables
+not to standardize.
+
+- Use `not_to_standardize`
+when the variables to standardize
+is much more than the
+variables not to standardize.
+
+For example, suppose we only
+need to standardize `dv` and
+`iv`,
+this is the call to do
+this, setting
+`to_standardize` to `c("iv", "dv")`:
+
+
+``` r
+lm_beta_select_boot_1 <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                       data = data_test_mod_cat2,
+                                       to_standardize = c("dv", "iv"),
+                                       bootstrap = 5000,
+                                       iseed = 4567)
+```
+
+If we want to standardize all
+variables except for `mod`
+and `cov1`, we can use
+this call, and set
+`not_to_standardize` to `c("mod", "cov1")`:
+
+
+``` r
+lm_beta_select_boot_2 <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                       data = data_test_mod_cat2,
+                                       not_to_standardize = c("mod", "cov1"),
+                                       bootstrap = 5000,
+                                       iseed = 4567)
+```
+
+The results of these calls are identical,
+and only those of the first version are
+printed:
+
+
+``` r
+summary(lm_beta_select_boot_1)
+#> Call to lm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     data = data_test_mod_cat2, to_standardize = c("dv", "iv"), 
+#>     bootstrap = 5000, iseed = 4567)
+#> 
+#> Variable(s) standardized: dv, iv 
+#> 
+#> Call:
+#> stats::lm(formula = dv ~ iv * mod + cov1 + cat1, data = betaselectr::std_data(data = data_test_mod_cat2, 
+#>     to_standardize = c("dv", "iv")))
+#> 
+#> Residuals:
+#>     Min      1Q  Median      3Q     Max 
+#> -2.4085 -0.6527  0.0008  0.7073  2.6363 
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)   
+#> (Intercept)   -2.991   -4.769   -1.196      0.899  -3.326   0.0024 **
+#> iv            -1.629   -2.667   -0.573      0.539  -3.021   0.0036 **
+#> mod            0.048    0.019    0.078      0.015   3.199   0.0016 **
+#> cov1           0.014   -0.037    0.066      0.026   0.533   0.5700   
+#> cat1gp2        0.241   -0.067    0.540      0.155   1.560   0.1276   
+#> cat1gp3        0.349    0.064    0.631      0.146   2.394   0.0152 * 
+#> iv:mod         0.036    0.015    0.056      0.011   3.366   0.0020 **
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 0.9504 on 293 degrees of freedom
+#> 
+#> R-squared                : 0.115
+#> Adjusted R-squared       : 0.097
+#> ANOVA test of R-squared : F(6, 293) = 6.338, p < 0.001
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Nonparametric bootstrapping conducted.
+#> - The number of bootstrap samples is 5000.
+#> - Standard errors are bootstrap standard errors.
+#> - Z values are computed by 'Estimate / Std. Error'.
+#> - The bootstrap p-values are asymmetric p-values by Asparouhov and
+#>   Muthén (2021).
+#> - Percentile bootstrap 95.0% confidence interval reported.
+```
+
+For *beta*s-*select*, researchers need
+to state which variables
+are standardized and which are not.
+This can be done in table notes.
+
+## Categorical Variables
+
+When calling `lm_betaselect()`,
+categorical variables (factors and
+string variables) will not be standardized
+by default.
+This can be overriden by setting
+`skip_categorical_x` to `FALSE`, though
+not recommended.
+
+In the example above, the coefficients
+of the two dummy variables when both
+the dummy variables and the outcome
+variables are standardized are
+0.116 and
+0.175:
+
+
+``` r
+printCoefmat(lm_std_common_summary$coefficients[5:6, ],
+             digits = 5,
+             zap.ind = 1,
+             P.values = TRUE,
+             has.Pvalue = TRUE,
+             signif.stars = TRUE)
+#>         Estimate Std. Error t value Pr(>|t|)  
+#> cat_gp2 0.116041   0.077970  1.4883  0.13775  
+#> cat_gp3 0.174623   0.077901  2.2416  0.02574 *
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+These two values are not interpretable
+because it does not make sense to talk
+about a one-SD change in the dummy variables.
+
+The *beta*s-*Select* of the dummy variables,
+with only the outcome variable standardized,
+are
+0.241 and
+0.349.
+
+
+``` r
+lm_beta_select_boot_summary <- summary(lm_beta_select_boot)
+printCoefmat(lm_beta_select_boot_summary$coefficients[5:6, ],
+             digits = 5,
+             zap.ind = 1,
+             P.values = TRUE,
+             has.Pvalue = TRUE,
+             signif.stars = TRUE)
+#>          Estimate  CI.Lower  CI.Upper Std. Error z value Pr(Boot)  
+#> cat1gp2  0.241350 -0.067312  0.540477   0.154668  1.5604   0.1276  
+#> cat1gp3  0.349290  0.064136  0.630539   0.145927  2.3936   0.0152 *
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+They
+represent the difference between `gp2`
+and `gp3` from the reference group,
+`gp1`, on the *standardized* outcome variable.
+That is, their meanings are the same before
+and after standardization. The only difference
+is in the unit of the outcome variable.
+
+# Conclusion
+
+In regression analysis, there
+are situations in which standardizing
+all variables is not appropriate, or
+when standardization needs to be done
+before forming product terms. We are
+not aware of tools that can do appropriate
+standardization *and* form confidence
+intervals that takes into account the
+selective standardization. By promoting
+the use of *beta*s-*select* using
+`lm_betaselect()`, we hope to make it
+easier for researchers to do appropriate
+standardization when reporting regression
+results.
+
+# References

@@ -26,7 +26,7 @@ variable, and a categorical variable.
 }
 \examples{
 
-glm_out <- glm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat, family = binomial())
+glm_out <- glm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat_binary, family = binomial())
 summary(glm_out)
 
 

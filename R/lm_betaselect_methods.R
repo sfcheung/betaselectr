@@ -1361,6 +1361,21 @@ print_fstatistic <- function(fstatistic,
 #' variables standardized are returned.
 #' Default is `"beta"`.
 #'
+#' @param print_raw Control whether
+#' the estimates before selected
+#' standardization are printed when
+#' `type` is `"beta"` or `"standardized"`.
+#' If `"none"`, the default, then it
+#' will not be printed. If set to `"before_ci"`
+#' and `ci` is `TRUE`, then will be
+#' inserted to the left of the confidence
+#' intervals. If set to "after_ci"` and `ci`
+#' is `TRUE`, then will
+#' be printed to the right of the confidence
+#' intervals. If `ci` is `FALSE`, then will
+#' be printed to the right of the
+#' standardized estimates.
+#'
 #' @param ...  Additional arguments
 #' passed to other methods.
 #'
@@ -1400,7 +1415,7 @@ summary.glm_betaselect <- function(object,
                                    test = c("LRT", "Rao"),
                                    se_method = c("boot", "bootstrap",
                                                  "z", "glm", "default"),
-                                   ci = FALSE,
+                                   ci = TRUE,
                                    level = .95,
                                    boot_type = c("perc", "bc"),
                                    boot_pvalue_type = c("asymmetric", "norm"),
@@ -1408,9 +1423,11 @@ summary.glm_betaselect <- function(object,
                                             "standardized",
                                             "raw",
                                             "unstandardized"),
+                                   print_raw = c("none", "before_ci", "after_ci"),
                                    ...) {
     se_method <- match.arg(se_method)
     type <- match.arg(type)
+    print_raw <- match.arg(print_raw)
     se_method <- switch(se_method,
                         boot = "boot",
                         bootstrap = "boot",
@@ -1463,7 +1480,7 @@ summary.glm_betaselect <- function(object,
         colnames(out$coefficients)[i] <- "z value"
         if (boot_pvalue_type == "asymmetric") {
             boot_est_list <- split(boot_est, rownames(boot_est))
-            boot_est_list <- boot_est_list[names(boot_est_list)]
+            boot_est_list <- boot_est_list[rownames(boot_est)]
             boot_pvalues <- sapply(boot_est_list,
                                    est2p,
                                    h0 = 0)
@@ -1495,6 +1512,21 @@ summary.glm_betaselect <- function(object,
         out_coef <- out$coefficients
         out_coef <- cbind(out_coef[, seq_len(i), drop = FALSE],
                           out_ci,
+                          out_coef[, -seq_len(i), drop = FALSE])
+        out$coefficients <- out_coef
+      }
+    if (print_raw != "none") {
+        b_ustd <- stats::coef(object$lm_betaselect$ustd)
+        if (ci) {
+            i <- switch(print_raw,
+                        before_ci = which(colnames(out$coefficients) == "CI.Lower") - 1,
+                        after_ci = which(colnames(out$coefficients) == "CI.Upper"))
+          } else {
+            i <- which(colnames(out$coefficients) == "Estimate")
+          }
+        out_coef <- out$coefficients
+        out_coef <- cbind(out_coef[, seq_len(i), drop = FALSE],
+                          "Raw" = b_ustd,
                           out_coef[, -seq_len(i), drop = FALSE])
         out$coefficients <- out_coef
       }
@@ -1613,6 +1645,11 @@ print.summary.glm_betaselect <- function(x,
                 beta = "- Results *after* standardization are reported.",
                 raw = "- Results *before* standardization are reported."),
                 exdent = 2))
+    if ("Raw" %in% colnames(x$coefficients)) {
+        tmp <- c(tmp,
+                strwrap("- 'Raw' shows the estimates *before* standardization.",
+                        exdent = 2))
+      }
     if (x$lm_betaselect$se_method == "boot") {
         tmp <- c(tmp,
                  strwrap("- Nonparametric bootstrapping conducted.",

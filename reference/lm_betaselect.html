@@ -15,7 +15,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -513,12 +514,12 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Estimate  CI.Lower  CI.Upper Std. Error z value Pr(Boot)    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   790.550  -616.077  2200.706    628.105   1.259     0.16    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -94.302 -1608.007  1514.014    721.336  -0.131     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            57.578    43.098    70.722      6.133   9.388     0.54    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -94.302 -1608.007  1514.014    721.336  -0.131     0.82    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            57.578    43.098    70.722      6.133   9.388   &lt;0.001 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cov1           10.024   -10.567    33.103     10.126   0.990     0.34    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      -112.588  -276.419    57.141     76.889  -1.464     0.82    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -53.106  -217.405    90.518     77.879  -0.682     0.26    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod          8.661    -7.435    24.082      7.200   1.203   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      -112.588  -276.419    57.141     76.889  -1.464     0.22    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -53.106  -217.405    90.518     77.879  -0.682     0.54    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod          8.661    -7.435    24.082      7.200   1.203     0.26    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -579,12 +580,12 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.051   -0.047    0.146      0.042   1.217     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720    0.671    0.758      0.022  32.675     0.12    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269    0.228    0.325      0.025  10.584     0.38    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720    0.671    0.758      0.022  32.675   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269    0.228    0.325      0.025  10.584   &lt;0.001 ***</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cov1           0.028   -0.016    0.082      0.025   1.105     0.28    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105   -0.259    0.056      0.075  -1.393   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049   -0.191    0.088      0.065  -0.759     0.16    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040   -0.022    0.099      0.030   1.366   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105   -0.259    0.056      0.075  -1.393     0.12    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049   -0.191    0.088      0.065  -0.759     0.38    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040   -0.022    0.099      0.030   1.366     0.16    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.12
+# betaselectr 0.0.1.14
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -59,7 +59,7 @@
 
 - Updated `summary.lm_betaselect()`
   to allow including the estimates
-  before standardization. (0.0.1.11
+  before standardization. (0.0.1.11)
 
 - Updated `print.summary.lm_betaselect()`
   to print confidence intervals by
@@ -67,4 +67,14 @@
 
 - Fixed a bug in printing the bootstrap
   *p*-values for `summary.lm_betaselect()`.
-  (0.0.1.12)
+  (0.0.1.13)
+
+- Updated `summary.glm_betaselect()`
+  to allow including the estimates
+  before standardization. (0.0.1.13)
+
+- Updated `print.summary.glm_betaselect()`
+  to print confidence intervals by
+  default, if available. (0.0.1.13)
+
+

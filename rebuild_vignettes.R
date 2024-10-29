@@ -5,7 +5,7 @@ base_dir <- getwd()
 setwd("vignettes/")
 knitr::knit("betaselectr_lav.Rmd.original", output = "betaselectr_lav.Rmd")
 knitr::knit("betaselectr_lm.Rmd.original", output = "betaselectr_lm.Rmd")
-
+knitr::knit("betaselectr_glm.Rmd.original", output = "betaselectr_glm.Rmd")
 setwd(base_dir)
 
 # For articles

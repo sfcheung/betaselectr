@@ -48,6 +48,7 @@ fix_to_standardize_lm <- function(object,
     # if (length(prods) > 0) {
     #     to_standardize <- setdiff(to_standardize, names(prods))
     #   }
+    browser()
     to_standardize
   }
 
@@ -58,7 +59,10 @@ fix_to_standardize_lm_data <- function(object,
                                        input_data,
                                        to_standardize = ".all.",
                                        not_to_standardize = NULL,
-                                       skip_categorical_x = TRUE) {
+                                       skip_categorical_x = TRUE,
+                                       skip_response = FALSE,
+                                       model_call = NULL,
+                                       org_call = NULL) {
 
     if (!identical(to_standardize, ".all.") && !is.null(not_to_standardize)) {
         stop("Do not specify both to_standardize and not_to_standardize.")
@@ -95,6 +99,11 @@ fix_to_standardize_lm_data <- function(object,
       }
     if ((length(cat_vars) > 0) && skip_categorical_x) {
         to_standardize <- setdiff(to_standardize, cat_vars)
+      }
+    if (skip_response) {
+        lm_terms <- stats::terms(object)
+        lm_y <- all.vars(lm_terms)[attr(lm_terms, "response")]
+        to_standardize <- setdiff(to_standardize, lm_y)
       }
     # if (length(prods) > 0) {
     #     to_standardize <- setdiff(to_standardize, names(prods))

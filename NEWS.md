@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.14
+# betaselectr 0.0.1.15
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -77,4 +77,8 @@
   to print confidence intervals by
   default, if available. (0.0.1.13)
 
+- Added `skip_response` to
+  `lm_betaselect()` and `glm_betaselect()`
+  as a convenient way to skip standardizing
+  the response variables. (0.0.1.15)
 

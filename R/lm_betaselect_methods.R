@@ -949,6 +949,7 @@ summary.lm_betaselect <- function(object,
         colnames(out$coefficients)[i] <- "z value"
         if (boot_pvalue_type == "asymmetric") {
             boot_est_list <- split(boot_est, rownames(boot_est))
+            boot_est_list <- boot_est_list[rownames(boot_est)]
             boot_pvalues <- sapply(boot_est_list,
                                    est2p,
                                    h0 = 0)
@@ -1462,6 +1463,7 @@ summary.glm_betaselect <- function(object,
         colnames(out$coefficients)[i] <- "z value"
         if (boot_pvalue_type == "asymmetric") {
             boot_est_list <- split(boot_est, rownames(boot_est))
+            boot_est_list <- boot_est_list[names(boot_est_list)]
             boot_pvalues <- sapply(boot_est_list,
                                    est2p,
                                    h0 = 0)

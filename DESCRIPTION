@@ -1,6 +1,6 @@
 Package: betaselectr
 Title: Selective Standardization in Structural Equation Models
-Version: 0.0.1.11
+Version: 0.0.1.12
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",

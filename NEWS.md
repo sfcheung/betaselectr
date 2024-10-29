@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.13
+# betaselectr 0.0.1.14
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -76,4 +76,5 @@
 - Updated `print.summary.glm_betaselect()`
   to print confidence intervals by
   default, if available. (0.0.1.13)
+
 

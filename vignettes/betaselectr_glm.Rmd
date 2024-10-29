@@ -233,7 +233,8 @@ including product terms.
 
 Suppose we only need to
 solve the first problem, standardizing all
-numeric variables,
+numeric variables except for the
+response variable (which is binary),
 with the product
 term computed after `iv` and `mod`
 are standardized.
@@ -242,7 +243,7 @@ are standardized.
 ``` r
 glm_beta_select <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                   data = data_test_mod_cat_binary,
-                                  not_to_standardize = "dv",
+                                  skip_response = TRUE,
                                   family = binomial(),
                                   do_boot = FALSE)
 ```
@@ -262,9 +263,9 @@ variable (`dv` in this example) may not
 be meaningful or may even be not allowed.
 In the case of logistic regression, the
 outcome variable need to be 0 or 1 only.
-Therefore, `not_to_standardize` is set to
-`"dv"`, the name of the outcome variable,
-to request that it is *not* standardized.
+Therefore, `skip_response` is set to
+`TRUE`, to request that the response
+(outcome) variable is *not* standardized.
 
 Moreover, categorical variables (factors and
 string variables) will not be standardized.
@@ -286,7 +287,7 @@ summary(glm_beta_select)
 #> Waiting for profiling to be done...
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
-#>     family = binomial(), data = data_test_mod_cat_binary, not_to_standardize = "dv", 
+#>     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, 
 #>     do_boot = FALSE, model_call = "glm")
 #> 
 #> Variable(s) standardized: iv, mod, cov1 
@@ -367,7 +368,7 @@ set:
 glm_beta_select_boot <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                        data = data_test_mod_cat_binary,
                                        family = binomial(),
-                                       not_to_standardize = "dv",
+                                       skip_response = TRUE,
                                        bootstrap = 5000,
                                        iseed = 4567)
 ```
@@ -392,7 +393,7 @@ This is the output of `summary()`
 summary(glm_beta_select_boot)
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
-#>     family = binomial(), data = data_test_mod_cat_binary, not_to_standardize = "dv", 
+#>     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, 
 #>     bootstrap = 5000, iseed = 4567, model_call = "glm")
 #> 
 #> Variable(s) standardized: iv, mod, cov1 
@@ -470,6 +471,7 @@ this, setting
 glm_beta_select_boot_1 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                          data = data_test_mod_cat_binary,
                                          to_standardize = c("iv", "cov1"),
+                                         skip_response = TRUE,
                                          family = binomial(),
                                          bootstrap = 5000,
                                          iseed = 4567)
@@ -485,6 +487,7 @@ this call, and set
 glm_beta_select_boot_2 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                          data = data_test_mod_cat_binary,
                                          not_to_standardize = c("dv", "mod"),
+                                         skip_response = TRUE,
                                          family = binomial(),
                                          bootstrap = 5000,
                                          iseed = 4567)
@@ -500,7 +503,8 @@ summary(glm_beta_select_boot_1)
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
 #>     family = binomial(), data = data_test_mod_cat_binary, to_standardize = c("iv", 
-#>         "cov1"), bootstrap = 5000, iseed = 4567, model_call = "glm")
+#>         "cov1"), skip_response = TRUE, bootstrap = 5000, iseed = 4567, 
+#>     model_call = "glm")
 #> 
 #> Variable(s) standardized: iv, cov1 
 #> 

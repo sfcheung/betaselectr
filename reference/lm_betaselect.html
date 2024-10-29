@@ -15,7 +15,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,8 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
     <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -630,14 +631,14 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = "iv"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205      3.337  -4.856   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148      4.062  -0.283     0.48    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165      0.034   4.918     0.60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004      0.048  -0.091     0.92    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.344  -0.611     0.80    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.307  -0.616     0.42    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031      0.041   0.757   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.558  -10.935      3.337  -4.856   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.603    7.538      4.062  -0.283     0.80    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.115    0.264      0.034   4.918   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.079    0.105      0.048  -0.091     0.92    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.870    0.502      0.344  -0.611     0.48    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.829    0.420      0.307  -0.616     0.60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.056    0.116      0.041   0.757     0.42    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -658,6 +659,7 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Percentile bootstrap 95.0% confidence interval reported.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">logistic_beta_x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -695,14 +697,14 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     data = betaselectr::std_data(data = data_test_mod_cat, to_standardize = "iv"))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205      3.337  -4.856   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148      4.062  -0.283     0.48    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165      0.034   4.918     0.60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004      0.048  -0.091     0.92    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.344  -0.611     0.80    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.307  -0.616     0.42    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031      0.041   0.757   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.558  -10.935      3.337  -4.856   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.603    7.538      4.062  -0.283     0.80    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.115    0.264      0.034   4.918   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.079    0.105      0.048  -0.091     0.92    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.870    0.502      0.344  -0.611     0.48    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.829    0.420      0.307  -0.616     0.60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.056    0.116      0.041   0.757     0.42    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -723,6 +725,7 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Percentile bootstrap 95.0% confidence interval reported.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Manually standardize iv and call glm()</span></span></span>
 <span class="r-in"><span></span></span>
@@ -764,14 +767,14 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span>     "mod", "cov1")))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.280      0.256   1.093     0.18    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv             1.941      0.202   9.603     0.32    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.827      0.158   5.229     0.40    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.013      0.116  -0.113     0.98    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211      0.311  -0.677   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189      0.329  -0.575     0.32    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.155      0.210   0.736   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.280   -0.290    0.862      0.256   1.093     0.18    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             1.941    1.626    2.430      0.202   9.603   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.827    0.499    1.223      0.158   5.229   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.013   -0.232    0.229      0.116  -0.113     0.98    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.963    0.454      0.311  -0.677     0.32    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.866    0.496      0.329  -0.575     0.40    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.155   -0.224    0.701      0.210   0.736     0.32    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -792,6 +795,7 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Z values are computed by 'Estimate / Std. Error'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - The bootstrap p-values are asymmetric p-values by Asparouhov and</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Percentile bootstrap 95.0% confidence interval reported.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">raw_output</span><span class="op">(</span><span class="va">lm_beta_x</span><span class="op">)</span><span class="op">)</span></span></span>

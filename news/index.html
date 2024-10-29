@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,8 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
     <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -38,7 +39,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.1.12" id="betaselectr-00112">betaselectr 0.0.1.12<a class="anchor" aria-label="anchor" href="#betaselectr-00112"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.0.1.14" id="betaselectr-00114">betaselectr 0.0.1.14<a class="anchor" aria-label="anchor" href="#betaselectr-00114"></a></h2>
 <ul><li><p>Added <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> and related methods and helper functions. (0.0.1.1)</p></li>
 <li><p>Added parallel processing support to the internal function <code>find_all_products()</code>. (0.0.1.2)</p></li>
 <li><p>For <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>, added an option to skip finding product terms. (0.0.1.2)</p></li>
@@ -52,9 +53,11 @@
 <li><p>Set the default value of <code>load_balancing</code> to <code>FALSE</code> in <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>. Also fix the case of <code>progress = FALSE</code>, <code>parallel = TRUE</code>, and <code>load_balancing = FALSE</code>. Load balancing is no longer used in this case. (0.0.1.8)</p></li>
 <li><p>Added <code><a href="../reference/coef.lav_betaselect.html">coef.lav_betaselect()</a></code>. (0.0.1.9)</p></li>
 <li><p>Added <code><a href="../reference/confint.lav_betaselect.html">confint.lav_betaselect()</a></code>. (0.0.1.10)</p></li>
-<li><p>Updated <code><a href="../reference/summary.lm_betaselect.html">summary.lm_betaselect()</a></code> to allow including the estimates before standardization. (0.0.1.11</p></li>
+<li><p>Updated <code><a href="../reference/summary.lm_betaselect.html">summary.lm_betaselect()</a></code> to allow including the estimates before standardization. (0.0.1.11)</p></li>
 <li><p>Updated <code><a href="../reference/summary.lm_betaselect.html">print.summary.lm_betaselect()</a></code> to print confidence intervals by default, if available. (0.0.1.11)</p></li>
-<li><p>Fixed a bug in printing the bootstrap <em>p</em>-values for <code><a href="../reference/summary.lm_betaselect.html">summary.lm_betaselect()</a></code>. (0.0.1.12)</p></li>
+<li><p>Fixed a bug in printing the bootstrap <em>p</em>-values for <code><a href="../reference/summary.lm_betaselect.html">summary.lm_betaselect()</a></code>. (0.0.1.13)</p></li>
+<li><p>Updated <code><a href="../reference/summary.glm_betaselect.html">summary.glm_betaselect()</a></code> to allow including the estimates before standardization. (0.0.1.13)</p></li>
+<li><p>Updated <code><a href="../reference/summary.glm_betaselect.html">print.summary.glm_betaselect()</a></code> to print confidence intervals by default, if available. (0.0.1.13)</p></li>
 </ul></div>
   </main></div>
 

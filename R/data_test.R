@@ -69,7 +69,7 @@
 #' Similar to `data_test_mod_cat` but
 #' generated from another population.
 #'
-#' @format A data frame with 500 rows
+#' @format A data frame with 300 rows
 #' and five variables:
 #' \describe{
 #'   \item{dv}{Dependent variable, continuous}
@@ -86,3 +86,28 @@
 #'
 #'
 "data_test_mod_cat2"
+
+#' @title Test Dataset with a Binary Outcome Variable
+#'
+#' @description This dataset has one
+#' predictor, one moderator, one
+#' control variable, one binary dependent
+#' variable, and a categorical variable.
+#'
+#' @format A data frame with 300 rows
+#' and five variables:
+#' \describe{
+#'   \item{dv}{Dependent variable, binary: 0, 1}
+#'   \item{iv}{Independent variable, continuous}
+#'   \item{mod}{Moderator, continuous}
+#'   \item{cov1}{Control variable, continuous}
+#'   \item{cat1}{String variable with these values: "gp1", "gp2", and "gp3"}
+#' }
+#'
+#' @examples
+#'
+#' glm_out <- glm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat_binary, family = binomial())
+#' summary(glm_out)
+#'
+#'
+"data_test_mod_cat_binary"

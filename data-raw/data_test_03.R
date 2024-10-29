@@ -1,18 +1,18 @@
 # Adapted from stdmod
 
 set.seed(41543)
-n <- 500
+n <- 300
 x <- rnorm(n)
 w <- .4 * x + sqrt(1 - .4^2) * rnorm(n)
 v1 <- rnorm(n)
 cat1 <- sample(c("gp1", "gp2", "gp3"), n, replace = TRUE, prob = c(.2, .3, .5))
-y <- .2 * x + .3 * w + .4 * x * w + .12 * v1 +
+y <- .2 * x + .3 * w + .35 * x * w + .12 * v1 +
       sapply(cat1,
              switch,
              gp1 = 0,
              gp2 = .4,
              gp3 = .6) +
-      rnorm(n)
+      rnorm(n, 0, 1.4)
 dat <- data.frame(dv = y,
                   iv = x,
                   mod = w,

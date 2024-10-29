@@ -33,7 +33,7 @@ dat0 <- round(dat0, 2)
 apply(dat0, 2, sd)
 colMeans(dat0)
 apply(dat0, 2, range)
-dat1 <- data.frame(dat0, cat = dat$cat1)
+dat1 <- data.frame(dat0, cat1 = dat$cat1)
 head(dat1)
 out <- lm(dv ~ iv * mod + cov1 + cat1,
           dat1)

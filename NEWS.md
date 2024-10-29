@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.7
+# betaselectr 0.0.1.11
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -44,4 +44,23 @@
   by default (0.0.1.6)
 
 - Added a draft vignette for
-  `lav_betaselect()`.
+  `lav_betaselect()`. (0.0.1.7)
+
+- Set the default value of `load_balancing`
+  to `FALSE` in `lm_betaselect()`. Also
+  fix the case of `progress = FALSE`,
+  `parallel = TRUE`, and `load_balancing = FALSE`.
+  Load balancing is no longer used in this
+  case. (0.0.1.8)
+
+- Added `coef.lav_betaselect()`. (0.0.1.9)
+
+- Added `confint.lav_betaselect()`. (0.0.1.10)
+
+- Updated `summary.lm_betaselect()`
+  to allow including the estimates
+  before standardization. (0.0.1.11
+
+- Updated `print.summary.lm_betaselect()`
+  to print confidence intervals by
+  default, if available. (0.0.1.11)

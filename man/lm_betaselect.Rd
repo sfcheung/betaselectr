@@ -19,7 +19,7 @@ lm_betaselect(
   parallel = FALSE,
   ncpus = parallel::detectCores(logical = FALSE) - 1,
   progress = TRUE,
-  load_balancing = TRUE,
+  load_balancing = FALSE,
   model_call = c("lm", "glm")
 )
 
@@ -33,7 +33,7 @@ glm_betaselect(
   parallel = FALSE,
   ncpus = parallel::detectCores(logical = FALSE) - 1,
   progress = TRUE,
-  load_balancing = TRUE
+  load_balancing = FALSE
 )
 
 \method{print}{lm_betaselect}(
@@ -101,7 +101,11 @@ generator. Default is \code{NULL}.}
 parallel processing will be used to
 do bootstrapping. Default is \code{FALSE}
 because bootstrapping for models fitted
-by \code{\link[=lm]{lm()}} or \code{\link[=glm]{glm()}} is rarely slow.}
+by \code{\link[=lm]{lm()}} or \code{\link[=glm]{glm()}} is rarely slow.
+Actually, if both \code{parallel} and
+\code{progress} are set to \code{TRUE}, the
+speed may even be slower than serial
+processing.}
 
 \item{ncpus}{If \code{do_boot} is \code{TRUE}
 and \code{parallel} is also \code{TRUE}, this
@@ -112,12 +116,13 @@ is \code{parallel::detectCores(logical = FALSE) - 1}}
 
 \item{progress}{Logical. If \code{TRUE},
 progress bars will be displayed
-for long process.}
+for long process. Default is \code{TRUE}.}
 
 \item{load_balancing}{Logical. If
-\code{parallel} is \code{TRUE}, this determine
+\code{parallel} is \code{TRUE}, this determines
 whether load balancing will be used.
-Default is \code{TRUE}.}
+Default is \code{FALSE} because the gain
+in speed is usually minor.}
 
 \item{model_call}{The model function
 to be called.

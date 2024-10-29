@@ -57,3 +57,32 @@
 #'
 #'
 "data_test_mod_cat"
+
+#' @title Test Dataset with Moderator
+#' and Categorical Variables (Version 2)
+#'
+#' @description This dataset has one
+#' predictor, one moderator, one
+#' control variable, one dependent
+#' variable, and a categorical variable.
+#'
+#' Similar to `data_test_mod_cat` but
+#' generated from another population.
+#'
+#' @format A data frame with 500 rows
+#' and five variables:
+#' \describe{
+#'   \item{dv}{Dependent variable, continuous}
+#'   \item{iv}{Independent variable, continuous}
+#'   \item{mod}{Moderator, continuous}
+#'   \item{cov1}{Control variable, continuous}
+#'   \item{cat1}{String variable with these values: "gp1", "gp2", and "gp3"}
+#' }
+#'
+#' @examples
+#'
+#' lm_out <- lm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat)
+#' summary(lm_out)
+#'
+#'
+"data_test_mod_cat2"

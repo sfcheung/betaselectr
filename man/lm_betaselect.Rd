@@ -13,6 +13,7 @@ lm_betaselect(
   ...,
   to_standardize = NULL,
   not_to_standardize = NULL,
+  skip_response = FALSE,
   do_boot = TRUE,
   bootstrap = 100L,
   iseed = NULL,
@@ -27,6 +28,7 @@ glm_betaselect(
   ...,
   to_standardize = NULL,
   not_to_standardize = NULL,
+  skip_response = FALSE,
   do_boot = TRUE,
   bootstrap = 100L,
   iseed = NULL,
@@ -80,6 +82,17 @@ are to be standardized. This argument
 cannot be ued with \code{to_standardize}
 at the same time. Default is \code{NULL},
 and only \code{to_standardize} is used.}
+
+\item{skip_response}{Logical. If
+\code{TRUE}, will not standardize the
+response (outcome) variable even if
+it appears in \code{to_standardize} or
+\code{to_standardize} is not specified.
+Used for models such as logistic
+regression models in which there are
+some restrictions on the response
+variables (e.g., only 0 or 1 for
+logistic regression).}
 
 \item{do_boot}{Whether bootstrapping
 will be conducted. Default is \code{TRUE}.}

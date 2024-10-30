@@ -239,6 +239,17 @@
 #' at the same time. Default is `NULL`,
 #' and only `to_standardize` is used.
 #'
+#' @param skip_response Logical. If
+#' `TRUE`, will not standardize the
+#' response (outcome) variable even if
+#' it appears in `to_standardize` or
+#' `to_standardize` is not specified.
+#' Used for models such as logistic
+#' regression models in which there are
+#' some restrictions on the response
+#' variables (e.g., only 0 or 1 for
+#' logistic regression).
+#'
 #' @param do_boot Whether bootstrapping
 #' will be conducted. Default is `TRUE`.
 #'
@@ -352,6 +363,7 @@
 lm_betaselect <- function(...,
                           to_standardize = NULL,
                           not_to_standardize = NULL,
+                          skip_response = FALSE,
                           do_boot = TRUE,
                           bootstrap = 100L,
                           iseed = NULL,
@@ -408,7 +420,10 @@ lm_betaselect <- function(...,
                         input_data = input_data,
                         to_standardize = to_standardize,
                         not_to_standardize = not_to_standardize,
-                        skip_categorical_x = TRUE
+                        skip_categorical_x = TRUE,
+                        skip_response = skip_response,
+                        model_call = model_call,
+                        org_call = my_call
                       )
     # Do standardization
     input_data_z <- input_data
@@ -510,6 +525,7 @@ lm_betaselect <- function(...,
 glm_betaselect <- function(...,
                            to_standardize = NULL,
                            not_to_standardize = NULL,
+                           skip_response = FALSE,
                            do_boot = TRUE,
                            bootstrap = 100L,
                            iseed = NULL,

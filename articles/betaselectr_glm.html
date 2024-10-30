@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -233,12 +233,13 @@ variables, including product terms.</p>
 <h3 id="estimates-only">Estimates Only<a class="anchor" aria-label="anchor" href="#estimates-only"></a>
 </h3>
 <p>Suppose we only need to solve the first problem, standardizing all
-numeric variables, with the product term computed after <code>iv</code>
-and <code>mod</code> are standardized.</p>
+numeric variables except for the response variable (which is binary),
+with the product term computed after <code>iv</code> and
+<code>mod</code> are standardized.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                  data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
-<span>                                  not_to_standardize <span class="op">=</span> <span class="st">"dv"</span>,</span>
+<span>                                  skip_response <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                  do_boot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>The function <code>glm_beta_iv_mod()</code> can be used as
@@ -250,9 +251,9 @@ before fitting the models. Terms such as product terms are created
 <p>For <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>, standardizing the outcome variable
 (<code>dv</code> in this example) may not be meaningful or may even be
 not allowed. In the case of logistic regression, the outcome variable
-need to be 0 or 1 only. Therefore, <code>not_to_standardize</code> is
-set to <code>"dv"</code>, the name of the outcome variable, to request
-that it is <em>not</em> standardized.</p>
+need to be 0 or 1 only. Therefore, <code>skip_response</code> is set to
+<code>TRUE</code>, to request that the response (outcome) variable is
+<em>not</em> standardized.</p>
 <p>Moreover, categorical variables (factors and string variables) will
 not be standardized.</p>
 <p>Bootstrapping is done by default. In this illustration,
@@ -268,7 +269,7 @@ addressing the issue with confidence intervals.</p>
 <span><span class="co">#&gt; Waiting for profiling to be done...</span></span>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
-<span><span class="co">#&gt;     family = binomial(), data = data_test_mod_cat_binary, not_to_standardize = "dv", </span></span>
+<span><span class="co">#&gt;     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, </span></span>
 <span><span class="co">#&gt;     do_boot = FALSE, model_call = "glm")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable(s) standardized: iv, mod, cov1 </span></span>
@@ -330,7 +331,7 @@ arguments set:</p>
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                       data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                       family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                                       not_to_standardize <span class="op">=</span> <span class="st">"dv"</span>,</span>
+<span>                                       skip_response <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                       bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>                                       iseed <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span></span></code></pre></div>
 <p>These are the additional arguments:</p>
@@ -346,7 +347,7 @@ reproducible.</p></li>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">glm_beta_select_boot</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
-<span><span class="co">#&gt;     family = binomial(), data = data_test_mod_cat_binary, not_to_standardize = "dv", </span></span>
+<span><span class="co">#&gt;     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, </span></span>
 <span><span class="co">#&gt;     bootstrap = 5000, iseed = 4567, model_call = "glm")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable(s) standardized: iv, mod, cov1 </span></span>
@@ -410,6 +411,7 @@ standardize is much more than the variables not to standardize.</p></li>
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                         data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                         to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"cov1"</span><span class="op">)</span>,</span>
+<span>                                         skip_response <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                         bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>                                         iseed <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span></span></code></pre></div>
@@ -420,6 +422,7 @@ standardize is much more than the variables not to standardize.</p></li>
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                         data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                         not_to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dv"</span>, <span class="st">"mod"</span><span class="op">)</span>,</span>
+<span>                                         skip_response <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                         bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>                                         iseed <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span></span></code></pre></div>
@@ -430,7 +433,8 @@ version are printed:</p>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
 <span><span class="co">#&gt;     family = binomial(), data = data_test_mod_cat_binary, to_standardize = c("iv", </span></span>
-<span><span class="co">#&gt;         "cov1"), bootstrap = 5000, iseed = 4567, model_call = "glm")</span></span>
+<span><span class="co">#&gt;         "cov1"), skip_response = TRUE, bootstrap = 5000, iseed = 4567, </span></span>
+<span><span class="co">#&gt;     model_call = "glm")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable(s) standardized: iv, cov1 </span></span>
 <span><span class="co">#&gt; </span></span>

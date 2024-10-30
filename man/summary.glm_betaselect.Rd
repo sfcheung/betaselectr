@@ -20,6 +20,8 @@
   boot_pvalue_type = c("asymmetric", "norm"),
   type = c("beta", "standardized", "raw", "unstandardized"),
   print_raw = c("none", "before_ci", "after_ci"),
+  transform_b = NULL,
+  transform_b_name = NULL,
   ...
 )
 
@@ -83,9 +85,7 @@ was not requested or if this argument
 is set to \code{"z"}, \code{"glm"}, or \code{"default"},
 then the usual \code{glm}
 standard errors are
-returned, with a warning raised
-unless \code{type} is \code{"raw"} or
-\verb{"unstandardized".}
+returned.
 Default is \code{"boot"}.}
 
 \item{ci}{Logical. Whether
@@ -136,6 +136,21 @@ inserted to the left of the confidence
 intervals. If set to "after_ci"\code{and}ci\code{is}TRUE\verb{, then will be printed to the right of the confidence intervals. If }ci\code{is}FALSE`, then will
 be printed to the right of the
 standardized estimates.}
+
+\item{transform_b}{The function
+to be used to transform the
+confidence limits. For example,
+if set to \code{exp}, the confidence
+limits will be exponentiated. Users
+need to decide whether the transformed
+limits are meaningful. Default is
+\code{NULL}.}
+
+\item{transform_b_name}{If
+\code{transform_b} is a function, then
+this is the name of the transformed
+coefficients. Default is
+\code{"Estimate(Transformed)"}}
 
 \item{...}{Additional arguments
 passed to other methods.}

@@ -282,8 +282,6 @@ ont the output of `glm_betaselect()`:
 
 ``` r
 summary(glm_beta_select)
-#> Warning in summary.glm_betaselect(glm_beta_select): Bootstrap estimates not
-#> available; 'se_method' changed to 'default'.
 #> Waiting for profiling to be done...
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -317,6 +315,15 @@ summary(glm_beta_select)
 #> 
 #> Number of Fisher Scoring iterations: 4
 #> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.314    0.168    0.558
+#> iv           1.150    0.882    1.506
+#> mod          1.214    0.923    1.607
+#> cov1         0.955    0.751    1.213
+#> cat1gp2      2.435    1.213    5.052
+#> cat1gp3      3.607    1.868    7.251
+#> iv:mod       1.398    1.114    1.782
 #> 
 #> Note:
 #> - Results *after* standardization are reported.
@@ -327,14 +334,6 @@ summary(glm_beta_select)
 #>   (if reported) should not be used for coefficients involved in
 #>   standardization.
 #> - Default 95.0% confidence interval reported.
-```
-
-A warning is always issued if standardization
-is done but bootstrapping not requested.
-
-
-```
-#> Waiting for profiling to be done...
 ```
 
 
@@ -384,8 +383,6 @@ These are the additional arguments:
   this to an integer to make the results
   reproducible.
 
-
-
 This is the output of `summary()`
 
 
@@ -423,6 +420,15 @@ summary(glm_beta_select_boot)
 #> 
 #> Number of Fisher Scoring iterations: 4
 #> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.314    0.154    0.550
+#> iv           1.150    0.875    1.521
+#> mod          1.214    0.920    1.625
+#> cov1         0.955    0.750    1.213
+#> cat1gp2      2.435    1.213    5.596
+#> cat1gp3      3.607    1.904    7.867
+#> iv:mod       1.398    1.115    1.816
 #> 
 #> Note:
 #> - Results *after* standardization are reported.
@@ -533,6 +539,15 @@ summary(glm_beta_select_boot_1)
 #> 
 #> Number of Fisher Scoring iterations: 4
 #> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.031    0.001    0.941
+#> iv           0.022    0.001    0.310
+#> mod          1.047    0.980    1.122
+#> cov1         0.955    0.750    1.213
+#> cat1gp2      2.435    1.213    5.596
+#> cat1gp3      3.607    1.904    7.867
+#> iv:mod       1.083    1.027    1.150
 #> 
 #> Note:
 #> - Results *after* standardization are reported.

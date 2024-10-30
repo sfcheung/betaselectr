@@ -230,13 +230,6 @@ ont the output of `glm_betaselect()`:
 summary(glm_beta_select)
 ```
 
-A warning is always issued if standardization
-is done but bootstrapping not requested.
-
-```{r, echo = FALSE}
-tmp <- capture.output(suppressWarnings(print(summary(glm_beta_select))))
-```
-
 ```{r, echo = FALSE}
 b_select <- coef(glm_beta_select)
 b_std <- coef(glm_std_common)
@@ -285,10 +278,6 @@ These are the additional arguments:
   generator used for bootstrapping. Set
   this to an integer to make the results
   reproducible.
-
-```{r, echo = FALSE}
-tmp <- capture.output(suppressWarnings(print(summary(glm_beta_select_boot))))
-```
 
 This is the output of `summary()`
 

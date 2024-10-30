@@ -28,6 +28,7 @@ Objects}
   type = c("beta", "standardized", "raw", "unstandardized"),
   warn = TRUE,
   boot_type = c("perc", "bc"),
+  transform_b = NULL,
   ...
 )
 }
@@ -101,6 +102,15 @@ profiling. See \link[stats:confint]{stats::confint.glm}
 for details.
 ignored if \code{method} is \code{"boot"} or
 \code{"bootstrap"}.}
+
+\item{transform_b}{The function
+to be used to transform the
+confidence limits. For example,
+if set to \code{exp}, the confidence
+limits will be exponentiated. Users
+need to decide whether the transformed
+limits are meaningful. Default is
+\code{NULL}.}
 }
 \value{
 A \emph{p} by 2 matrix of the confidence

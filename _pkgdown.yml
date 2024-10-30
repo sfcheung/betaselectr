@@ -28,6 +28,21 @@ navbar:
   structure:
     left:  [intro, articles, reference, tutorials, news]
     right: [search, github]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: "<Structural Equation Models>"
+      - text: Beta-Select Demonstration - SEM by 'lavaan'
+        href: articles/betaselectr_lav.html
+      - text: -------
+      - text: "<Multiple Regression>"
+      - text: Beta-Select Demonstration - Regression by 'lm()'
+        href: articles/betaselectr_lm.html
+      - text: -------
+      - text: "<Generalized Linear Models>"
+      - text: Beta-Select Demonstration - Logistic Regression by 'glm()'
+        href: articles/betaselectr_glm.html
 
 reference:
 - title: Main Functions

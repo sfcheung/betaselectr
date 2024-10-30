@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.16
+# betaselectr 0.0.1.17
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -94,3 +94,6 @@
   Not necessary because the notes in
   the print method can already alert the
   users. (0.0.1.16)
+
+- Updated the vignettes and the `pkgdown`
+  site. (0.0.1.17)

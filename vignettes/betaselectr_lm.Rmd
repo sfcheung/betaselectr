@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: Regression by `lm()`"
-date: "2024-10-29"
+date: "2024-10-30"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -277,8 +277,6 @@ ont the output of `lm_betaselect()`:
 
 ``` r
 summary(lm_beta_select)
-#> Warning in summary.lm_betaselect(lm_beta_select): Bootstrap estimates not
-#> available; 'se_method' changed to 'ls'.
 #> Call to lm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
 #>     data = data_test_mod_cat2, do_boot = FALSE)
@@ -321,9 +319,6 @@ summary(lm_beta_select)
 #>   in standardization.
 #> - Least squares 95.0% confidence interval reported.
 ```
-
-A warning is always issued if standardization
-is done but bootstrapping not requested.
 
 
 

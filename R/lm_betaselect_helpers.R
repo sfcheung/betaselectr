@@ -119,3 +119,25 @@ find_categorical_lm <- function(object) {
     tmp <- tmp[tmp != "numeric"]
     names(tmp)
   }
+
+#' @noRd
+# For functions not vectorized
+apply_to_cells <- function(x, FUN) {
+    x_dim <- length(dim(x))
+    if (x_dim == 2) {
+        p <- nrow(x)
+        q <- ncol(x)
+        for (i in seq_len(p)) {
+            for (j in seq_len(q)) {
+                x[i, j] <- do.call(FUN, list(x[i, j]))
+              }
+          }
+        return(x)
+      } else if (x_dim == 1) {
+        for (i in seq_along(x)) {
+            x[i] <- do.call(FUN, list(x[i]))
+          }
+        return(x)
+      }
+    stop("x must be either one-dimensional or two-dimensional.")
+  }

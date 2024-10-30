@@ -15,7 +15,7 @@ glm_betaselect()."><meta name="google-site-verification" content="0VLBmFnW_UJFI-
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,9 +25,14 @@ glm_betaselect()."><meta name="google-site-verification" content="0VLBmFnW_UJFI-
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>&lt;Structural Equation Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration - SEM by 'lavaan'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Multiple Regression&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration - Regression by 'lm()'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Generalized Linear Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration - Logistic Regression by 'glm()'</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -80,6 +85,7 @@ coefficients in the output of
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"beta"</span>, <span class="st">"standardized"</span>, <span class="st">"raw"</span>, <span class="st">"unstandardized"</span><span class="op">)</span>,</span>
 <span>  warn <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  boot_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"perc"</span>, <span class="st">"bc"</span><span class="op">)</span>,</span>
+<span>  transform_b <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -177,6 +183,17 @@ for details.
 ignored if <code>method</code> is <code>"boot"</code> or
 <code>"bootstrap"</code>.</p></dd>
 
+
+<dt id="arg-transform-b">transform_b<a class="anchor" aria-label="anchor" href="#arg-transform-b"></a></dt>
+<dd><p>The function
+to be used to transform the
+confidence limits. For example,
+if set to <code>exp</code>, the confidence
+limits will be exponentiated. Users
+need to decide whether the transformed
+limits are meaningful. Default is
+<code>NULL</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -230,7 +247,7 @@ added.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      -209.176316   88.39063</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         -1.968484   22.60068</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">lm_beta_x</span>, method <span class="op">=</span> <span class="st">"ls"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>With standardization, the variance-covariance matrix using OLS or WLS should not be used.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>With standardization, the variance-covariance matrix using OLS or WLS should be used with caution.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    2.5 %     97.5 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -427.704232 2008.80410</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> iv          -1288.701874 1100.09791</span>
@@ -264,7 +281,7 @@ added.</p>
 <span class="r-in"><span>                                  iseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">logistic_beta_x</span>, method <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>With standardization, the confidence intervalfrom 'lm()' or 'glm()' should not be used.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>With standardization, the non-bootstrap confidence interval from 'lm()' or 'glm()' should be used with caution.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Waiting for profiling to be done...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    2.5 %       97.5 %</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept) -21.56476101 -11.16194809</span>

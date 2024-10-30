@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,14 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>&lt;Structural Equation Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration - SEM by 'lavaan'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Multiple Regression&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration - Regression by 'lm()'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Generalized Linear Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration - Logistic Regression by 'glm()'</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -63,7 +68,7 @@
 
       <h1>Beta-Select Demonstration: Regression by `lm()`</h1>
             
-            <h4 data-toc-skip class="date">2024-10-29</h4>
+            <h4 data-toc-skip class="date">2024-10-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lm.Rmd" class="external-link"><code>vignettes/betaselectr_lm.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lm.Rmd</code></div>
@@ -259,8 +264,6 @@ addressing the issue with confidence intervals.</p>
 <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lm_beta_select</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in summary.lm_betaselect(lm_beta_select): Bootstrap estimates not</span></span>
-<span><span class="co">#&gt; available; 'se_method' changed to 'ls'.</span></span>
 <span><span class="co">#&gt; Call to lm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
 <span><span class="co">#&gt;     data = data_test_mod_cat2, do_boot = FALSE)</span></span>
@@ -302,8 +305,6 @@ addressing the issue with confidence intervals.</p>
 <span><span class="co">#&gt;   intervals (if reported) should not be used for coefficients involved</span></span>
 <span><span class="co">#&gt;   in standardization.</span></span>
 <span><span class="co">#&gt; - Least squares 95.0% confidence interval reported.</span></span></code></pre></div>
-<p>A warning is always issued if standardization is done but
-bootstrapping not requested.</p>
 <p>Compared to the solution with the product term standardized, the
 coefficient of <code>iv:mod</code> changed substantially from 2.440 to
 0.145. As shown by <span class="citation">Cheung et al. (2022)</span>,

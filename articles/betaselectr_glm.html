@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,14 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
+<li><h6 class="dropdown-header" data-toc-skip>&lt;Structural Equation Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration - SEM by 'lavaan'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Multiple Regression&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration - Regression by 'lm()'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Generalized Linear Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration - Logistic Regression by 'glm()'</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -264,8 +269,6 @@ addressing the issue with confidence intervals.</p>
 <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">glm_beta_select</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in summary.glm_betaselect(glm_beta_select): Bootstrap estimates not</span></span>
-<span><span class="co">#&gt; available; 'se_method' changed to 'default'.</span></span>
 <span><span class="co">#&gt; Waiting for profiling to be done...</span></span>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
@@ -299,6 +302,15 @@ addressing the issue with confidence intervals.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Transformed Parameter Estimates:</span></span>
+<span><span class="co">#&gt;             Exp(B) CI.Lower CI.Upper</span></span>
+<span><span class="co">#&gt; (Intercept)  0.314    0.168    0.558</span></span>
+<span><span class="co">#&gt; iv           1.150    0.882    1.506</span></span>
+<span><span class="co">#&gt; mod          1.214    0.923    1.607</span></span>
+<span><span class="co">#&gt; cov1         0.955    0.751    1.213</span></span>
+<span><span class="co">#&gt; cat1gp2      2.435    1.213    5.052</span></span>
+<span><span class="co">#&gt; cat1gp3      3.607    1.868    7.251</span></span>
+<span><span class="co">#&gt; iv:mod       1.398    1.114    1.782</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - Results *after* standardization are reported.</span></span>
@@ -309,9 +321,6 @@ addressing the issue with confidence intervals.</p>
 <span><span class="co">#&gt;   (if reported) should not be used for coefficients involved in</span></span>
 <span><span class="co">#&gt;   standardization.</span></span>
 <span><span class="co">#&gt; - Default 95.0% confidence interval reported.</span></span></code></pre></div>
-<p>A warning is always issued if standardization is done but
-bootstrapping not requested.</p>
-<pre><code><span><span class="co">#&gt; Waiting for profiling to be done...</span></span></code></pre>
 <p>Compared to the solution with the product term standardized, the
 coefficient of <code>iv:mod</code> changed substantially from 5.413 to
 0.335. Similar to the case of linear regression <span class="citation">(Cheung et al., 2022)</span>, the coefficient of
@@ -327,7 +336,7 @@ with the product term computed after <code>iv</code> and
 <code>mod</code> are standardized and bootstrap confidence interval
 used, we can call <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code> again, with additional
 arguments set:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                       data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                       family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -343,7 +352,7 @@ for bootstrapping. Set this to an integer to make the results
 reproducible.</p></li>
 </ul>
 <p>This is the output of <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">glm_beta_select_boot</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
@@ -377,6 +386,15 @@ reproducible.</p></li>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Transformed Parameter Estimates:</span></span>
+<span><span class="co">#&gt;             Exp(B) CI.Lower CI.Upper</span></span>
+<span><span class="co">#&gt; (Intercept)  0.314    0.154    0.550</span></span>
+<span><span class="co">#&gt; iv           1.150    0.875    1.521</span></span>
+<span><span class="co">#&gt; mod          1.214    0.920    1.625</span></span>
+<span><span class="co">#&gt; cov1         0.955    0.750    1.213</span></span>
+<span><span class="co">#&gt; cat1gp2      2.435    1.213    5.596</span></span>
+<span><span class="co">#&gt; cat1gp3      3.607    1.904    7.867</span></span>
+<span><span class="co">#&gt; iv:mod       1.398    1.115    1.816</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - Results *after* standardization are reported.</span></span>
@@ -407,7 +425,7 @@ standardize is much more than the variables not to standardize.</p></li>
 <p>For example, suppose we only need to standardize <code>iv</code> and
 <code>cov1</code>, this is the call to do this, setting
 <code>to_standardize</code> to <code>c("iv", "cov1")</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                         data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                         to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"cov1"</span><span class="op">)</span>,</span>
@@ -418,7 +436,7 @@ standardize is much more than the variables not to standardize.</p></li>
 <p>If we want to standardize all variables except for <code>dv</code>,
 <code>mod</code>, we can use this call, and set
 <code>not_to_standardize</code> to <code>c("dv", "mod")</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                         data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
 <span>                                         not_to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dv"</span>, <span class="st">"mod"</span><span class="op">)</span>,</span>
@@ -428,7 +446,7 @@ standardize is much more than the variables not to standardize.</p></li>
 <span>                                         iseed <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span></span></code></pre></div>
 <p>The results of these calls are identical, and only those of the first
 version are printed:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">glm_beta_select_boot_1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call to glm_betaselect():</span></span>
 <span><span class="co">#&gt; betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, </span></span>
@@ -463,6 +481,15 @@ version are printed:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Transformed Parameter Estimates:</span></span>
+<span><span class="co">#&gt;             Exp(B) CI.Lower CI.Upper</span></span>
+<span><span class="co">#&gt; (Intercept)  0.031    0.001    0.941</span></span>
+<span><span class="co">#&gt; iv           0.022    0.001    0.310</span></span>
+<span><span class="co">#&gt; mod          1.047    0.980    1.122</span></span>
+<span><span class="co">#&gt; cov1         0.955    0.750    1.213</span></span>
+<span><span class="co">#&gt; cat1gp2      2.435    1.213    5.596</span></span>
+<span><span class="co">#&gt; cat1gp3      3.607    1.904    7.867</span></span>
+<span><span class="co">#&gt; iv:mod       1.083    1.027    1.150</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Note:</span></span>
 <span><span class="co">#&gt; - Results *after* standardization are reported.</span></span>
@@ -487,7 +514,7 @@ can be overriden by setting <code>skip_categorical_x</code> to
 <p>In the example above, the coefficients of the two dummy variables
 when both the dummy variables and the outcome variables are standardized
 are 0.416 and 0.642:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/printCoefmat.html" class="external-link">printCoefmat</a></span><span class="op">(</span><span class="va">glm_std_common_summary</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span>, <span class="op">]</span>,</span>
 <span>             digits <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>             zap.ind <span class="op">=</span> <span class="fl">1</span>,</span>

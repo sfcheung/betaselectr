@@ -15,7 +15,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,9 +25,14 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration: Logistic Regression by `glm()`</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration: SEM by 'lavaan'</a></li>
-    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration: Regression by `lm()`</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><h6 class="dropdown-header" data-toc-skip>&lt;Structural Equation Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lav.html">Beta-Select Demonstration - SEM by 'lavaan'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Multiple Regression&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_lm.html">Beta-Select Demonstration - Regression by 'lm()'</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>&lt;Generalized Linear Models&gt;</h6></li>
+    <li><a class="dropdown-item" href="../articles/betaselectr_glm.html">Beta-Select Demonstration - Logistic Regression by 'glm()'</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -665,6 +670,15 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.000    0.000    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 1946.771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.122    1.302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.924    1.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.419    1.653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.437    1.521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.945    1.123</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
@@ -731,6 +745,15 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.000    0.000    0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 1946.771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.122    1.302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.924    1.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.419    1.653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.437    1.521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.945    1.123</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
@@ -801,6 +824,15 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of Fisher Scoring iterations: 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  1.323    0.748    2.373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           6.965    5.083   11.364</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          2.287    1.648    3.399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.987    0.793    1.257</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.382    1.576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.421    1.643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.167    0.800    2.019</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>

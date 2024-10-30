@@ -219,9 +219,6 @@ ont the output of `lm_betaselect()`:
 summary(lm_beta_select)
 ```
 
-A warning is always issued if standardization
-is done but bootstrapping not requested.
-
 ```{r, echo = FALSE}
 tmp <- capture.output(suppressWarnings(print(summary(lm_beta_select))))
 ```

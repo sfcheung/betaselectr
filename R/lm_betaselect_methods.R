@@ -212,8 +212,9 @@ vcov.lm_betaselect <- function(object,
                    raw = "raw",
                    unstandardized = "raw")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        warning("Bootstrap estimates not available; ",
-                "'method' changed to 'ls'.")
+        # This warning is not necessary
+        # warning("Bootstrap estimates not available; ",
+        #         "'method' changed to 'ls'.")
         method <- "ls"
       }
     if (type == "beta") {
@@ -227,7 +228,7 @@ vcov.lm_betaselect <- function(object,
           } else {
             if (warn) {
                 warning("With standardization, the variance-covariance matrix ",
-                        "from 'lm()' or 'glm()' should not be used.")
+                        "from 'lm()' or 'glm()' should be used with caution.")
               }
             NextMethod()
           }
@@ -406,8 +407,9 @@ confint.lm_betaselect <- function(object,
                    raw = "raw",
                    unstandardized = "raw")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        warning("Bootstrap estimates not available; ",
-                "'method' changed to 'ls'.")
+        # # This warning is not necessary.
+        # warning("Bootstrap estimates not available; ",
+        #         "'method' changed to 'ls'.")
         method <- "ls"
       }
     if (type == "beta") {
@@ -434,7 +436,7 @@ confint.lm_betaselect <- function(object,
           } else {
             if (warn) {
                 warning("With standardization, the variance-covariance matrix ",
-                        "using OLS or WLS should not be used.")
+                        "using OLS or WLS should be used with caution.")
               }
             class(object) <- "lm"
             out <- stats::confint(object,
@@ -485,6 +487,17 @@ confint.lm_betaselect <- function(object,
 #' ignored if `method` is `"boot"` or
 #' `"bootstrap"`.
 #'
+#' @param transform_b The function
+#' to be used to transform the
+#' confidence limits. For example,
+#' if set to `exp`, the confidence
+#' limits will be exponentiated. Users
+#' need to decide whether the transformed
+#' limits are meaningful. Default is
+#' `NULL`.
+#'
+#'
+#'
 #' @examples
 #'
 #' data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
@@ -519,6 +532,7 @@ confint.glm_betaselect <- function(object,
                                             "unstandardized"),
                                    warn = TRUE,
                                    boot_type = c("perc", "bc"),
+                                   transform_b = NULL,
                                    ...) {
     test <- match.arg(test)
     method <- match.arg(method)
@@ -538,12 +552,13 @@ confint.glm_betaselect <- function(object,
                    raw = "raw",
                    unstandardized = "raw")
     if (identical(method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        warning("Bootstrap estimates not available; ",
-                "'method' changed to 'ls' or 'default'.")
+        # # This warning is not necessary.
+        # warning("Bootstrap estimates not available; ",
+        #         "'method' changed to 'ls' or 'default'.")
         method <- "ls"
       }
     if (type == "beta") {
-        if (method == "boot") {1
+        if (method == "boot") {
             boot_out <- object$lm_betaselect$boot_out
             boot_idx <- attr(boot_out, "boot_idx")
             boot_est <- lapply(parm, function(y) {
@@ -554,6 +569,14 @@ confint.glm_betaselect <- function(object,
                           })
             est <- stats::coef(object,
                                type = type)[parm]
+            if (is.function(transform_b)) {
+                est <- apply_to_cells(est, cell_fun = transform_b)
+                boot_est <- lapply(boot_est,
+                                   apply_to_cells,
+                                   cell_fun = transform_b)
+                # est <- do.call(transform_b, list(est))
+                # boot_est <- do.call(transform_b, list(boot_est))
+              }
             out <- mapply(boot_ci_internal,
                           t0 = est,
                           t = boot_est,
@@ -565,8 +588,8 @@ confint.glm_betaselect <- function(object,
             return(out)
           } else {
             if (warn) {
-                warning("With standardization, the confidence interval",
-                        "from 'lm()' or 'glm()' should not be used.")
+                warning("With standardization, the non-bootstrap confidence interval ",
+                        "from 'lm()' or 'glm()' should be used with caution.")
               }
             class(object) <- "glm"
             out <- stats::confint(object,
@@ -575,6 +598,10 @@ confint.glm_betaselect <- function(object,
                                   trace = trace,
                                   test = test,
                                   ...)
+            if (is.function(transform_b)) {
+                out <- apply_to_cells(out, cell_fun = transform_b)
+                # out <- do.call(transform_b, list(out))
+              }
             return(out)
           }
       } else {
@@ -589,6 +616,12 @@ confint.glm_betaselect <- function(object,
                           })
             est <- stats::coef(object,
                                type = type)[parm]
+            if (is.function(transform_b)) {
+                est <- apply_to_cells(est, cell_fun = transform_b)
+                boot_est <- lapply(boot_est,
+                                   apply_to_cells,
+                                   cell_fun = transform_b)
+              }
             out <- mapply(boot_ci_internal,
                           t0 = est,
                           t = boot_est,
@@ -604,6 +637,10 @@ confint.glm_betaselect <- function(object,
                                   level = level,
                                   trace = trace,
                                   test = test)
+            if (is.function(transform_b)) {
+                out <- apply_to_cells(out, cell_fun = transform_b)
+                # out <- do.call(transform_b, list(out))
+              }
             return(out)
           }
       }
@@ -791,9 +828,7 @@ anova.glm_betaselect <- function(object,
 #' is set to `"t"`, `"lm"`, or `"ls"`,
 #' then the usual `lm`
 #' standard errors are
-#' returned, with a warning raised
-#' unless `type` is `"raw"` or
-#' `"unstandardized".`
+#' returned.
 #' Default is `"boot"`.
 #'
 #' @param ci Logical. Whether
@@ -912,8 +947,9 @@ summary.lm_betaselect <- function(object,
     boot_type <- match.arg(boot_type)
     boot_pvalue_type <- match.arg(boot_pvalue_type)
     if (identical(se_method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        warning("Bootstrap estimates not available; ",
-                "'se_method' changed to 'ls'.")
+        # # This warning is not necessary.
+        # warning("Bootstrap estimates not available; ",
+        #         "'se_method' changed to 'ls'.")
         se_method <- "ls"
       }
     if (type == "beta") {
@@ -1319,9 +1355,7 @@ print_fstatistic <- function(fstatistic,
 #' is set to `"z"`, `"glm"`, or `"default"`,
 #' then the usual `glm`
 #' standard errors are
-#' returned, with a warning raised
-#' unless `type` is `"raw"` or
-#' `"unstandardized".`
+#' returned.
 #' Default is `"boot"`.
 #'
 #' @param ci Logical. Whether
@@ -1376,6 +1410,21 @@ print_fstatistic <- function(fstatistic,
 #' be printed to the right of the
 #' standardized estimates.
 #'
+#' @param transform_b The function
+#' to be used to transform the
+#' confidence limits. For example,
+#' if set to `exp`, the confidence
+#' limits will be exponentiated. Users
+#' need to decide whether the transformed
+#' limits are meaningful. Default is
+#' `NULL`.
+#'
+#' @param transform_b_name If
+#' `transform_b` is a function, then
+#' this is the name of the transformed
+#' coefficients. Default is
+#' `"Estimate(Transformed)"`
+#'
 #' @param ...  Additional arguments
 #' passed to other methods.
 #'
@@ -1424,7 +1473,18 @@ summary.glm_betaselect <- function(object,
                                             "raw",
                                             "unstandardized"),
                                    print_raw = c("none", "before_ci", "after_ci"),
+                                   transform_b = NULL,
+                                   transform_b_name = NULL,
                                    ...) {
+    # If logistic regression is likely conducted:
+    if (isTRUE(object$family$family == "binomial")) {
+        if (isTRUE(object$family$link == "logit")) {
+          if (is.null(transform_b)) {
+              transform_b <- exp
+              transform_b_name <- "Exp(B)"
+            }
+        }
+      }
     se_method <- match.arg(se_method)
     type <- match.arg(type)
     print_raw <- match.arg(print_raw)
@@ -1442,8 +1502,9 @@ summary.glm_betaselect <- function(object,
     boot_type <- match.arg(boot_type)
     boot_pvalue_type <- match.arg(boot_pvalue_type)
     if (identical(se_method, "boot") && is.null(object$lm_betaselect$boot_out)) {
-        warning("Bootstrap estimates not available; ",
-                "'se_method' changed to 'default'.")
+        # # This warning is not necessary
+        # warning("Bootstrap estimates not available; ",
+        #         "'se_method' changed to 'default'.")
         se_method <- "default"
       }
     if (type == "beta") {
@@ -1529,6 +1590,32 @@ summary.glm_betaselect <- function(object,
                           "Raw" = b_ustd,
                           out_coef[, -seq_len(i), drop = FALSE])
         out$coefficients <- out_coef
+      }
+    if (!is.null(transform_b)) {
+        i <- intersect(c("Estimate", "CI.Lower", "CI.Upper"),
+                       colnames(out$coefficients))
+        tmp1 <- as.matrix(out$coefficients[, i])
+        tmp2 <- apply_to_cells(tmp1,
+                               cell_fun = transform_b)
+        if (is.null(transform_b_name)) {
+            transform_b_name <- "Estimate(Transformed)"
+          }
+        colnames(tmp2)[match("Estimate", colnames(tmp2))] <- transform_b_name
+        if (ci) {
+            out_ci_t <- suppressMessages(confint.glm_betaselect(object,
+                                                                level = level,
+                                                                trace = trace,
+                                                                test = test,
+                                                                method = se_method,
+                                                                type = type,
+                                                                warn = FALSE,
+                                                                boot_type = boot_type,
+                                                                transform_b = transform_b))
+            tmp2[, c("CI.Lower", "CI.Upper")] <- out_ci_t
+          }
+        out$coefficients_transformed <- tmp2
+      } else {
+        out$coefficients_transformed <- NULL
       }
     out
   }
@@ -1635,6 +1722,13 @@ print.summary.glm_betaselect <- function(x,
     NextMethod(digits = est_digits,
                eps.Pvalue = pvalue_less_than,
                dig.tst = z_digits)
+
+    if (!is.null(x$coefficients_transformed)) {
+      coef_transformed <- x$coefficients_transformed
+        coef_transformed <- round(coef_transformed, est_digits)
+        cat("Transformed Parameter Estimates:\n")
+        print(coef_transformed)
+      }
 
     cat("\n")
 

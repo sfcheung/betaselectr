@@ -56,8 +56,9 @@ test_that("coef", {
   })
 
 test_that("vcov", {
-    expect_warning(expect_warning(vcov(lm_beta_x), "changed"),
-                   "should not")
+    # Warning removed
+    # expect_warning(expect_warning(vcov(lm_beta_x), "changed"),
+    #                "should not")
     expect_warning(vcov(lm_beta_x, method = "ls"))
     expect_equal(vcov(lm_beta_xyw_boot, method = "boot"),
                  vcov(lm_beta_xyw_boot))
@@ -70,8 +71,9 @@ test_that("vcov", {
 
 
 test_that("confint", {
-    expect_warning(expect_warning(confint(lm_beta_x), "changed"),
-                   "should not")
+    # Warning removed
+    # expect_warning(expect_warning(confint(lm_beta_x), "changed"),
+    #                "should not")
     expect_warning(confint(lm_beta_x, method = "ls"))
     expect_equal(confint(lm_beta_xyw_boot, method = "boot", level = .80,
                          parm = c("(Intercept)", "cat1gp2")),
@@ -99,8 +101,9 @@ test_that("anova", {
 test_that("summary", {
     lm_beta_x_lm <- lm_beta_x
     class(lm_beta_x_lm) <- "lm"
-    expect_warning(summary(lm_beta_x),
-                   "changed")
+    # Warning removed.
+    # expect_warning(summary(lm_beta_x),
+    #                "changed")
     expect_equal(summary(lm_beta_x, type = "raw", se_method = "lm", ci = FALSE)$coefficients,
                  summary(lm_raw)$coefficients)
     expect_equal(summary(lm_beta_x, type = "beta", se_method = "lm", ci = FALSE)$coefficients,

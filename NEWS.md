@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.15
+# betaselectr 0.0.1.16
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -82,3 +82,15 @@
   as a convenient way to skip standardizing
   the response variables. (0.0.1.15)
 
+- Added `transform_b` to `summary.glm_betaselect()`
+  for transforming
+  the coefficients and their confidence
+  limits. Intended to compute exponentiated
+  coefficients but can be used for other
+  purposes. (0.0.1.16)
+
+- Removed some warnings in the methods
+  for `lm_betaselect()` and `glm_betaselect()`.
+  Not necessary because the notes in
+  the print method can already alert the
+  users. (0.0.1.16)

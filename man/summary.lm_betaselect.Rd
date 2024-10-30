@@ -58,9 +58,7 @@ was not requested or if this argument
 is set to \code{"t"}, \code{"lm"}, or \code{"ls"},
 then the usual \code{lm}
 standard errors are
-returned, with a warning raised
-unless \code{type} is \code{"raw"} or
-\verb{"unstandardized".}
+returned.
 Default is \code{"boot"}.}
 
 \item{ci}{Logical. Whether

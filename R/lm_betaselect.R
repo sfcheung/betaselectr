@@ -1,4 +1,4 @@
-#' @title Standardize Coefficients in a
+#' @title Betas-Select in a
 #' Regression Model
 #'
 #' @description Can fit a linear regression
@@ -63,7 +63,7 @@
 #' or misleading in these conditions:
 #'
 #' - Dummy variables are standardized
-#' and cannot be interpreted as the
+#' and their coefficients cannot be interpreted as the
 #' difference between two groups on the
 #' outcome variables.
 #'
@@ -226,8 +226,7 @@
 #' which should be the names of the
 #' variables to be standardized.
 #' Default is `NULL`, indicating all
-#' variables are to be standardized
-#' (but see `skip_categorical`).
+#' variables are to be standardized.
 #'
 #' @param not_to_standardize A string
 #' vector, which should be the names
@@ -270,7 +269,7 @@
 #' parallel processing will be used to
 #' do bootstrapping. Default is `FALSE`
 #' because bootstrapping for models fitted
-#' by [lm()] or [glm()] is rarely slow.
+#' by [stats::lm()] or [stats::glm()] is rarely slow.
 #' Actually, if both `parallel` and
 #' `progress` are set to `TRUE`, the
 #' speed may even be slower than serial
@@ -546,7 +545,8 @@ glm_betaselect <- function(...,
 #' object.
 #'
 #' @details This is a helper functions
-#' to be used by [lm_betaselect()]. It
+#' to be used by [lm_betaselect()]
+#' and [glm_betaselect()]. It
 #' assumes that the variables selected
 #' has been checked whether they are
 #' numeric.

@@ -10,7 +10,7 @@
 #'
 #' @return
 #' A numeric vector: The betas-select
-#' in the object. Names of parameters
+#' in the object. The names of parameters
 #' follow the convention in `lavaan`.
 #'
 #' @param object The output of

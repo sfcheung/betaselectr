@@ -11,11 +11,11 @@
 #' selected variables have been
 #' standardized. If requested, it can
 #' also return the regression
-#' coefficients *without*
+#' coefficients *before*
 #' standardization.
 #'
 #' @return
-#' A scalar vector: The estimate of
+#' A numeric vector: The estimate of
 #' regression coefficients.
 #'
 #' @param object The output of
@@ -288,13 +288,11 @@ vcov.glm_betaselect <- vcov.lm_betaselect
 #' was requested, by default it returns
 #' the percentile bootstrap confidence
 #' intervals. Otherwise, it returns the
-#' default confidence intervals
-#' and raises a warning for the
-#' standardized solution.
+#' default confidence intervals.
 #'
 #' Support for other type of
-#' confidence intervals will be
-#' added.
+#' confidence intervals may be
+#' added in the future.
 #'
 #' @return
 #' A *p* by 2 matrix of the confidence

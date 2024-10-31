@@ -1,13 +1,16 @@
-#' @title Confidence Interval for a
+#' @title Confidence Intervals for a
 #' 'lav_betaselect'-Class Object
 #'
 #' @description Return the confidence
 #' intervals of betas-select in the
 #' output of [lav_betaselect()].
 #'
-#' @details Details
-#' (Include subjects for verbs.)
-#' (Use 3rd person forms for verbs.)
+#' @details
+#' The type of
+#' confidence intervals depends
+#' on the call to [lav_betaselect()].
+#' This function does not recompute
+#' the confidence interval.
 #'
 #' @return
 #' A two-column matrix of the confidence

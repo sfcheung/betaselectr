@@ -1,6 +1,6 @@
 #' @title Print a 'lav_betaselect' Object
 #'
-#' @description Print method for an
+#' @description Print method for a
 #' 'lav_betaselect' object, which
 #' is the output of
 #' [lav_betaselect()].
@@ -23,8 +23,9 @@
 #' which is compact but not easy to
 #' read.
 #'
-#' @param x Object of the class
-#' `std_solution_boot`.
+#' @param x A `lav_betaselect`-class
+#' object, such as the output of
+#' [lav_betaselect()].
 #'
 #' @param ... Optional arguments to be
 #' passed to [print()] methods.
@@ -47,10 +48,10 @@
 #' with `output` set to `"data.frame"`.
 #'
 #' @param standardized_only Logical.
-#' If `TRUE`, only the
+#' If `TRUE`, the default, only the
 #' results for the standardized solution
 #' will be printed. If `FALSE`,
-#' the default, then
+#' then
 #' the standardized solution is printed
 #' alongside the unstandardized solution,
 #' as in the printout of the output
@@ -61,21 +62,21 @@
 #' and `output` is `"lavaan.printer"`, then the
 #' column `"Bs.by"` is shown,
 #' indicating, for each parameter, the
-#' variables standardized. Otherwise,
-#' this column is not shown if `output`
+#' variables standardized.
+#' This column is not shown if `output`
 #' is not `"lavaan.printer"`.
 #'
 #' @param by_group If `TRUE`, the
 #' default, and the model has more than
-#' one groups, sections will be grouped
+#' one group, sections will be grouped
 #' by groups first, as in the print
 #' out of `summary()` in `lavaan`.
 #' If `FALSE`, then the sections will
 #' be grouped by sections first.
 #'
 #' @param na_str The string to be used
-#' for cells with `NA``. Default is
-#' `" "``, a white space.
+#' for cells with `NA`. Default is
+#' `" "`, a whitespace.
 #'
 #' @param sig_stars If `TRUE`, the
 #' default, symbols such as asterisks

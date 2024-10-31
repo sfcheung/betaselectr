@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: SEM by 'lavaan'"
-date: "2024-10-06"
+date: "2024-10-31"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -8,6 +8,8 @@ vignette: >
   %\VignetteIndexEntry{Beta-Select Demonstration: SEM by 'lavaan'}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: "references.bib"
+csl: apa.csl
 ---
 
 
@@ -18,7 +20,7 @@ vignette: >
 
 This article demonstrates how to use
 `lav_betaselect()` from the package
-`betaselectr`
+[`betaselectr`](https://sfcheung.github.io/betaselectr/)
 to standardize
 selected variables in a model fitted
 by `lavaan` and forming confidence
@@ -27,7 +29,7 @@ intervals for the parameters.
 # Data and Model
 
 The sample dataset from the package
-`betaselectr` will be used for in this
+`betaselectr` will be used in this
 demonstration:
 
 
@@ -49,6 +51,8 @@ This is the path model, fitted by
 
 ``` r
 library(lavaan)
+#> This is lavaan 0.6-19
+#> lavaan is FREE software! Please report any bugs.
 mod <-
 "
 med ~ iv + mod + iv:mod + cov1 + cov2
@@ -144,14 +148,14 @@ problems:
   standardized. This is inappropriate.
   One simple but underused solution is
   standardized the variables *before*
-  forming the product term (Friedrich, 1982).
+  forming the product term [@friedrich_defense_1982].
 
 - The confidence intervals are formed using
   the delta-method, which has been found
   to be inferior to methods such as
   nonparametric percentile bootstrap
   confidence interval for the standardized
-  solution (Falk, 2018). Although there
+  solution [@falk_are_2018]. Although there
   are situations in which the delta-method
   confidence and the nonparametric
   percentile bootstrap confidences can be
@@ -165,7 +169,7 @@ problems:
   do not need to be standardized. for
   example, if `cov1` is age measured by
   year, then age is more
-  meaningful than the "standardized age".
+  meaningful than "standardized age".
 
 - In path analysis, categorical variables
   are usually represented by dummy variables,
@@ -178,18 +182,18 @@ problems:
 The function `lav_betaselect()` can be used
 to solve this problem by:
 
-- Standardizing variables before product
-  terms are formed.
+- standardizing variables before product
+  terms are formed,
 
-- Standardizing only variables for which
+- standardizing only variables for which
   standardization can facilitate
-  interpretation.
+  interpretation, and
 
-- Forming confidence intervals that take
+- forming confidence intervals that take
   into account selected standardization.
 
 We call the coefficients computed by
-this kind of standardization *beta*s-Select
+this kind of standardization *beta*s-select
 ($\beta{s}_{Select}$, $\beta_{Select}$
 in singular form),
 to differentiate them from coefficients
@@ -261,9 +265,9 @@ term standardized, the coefficient of
 `iv:mod` changed substantially from
 3.588 to
 0.286. As shown by
-Cheung et al. (2022), the coefficient
+@cheung_improving_2022, the coefficient
 of *standardized* product term (`iv:mod`)
-can be severely biased estimate of the
+can be substantially different from the
 properly standardized product term
 (the product of standardized `iv` and
 standardized `mod`).
@@ -277,10 +281,16 @@ are formed *after* standardization.
 
 Suppose we want to address
 both the first and the second problems,
-with the product
-term computed after `iv` and `mod`
-standardized and bootstrap confidence
-interval used, we can call `lav_betaselect()`
+with
+
+- the product term computed after `iv` and `mod`
+  standardized, and
+
+- bootstrap confidence intervals used, that
+  take into account the sampling variation
+  of the standardizers (the standard deviations).
+
+We can call `lav_betaselect()`
 again, with additional arguments
 set:
 
@@ -396,14 +406,14 @@ done using either `to_standardize`
 or `not_to_standardize`.
 
 - Use `to_standardize` when
-the variables to standardize
-is much fewer than the variables
+the number of variables to standardize
+is much fewer than the number of variables
 not to standardize.
 
 - Use `not_to_standardize`
-when the variables to standardize
+when the number variables to standardize
 is much more than the
-variables not to standardize.
+the number of variables not to standardize.
 
 For example, suppose we only
 need to standardize `dv` and
@@ -441,7 +451,7 @@ fit_beta_select_2 <- lav_betaselect(fit,
 ```
 
 The results of these calls are identical,
-and only those of the first version are
+and only those of the second version are
 printed:
 
 
@@ -491,14 +501,14 @@ fit_beta_select_2
 #>   them. The product term(s) is/are not standardized.
 ```
 
-The footnotes confirmed that, by
+The footnotes show that, by
 specifying that `dv` and `mod` are not
 standardized, all the other four variables
 are standardized: `iv`, `med`, `cov1`, and `cov2`.
 Therefore, in this case, it is more
 convenient to use `not_to_standardize`.
 
-For *beta*s-*select*, researchers need
+When reporting *beta*s-*select*, researchers need
 to state which variables
 are standardized and which are not.
 This can be done in table notes,
@@ -567,7 +577,7 @@ before forming product terms. We are
 not aware of tools that can do appropriate
 standardization *and* form confidence
 intervals that takes into account the
-selective Standardization. By promoting
+selective standardization. By promoting
 the use of *beta*s-*select* using
 `lav_betaselect()`, we hope to make it
 easier for researchers to do appropriate
@@ -575,11 +585,3 @@ Standardization in when reporting SEM
 results.
 
 # References
-
-Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N. (2022). Improving an old way to measure moderation effect in standardized units. *Health Psychology, 41*(7), 502--505. https://doi.org/10.1037/hea0001188
-
-Falk, C. F. (2018). Are robust standard errors the best approach for interval estimation with nonnormal data in structural equation modeling? *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2), 244--266. https://doi.org/10.1080/10705511.2017.1367254
-
-Friedrich, R. J. (1982). In defense of multiplicative terms in multiple regression equations. *American Journal of Political Science, 26*(4), 797--833. https://doi.org/10.2307/2110973
-
-

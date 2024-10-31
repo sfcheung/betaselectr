@@ -45,7 +45,7 @@ Default is \code{"beta"}.}
 \item{...}{Other arguments. Ignored.}
 }
 \value{
-A scalar vector: The estimate of
+A numeric vector: The estimate of
 regression coefficients.
 }
 \description{
@@ -60,7 +60,7 @@ regression coefficients \emph{after} the
 selected variables have been
 standardized. If requested, it can
 also return the regression
-coefficients \emph{without}
+coefficients \emph{before}
 standardization.
 }
 \examples{

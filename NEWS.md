@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.17
+# betaselectr 0.0.1.18
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -97,3 +97,6 @@
 
 - Updated the vignettes and the `pkgdown`
   site. (0.0.1.17)
+
+- Proofread the documentation and
+  update meta-data. (0.0.1.18)

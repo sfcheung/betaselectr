@@ -18,8 +18,9 @@
 )
 }
 \arguments{
-\item{x}{Object of the class
-\code{std_solution_boot}.}
+\item{x}{A \code{lav_betaselect}-class
+object, such as the output of
+\code{\link[=lav_betaselect]{lav_betaselect()}}.}
 
 \item{...}{Optional arguments to be
 passed to \code{\link[=print]{print()}} methods.}
@@ -42,10 +43,10 @@ format similar to that of
 with \code{output} set to \code{"data.frame"}.}
 
 \item{standardized_only}{Logical.
-If \code{TRUE}, only the
+If \code{TRUE}, the default, only the
 results for the standardized solution
 will be printed. If \code{FALSE},
-the default, then
+then
 the standardized solution is printed
 alongside the unstandardized solution,
 as in the printout of the output
@@ -56,20 +57,21 @@ object.}
 and \code{output} is \code{"lavaan.printer"}, then the
 column \code{"Bs.by"} is shown,
 indicating, for each parameter, the
-variables standardized. Otherwise,
-this column is not shown if \code{output}
+variables standardized.
+This column is not shown if \code{output}
 is not \code{"lavaan.printer"}.}
 
 \item{by_group}{If \code{TRUE}, the
 default, and the model has more than
-one groups, sections will be grouped
+one group, sections will be grouped
 by groups first, as in the print
 out of \code{summary()} in \code{lavaan}.
 If \code{FALSE}, then the sections will
 be grouped by sections first.}
 
 \item{na_str}{The string to be used
-for cells with \verb{NA``. Default is }" "``, a white space.}
+for cells with \code{NA}. Default is
+\code{" "}, a whitespace.}
 
 \item{sig_stars}{If \code{TRUE}, the
 default, symbols such as asterisks
@@ -86,7 +88,7 @@ on its confidence interval.}
 \code{x} is returned invisibly. Called for its side effect.
 }
 \description{
-Print method for an
+Print method for a
 'lav_betaselect' object, which
 is the output of
 \code{\link[=lav_betaselect]{lav_betaselect()}}.

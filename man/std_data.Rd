@@ -25,7 +25,8 @@ object.
 }
 \details{
 This is a helper functions
-to be used by \code{\link[=lm_betaselect]{lm_betaselect()}}. It
+to be used by \code{\link[=lm_betaselect]{lm_betaselect()}}
+and \code{\link[=glm_betaselect]{glm_betaselect()}}. It
 assumes that the variables selected
 has been checked whether they are
 numeric.

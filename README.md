@@ -14,11 +14,13 @@ Not ready for use.
 
 (Version 0.0.1.17, updated on 2024-10-30, [release history](https://sfcheung.github.io/betaselectr/news/index.html))
 
-It computes Beta_Select, standardization
-in structural equation models with only
+It computes *beta*-select, standardization
+in structural equation models and
+regression models with only
 selected variables standardized. It
-supports models with moderation, as well
-as regression models. It can form
+supports models with moderation, with
+product terms formed appropriately
+(formed *after* standardization). It can also form
 confidence intervals that takes into
 account the standardization
 appropriately.
@@ -38,3 +40,5 @@ work-in-progress. Not ready for use.
 If you have any suggestions and found
 any bugs, please feel feel to open a
 GitHub issue. Thanks.
+
+https://github.com/sfcheung/betaselectr/issues

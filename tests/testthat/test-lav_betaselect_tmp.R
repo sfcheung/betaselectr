@@ -1,4 +1,4 @@
-skip("WIP")
+skip("Not used")
 
 #Load a test data of 500 cases
 data(test_modmed)

@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.18
+# betaselectr 0.0.1.19
 
 - Added `lm_betaselect()` and related
   methods and helper functions.
@@ -100,3 +100,5 @@
 
 - Proofread the documentation and
   update meta-data. (0.0.1.18)
+
+- Enabled more tests. (0.0.1.19)

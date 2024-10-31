@@ -40,7 +40,7 @@
 #' printed in a format similar to
 #' the printout of the output of
 #' the `summary`-method of a
-#' `lavaan-class` object.
+#' 'lavaan'-class object.
 #' If set to `"table"`, the results are
 #' printed in a table
 #' format similar to that of
@@ -55,7 +55,7 @@
 #' the standardized solution is printed
 #' alongside the unstandardized solution,
 #' as in the printout of the output
-#' of [summary()] of a [lavaan-class]
+#' of [summary()] of a 'lavaan'-class
 #' object.
 #'
 #' @param show_Bs.by Logical. If `TRUE`

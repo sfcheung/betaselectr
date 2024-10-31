@@ -22,10 +22,10 @@ Authors@R:
 Description: It computes betas-select, standardization in
   structural equation models and regression models with only
   selected variables standardized. It supports models with
-  moderation, with product terms formed after standardiztion.
+  moderation, with product terms formed after standardization.
   It can also form confidence intervals that takes into account
   the standardization appropriately, such as bootstrap
-  confidendce intervals proposed by Cheung, Cheung, Lau, Hui,
+  confidence intervals proposed by Cheung, Cheung, Lau, Hui,
   and Vong (2022) <doi:10.1037/hea0001188>.
 License: GPL (>= 3)
 Encoding: UTF-8

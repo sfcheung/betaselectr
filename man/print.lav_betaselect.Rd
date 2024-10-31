@@ -35,7 +35,7 @@ and the results will be
 printed in a format similar to
 the printout of the output of
 the \code{summary}-method of a
-\code{lavaan-class} object.
+'lavaan'-class object.
 If set to \code{"table"}, the results are
 printed in a table
 format similar to that of
@@ -50,7 +50,7 @@ then
 the standardized solution is printed
 alongside the unstandardized solution,
 as in the printout of the output
-of \code{\link[=summary]{summary()}} of a \linkS4class{lavaan}
+of \code{\link[=summary]{summary()}} of a 'lavaan'-class
 object.}
 
 \item{show_Bs.by}{Logical. If \code{TRUE}

@@ -56,13 +56,17 @@ reference:
   #   Section description.
 - contents:
   - std_data
-- title: Methods
+- title: Methods for lav_betaselect()
   # desc:  >
   #   Section description.
 - contents:
   - print.lav_betaselect
   - coef.lav_betaselect
   - confint.lav_betaselect
+- title: Methods for lm_betaselect() and glm_betaselect()
+  # desc:  >
+  #   Section description.
+- contents:
   - anova.lm_betaselect
   - coef.lm_betaselect
   - confint.lm_betaselect

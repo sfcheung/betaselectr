@@ -102,3 +102,5 @@
   update meta-data. (0.0.1.18)
 
 - Enabled more tests. (0.0.1.19)
+
+- Prepare for CRAN. (0.0.2.0)

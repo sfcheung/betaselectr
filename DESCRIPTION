@@ -1,6 +1,6 @@
 Package: betaselectr
 Title: Betas-Select in Structural Equation Models and Linear Models
-Version: 0.0.1.19
+Version: 0.0.2.0
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",
@@ -15,6 +15,10 @@ Authors@R:
              family = "Chang",
              role = c("aut"),
              comment = c(ORCID = "0009-0003-9931-501X")),
+      person(given = "Wendie",
+             family ="Yang",
+             role = c("ctb"),
+             comment = c(ORCID = "0009-0000-8388-6481")),
       person(given = "Sing-Hang",
              family = "Cheung",
              role = c("aut"),

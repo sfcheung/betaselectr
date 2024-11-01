@@ -17,7 +17,7 @@ Authors@R:
              comment = c(ORCID = "0009-0003-9931-501X")),
       person(given = "Wendie",
              family ="Yang",
-             role = c("ctb"),
+             role = c("aut"),
              comment = c(ORCID = "0009-0000-8388-6481")),
       person(given = "Sing-Hang",
              family = "Cheung",

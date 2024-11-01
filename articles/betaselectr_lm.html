@@ -8,7 +8,7 @@
 <title>Beta-Select Demonstration: Regression by `lm()` • betaselectr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/PT_Serif-0.4.9/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 
       <h1>Beta-Select Demonstration: Regression by `lm()`</h1>
             
-            <h4 data-toc-skip class="date">2024-10-30</h4>
+            <h4 data-toc-skip class="date">2024-10-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lm.Rmd" class="external-link"><code>vignettes/betaselectr_lm.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lm.Rmd</code></div>
@@ -80,9 +80,9 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This article demonstrates how to use <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>
-from the package <code>betaselectr</code> to standardize selected
-variables in a model fitted by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> and forming confidence
-intervals for the parameters.</p>
+from the package <a href="https://sfcheung.github.io/betaselectr/"><code>betaselectr</code></a>
+to standardize selected variables in a model fitted by <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>
+and forming confidence intervals for the parameters.</p>
 </div>
 <div class="section level2">
 <h2 id="data-and-model">Data and Model<a class="anchor" aria-label="anchor" href="#data-and-model"></a>
@@ -201,25 +201,29 @@ variables:</p>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>However, for this model, there are several problems:</p>
 <ul>
-<li><p>The product term, <code>iv:mod</code>, is also standardized. This
-is inappropriate. One simple but underused solution is standardizing the
-variables <em>before</em> forming the product term <span class="citation">(Friedrich, 1982)</span>.</p></li>
-<li><p>The confidence intervals are formed using the ordinary least
-squares (OLS), which does not take into account the sampling variation
-of the standardizers (the sample standard deviations used in
-standardization) and so the standard errors may be biased <span class="citation">(Yuan &amp; Chan, 2011)</span>. Although there are
-situations in which the OLS confidence and the nonparametric percentile
-bootstrap confidences can be similar (e.g., sample size is large and the
-population values are not extreme), it is recommended to use bootstrap
-confidence intervals when computation cost is low <span class="citation">(Jones &amp; Waller, 2013)</span>.</p></li>
+<li><p>The product term is also standardized (<code>iv_x_mod</code>,
+computed using the standard deviations of <code>dv</code> and
+<code>iv:mod</code>). This is inappropriate <span class="citation">(Hayes, 2022)</span>. One simple but underused solution
+is standardizing the variables <em>before</em> forming the product term
+<span class="citation">(Friedrich, 1982)</span>.</p></li>
+<li><p>The confidence intervals are formed using ordinary least squares
+(OLS), which does not take into account the sampling variation of the
+standardizers (the sample standard deviations used in standardization)
+and so the standard errors may be biased <span class="citation">(Yuan
+&amp; Chan, 2011)</span>. Although there are situations in which the OLS
+confidence and the nonparametric percentile bootstrap confidences can be
+similar (e.g., sample size is large and the population values are not
+extreme), it is recommended to use bootstrap confidence intervals when
+computation cost is low <span class="citation">(Jones &amp; Waller,
+2013)</span>.</p></li>
 <li><p>There are cases in which some variabLes are measured by
 meaningful units and do not need to be standardized. for example, if
 <code>cov1</code> is age measured by year, then age is more meaningful
 than “standardized age”.</p></li>
 <li><p>In regression models, categorical variables are usually
 represented by dummy variables, each of them having only two possible
-values (0 or 1). It is not meaningful to standardize the dummy
-variables.</p></li>
+values (0 or 1). It is not meaningful to standardize the dummy variables
+<span class="citation">(Darlington &amp; Hayes, 2016)</span>.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -235,7 +239,7 @@ facilitate interpretation, and</p></li>
 selected standardization.</p></li>
 </ul>
 <p>We call the coefficients computed by this kind of standardization
-<em>beta</em>s-Select (<span class="math inline">\(\beta{s}_{Select}\)</span>, <span class="math inline">\(\beta_{Select}\)</span> in singular form), to
+<em>beta</em>s-select (<span class="math inline">\(\beta{s}_{Select}\)</span>, <span class="math inline">\(\beta_{Select}\)</span> in singular form), to
 differentiate them from coefficients computed by standardizing all
 variables, including product terms.</p>
 <div class="section level3">
@@ -246,9 +250,9 @@ numeric variables, with the product term computed after <code>iv</code>,
 <code>mod</code>, and <code>dv</code> are standardized.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm_beta_select</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">lm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
-<span>                               data <span class="op">=</span> <span class="va">data_test_mod_cat2</span>,</span>
-<span>                               do_boot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>The function <code>lm_beta_iv_mod()</code> can be used as
+<span>                                data <span class="op">=</span> <span class="va">data_test_mod_cat2</span>,</span>
+<span>                                do_boot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p>The function <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> can be used as
 <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>, with applicable arguments such as the model formula
 and <code>data</code> passed to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>.</p>
 <p>By default, <em>all</em> numeric variables will be standardized
@@ -257,9 +261,9 @@ before fitting the models. Terms such as product terms are created
 <p>Moreover, categorical variables (factors and string variables) will
 not be standardized.</p>
 <p>Bootstrapping is done by default. In this illustration,
-<code>do_boot = FALSE</code> is added to disabled it because we only
-want to address the first problem. We will do bootstrapping when
-addressing the issue with confidence intervals.</p>
+<code>do_boot = FALSE</code> is added to disable it because we only want
+to address the first problem. We will do bootstrapping when addressing
+the issue with confidence intervals.</p>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method can be used ont the output of
 <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -309,7 +313,7 @@ addressing the issue with confidence intervals.</p>
 coefficient of <code>iv:mod</code> changed substantially from 2.440 to
 0.145. As shown by <span class="citation">Cheung et al. (2022)</span>,
 the coefficient of <em>standardized</em> product term
-(<code>iv:mod</code>) can be a severely biased estimate of the properly
+(<code>iv:mod</code>) can be substantially different from the properly
 standardized product term (the product of standardized <code>iv</code>
 and standardized <code>mod</code>).</p>
 </div>
@@ -317,9 +321,13 @@ and standardized <code>mod</code>).</p>
 <h3 id="estimates-and-bootstrap-confidence-interval">Estimates and Bootstrap Confidence Interval<a class="anchor" aria-label="anchor" href="#estimates-and-bootstrap-confidence-interval"></a>
 </h3>
 <p>Suppose we want to address both the first and the second problems,
-with the product term computed after <code>iv</code>, <code>mod</code>,
-and <code>dv</code> are standardized and bootstrap confidence interval
-used, we can call <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> again, with additional
+with</p>
+<ul>
+<li><p>the product term computed after <code>iv</code>,
+<code>mod</code>, and <code>dv</code> are standardized, and</p></li>
+<li><p>bootstrap confidence interval used.</p></li>
+</ul>
+<p>We can call <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> again, with additional
 arguments set:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm_beta_select_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">lm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
@@ -331,7 +339,7 @@ arguments set:</p>
 <li><p><code>bootstrap</code>: The number of bootstrap samples to draw.
 Default is 100. It should be set to 5000 or even 10000.</p></li>
 <li><p><code>iseed</code>: The seed for the random number generator used
-for bootstrapping. Set this to an integer to make the results
+in bootstrapping. Set this to an integer to make the results
 reproducible.</p></li>
 </ul>
 <p>This is the output of <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code></p>
@@ -380,7 +388,7 @@ reproducible.</p></li>
 <span><span class="co">#&gt; - Percentile bootstrap 95.0% confidence interval reported.</span></span></code></pre></div>
 <p>By default, 95% percentile bootstrap confidence intervals are printed
 (<code>CI.Lower</code> and <code>CI.Upper</code>). The <em>p</em>-values
-(<code>Pr(Boot)</code>) are asymmetric bootstrap <em>p</em>-values.</p>
+(<code>Pr(Boot)</code>) are asymmetric bootstrap <em>p</em>-values <span class="citation">(Asparouhov &amp; Muthén, 2021)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="estimates-and-bootstrap-confidence-intervals-with-only-selected-variables-standardized">Estimates and Bootstrap Confidence Intervals, With Only Selected
@@ -390,10 +398,12 @@ Variables Standardized<a class="anchor" aria-label="anchor" href="#estimates-and
 only some of the variables. This can be done using either
 <code>to_standardize</code> or <code>not_to_standardize</code>.</p>
 <ul>
-<li><p>Use <code>to_standardize</code> when the variables to standardize
-is much fewer than the variables not to standardize.</p></li>
-<li><p>Use <code>not_to_standardize</code> when the variables to
-standardize is much more than the variables not to standardize.</p></li>
+<li><p>Use <code>to_standardize</code> when the number of variables to
+standardize is much fewer than number of the variables not to
+standardize.</p></li>
+<li><p>Use <code>not_to_standardize</code> when the number of variables
+to standardize is much more than the number of variables not to
+standardize.</p></li>
 </ul>
 <p>For example, suppose we only need to standardize <code>dv</code> and
 <code>iv</code>, this is the call to do this, setting
@@ -467,9 +477,7 @@ notes.</p>
 <h3 id="categorical-variables">Categorical Variables<a class="anchor" aria-label="anchor" href="#categorical-variables"></a>
 </h3>
 <p>When calling <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code>, categorical variables
-(factors and string variables) will not be standardized by default. This
-can be overriden by setting <code>skip_categorical_x</code> to
-<code>FALSE</code>, though not recommended.</p>
+(factors and string variables) will never be standardized.</p>
 <p>In the example above, the coefficients of the two dummy variables
 when both the dummy variables and the outcome variables are standardized
 are 0.116 and 0.175:</p>
@@ -486,7 +494,7 @@ are 0.116 and 0.175:</p>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>These two values are not interpretable because it does not make sense
-to talk about a one-SD change in the dummy variables.</p>
+to talk about a “one-SD change” in the dummy variables.</p>
 <p>The <em>beta</em>s-<em>Select</em> of the dummy variables, with only
 the outcome variable standardized, are 0.241 and 0.349.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -525,16 +533,30 @@ when reporting regression results.</p>
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-asparouhov_bootstrap_2021" class="csl-entry">
+Asparouhov, T., &amp; Muthén, B. O. (2021). <em>Bootstrap
+<em>p</em>-value computation</em>. <a href="https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf" class="external-link">https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf</a>
+</div>
 <div id="ref-cheung_improving_2022" class="csl-entry">
 Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., &amp; Vong, W.
 N. (2022). Improving an old way to measure moderation effect in
 standardized units. <em>Health Psychology</em>, <em>41</em>(7), 502–505.
 <a href="https://doi.org/10.1037/hea0001188" class="external-link">https://doi.org/10.1037/hea0001188</a>
 </div>
+<div id="ref-darlington_regression_2016" class="csl-entry">
+Darlington, R. B., &amp; Hayes, A. F. (2016). <em>Regression analysis
+and linear models: <span>Concepts</span>, applications, and
+implementation</em> (Illustrated edition). The Guilford Press.
+</div>
 <div id="ref-friedrich_defense_1982" class="csl-entry">
 Friedrich, R. J. (1982). In defense of multiplicative terms in multiple
 regression equations. <em>American Journal of Political Science</em>,
 <em>26</em>(4), 797–833. <a href="https://doi.org/10.2307/2110973" class="external-link">https://doi.org/10.2307/2110973</a>
+</div>
+<div id="ref-hayes_introduction_2022" class="csl-entry">
+Hayes, A. F. (2022). <em>Introduction to mediation, moderation, and
+conditional process analysis: <span>A</span> regression-based
+approach</em> (Third edition). The Guilford Press.
 </div>
 <div id="ref-jones_computing_2013" class="csl-entry">
 Jones, J. A., &amp; Waller, N. G. (2013). Computing confidence intervals
@@ -555,7 +577,7 @@ standardized regression coefficients. <em>Psychometrika</em>,
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Shu Fai Cheung.</p>
+  <p>Developed by Shu Fai Cheung, Rong Wei Sun, Florbela Chang, Sing-Hang Cheung.</p>
 </div>
 
 <div class="pkgdown-footer-right">

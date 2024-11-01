@@ -8,7 +8,7 @@
 <title>Beta-Select Demonstration: Logistic Regression by `glm()` • betaselectr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/PT_Serif-0.4.9/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 
       <h1>Beta-Select Demonstration: Logistic Regression by `glm()`</h1>
             
-            <h4 data-toc-skip class="date">2024-10-30</h4>
+            <h4 data-toc-skip class="date">2024-10-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_glm.Rmd" class="external-link"><code>vignettes/betaselectr_glm.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_glm.Rmd</code></div>
@@ -80,9 +80,10 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This article demonstrates how to use <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>
-from the package <code>betaselectr</code> to standardize selected
-variables in a model fitted by <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> and forming confidence
-intervals for the parameters.</p>
+from the package <a href="https://sfcheung.github.io/betaselectr/"><code>betaselectr</code></a>
+to standardize selected variables in a model fitted by
+<code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> and forming confidence intervals for the parameters.
+Logistic regression is used in this illustration.</p>
 </div>
 <div class="section level2">
 <h2 id="data-and-model">Data and Model<a class="anchor" aria-label="anchor" href="#data-and-model"></a>
@@ -99,7 +100,8 @@ used for in this demonstration:</p>
 <span><span class="co">#&gt; 4  0 16.16 48.25 16.28  gp3</span></span>
 <span><span class="co">#&gt; 5  0  9.61 42.95 15.89  gp1</span></span>
 <span><span class="co">#&gt; 6  0 13.14 48.65 21.03  gp3</span></span></code></pre></div>
-<p>This is the regression model, fitted by <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>:</p>
+<p>This is the logistic regression model, fitted by
+<code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span> <span class="op">*</span> <span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>               data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
@@ -140,9 +142,10 @@ variable with three groups: <code>gp1</code>, <code>gp2</code>,
 <div class="section level2">
 <h2 id="problems-with-standardization">Problems With Standardization<a class="anchor" aria-label="anchor" href="#problems-with-standardization"></a>
 </h2>
-<p>In logistic regression, there are several ways to do standardization.
-We use the same approach in linear regression and standardize all
-variables, except for the binary response variable.</p>
+<p>In logistic regression, there are several ways to do standardization
+<span class="citation">(Menard, 2004)</span>. We use the same approach
+in linear regression and standardize all variables, except for the
+binary response variable.</p>
 <p>First, all variables in the model, including the product term and
 dummy variables, are computed:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -199,14 +202,15 @@ variables:</p>
 <p>However, for this model, there are several problems:</p>
 <ul>
 <li><p>The product term, <code>iv:mod</code>, is also standardized
-(<code>iv_x_mod</code> in this model). This is inappropriate. One simple
-but underused solution is standardizing the variables <em>before</em>
-forming the product term <span class="citation">(see Friedrich, 1982 on
-the case of linear regression)</span>.</p></li>
-<li><p>The confidence intervals are formed using profiling in
+(<code>iv_x_mod</code>, computed using the standard deviations of
+<code>dv</code> and <code>iv:mod</code>). This is inappropriate. One
+simple but underused solution is standardizing the variables
+<em>before</em> forming the product term <span class="citation">(see
+Friedrich, 1982 on the case of linear regression)</span>.</p></li>
+<li><p>The default confidence intervals are formed using profiling in
 <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>. It does allow for asymmetry. However, it does not
 take into account the sampling variation of the standardizers (the
-sample standard deviations used in standardization). It is not clear
+sample standard deviations used in standardization). It is unclear
 whether it will be biased, as in the case of OLS standard error <span class="citation">(Yuan &amp; Chan, 2011)</span>.</p></li>
 <li><p>There are cases in which some variabLes are measured by
 meaningful units and do not need to be standardized. for example, if
@@ -231,7 +235,7 @@ facilitate interpretation, and</p></li>
 selected standardization.</p></li>
 </ul>
 <p>We call the coefficients computed by this kind of standardization
-<em>beta</em>s-Select (<span class="math inline">\(\beta{s}_{Select}\)</span>, <span class="math inline">\(\beta_{Select}\)</span> in singular form), to
+<em>beta</em>s-select (<span class="math inline">\(\beta{s}_{Select}\)</span>, <span class="math inline">\(\beta_{Select}\)</span> in singular form), to
 differentiate them from coefficients computed by standardizing all
 variables, including product terms.</p>
 <div class="section level3">
@@ -262,9 +266,9 @@ need to be 0 or 1 only. Therefore, <code>skip_response</code> is set to
 <p>Moreover, categorical variables (factors and string variables) will
 not be standardized.</p>
 <p>Bootstrapping is done by default. In this illustration,
-<code>do_boot = FALSE</code> is added to disabled it because we only
-want to address the first problem. We will do bootstrapping when
-addressing the issue with confidence intervals.</p>
+<code>do_boot = FALSE</code> is added to disable it because we only want
+to address the first problem. We will do bootstrapping when addressing
+the issue with confidence intervals.</p>
 <p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method can be used ont the output of
 <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -324,17 +328,22 @@ addressing the issue with confidence intervals.</p>
 <p>Compared to the solution with the product term standardized, the
 coefficient of <code>iv:mod</code> changed substantially from 5.413 to
 0.335. Similar to the case of linear regression <span class="citation">(Cheung et al., 2022)</span>, the coefficient of
-<em>standardized</em> product term (<code>iv:mod</code>) can be very
-different from the properly standardized product term (the product of
-standardized <code>iv</code> and standardized <code>mod</code>).</p>
+<em>standardized</em> product term (<code>iv:mod</code>) can be
+substantially different from the properly standardized product term (the
+product of standardized <code>iv</code> and standardized
+<code>mod</code>).</p>
 </div>
 <div class="section level3">
 <h3 id="estimates-and-bootstrap-confidence-interval">Estimates and Bootstrap Confidence Interval<a class="anchor" aria-label="anchor" href="#estimates-and-bootstrap-confidence-interval"></a>
 </h3>
 <p>Suppose we want to address both the first and the second problems,
-with the product term computed after <code>iv</code> and
-<code>mod</code> are standardized and bootstrap confidence interval
-used, we can call <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code> again, with additional
+with</p>
+<ul>
+<li><p>the product term computed after <code>iv</code> and
+<code>mod</code> are standardized, and</p></li>
+<li><p>bootstrap confidence interval used.</p></li>
+</ul>
+<p>We can call <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code> again, with additional
 arguments set:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
@@ -407,7 +416,7 @@ reproducible.</p></li>
 <span><span class="co">#&gt; - Percentile bootstrap 95.0% confidence interval reported.</span></span></code></pre></div>
 <p>By default, 95% percentile bootstrap confidence intervals are printed
 (<code>CI.Lower</code> and <code>CI.Upper</code>). The <em>p</em>-values
-(<code>Pr(Boot)</code>) are asymmetric bootstrap <em>p</em>-values.</p>
+(<code>Pr(Boot)</code>) are asymmetric bootstrap <em>p</em>-values <span class="citation">(Asparouhov &amp; Muthén, 2021)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="estimates-and-bootstrap-confidence-intervals-with-only-selected-variables-standardized">Estimates and Bootstrap Confidence Intervals, With Only Selected
@@ -417,10 +426,12 @@ Variables Standardized<a class="anchor" aria-label="anchor" href="#estimates-and
 only some of the variables. This can be done using either
 <code>to_standardize</code> or <code>not_to_standardize</code>.</p>
 <ul>
-<li><p>Use <code>to_standardize</code> when the variables to standardize
-is much fewer than the variables not to standardize.</p></li>
-<li><p>Use <code>not_to_standardize</code> when the variables to
-standardize is much more than the variables not to standardize.</p></li>
+<li><p>Use <code>to_standardize</code> when the number of variables to
+standardize is much fewer than number of the variables not to
+standardize</p></li>
+<li><p>Use <code>not_to_standardize</code> when the number of variables
+to standardize is much more than the number of variables not to
+standardize.</p></li>
 </ul>
 <p>For example, suppose we only need to standardize <code>iv</code> and
 <code>cov1</code>, this is the call to do this, setting
@@ -433,13 +444,14 @@ standardize is much more than the variables not to standardize.</p></li>
 <span>                                         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                         bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
 <span>                                         iseed <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span></span></code></pre></div>
-<p>If we want to standardize all variables except for <code>dv</code>,
-<code>mod</code>, we can use this call, and set
-<code>not_to_standardize</code> to <code>c("dv", "mod")</code>:</p>
+<p>If we want to standardize all variables except for <code>mod</code>
+(<code>dv</code> is skipped by <code>skip_response</code>) we can use
+this call, and set <code>not_to_standardize</code> to
+<code>"mod"</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">glm_beta_select_boot_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lm_betaselect.html">glm_betaselect</a></span><span class="op">(</span><span class="va">dv</span> <span class="op">~</span> <span class="va">iv</span><span class="op">*</span><span class="va">mod</span> <span class="op">+</span> <span class="va">cov1</span> <span class="op">+</span> <span class="va">cat1</span>,</span>
 <span>                                         data <span class="op">=</span> <span class="va">data_test_mod_cat_binary</span>,</span>
-<span>                                         not_to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dv"</span>, <span class="st">"mod"</span><span class="op">)</span>,</span>
+<span>                                         not_to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod"</span><span class="op">)</span>,</span>
 <span>                                         skip_response <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                         family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                                         bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
@@ -508,9 +520,7 @@ notes.</p>
 <h3 id="categorical-variables">Categorical Variables<a class="anchor" aria-label="anchor" href="#categorical-variables"></a>
 </h3>
 <p>When calling <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>, categorical variables
-(factors and string variables) will not be standardized by default. This
-can be overriden by setting <code>skip_categorical_x</code> to
-<code>FALSE</code>, though not recommended.</p>
+(factors and string variables) will never be standardized.</p>
 <p>In the example above, the coefficients of the two dummy variables
 when both the dummy variables and the outcome variables are standardized
 are 0.416 and 0.642:</p>
@@ -527,7 +537,7 @@ are 0.416 and 0.642:</p>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 <p>These two values are not interpretable because it does not make sense
-to talk about a one-SD change in the dummy variables.</p>
+to talk about a “one-SD change” in the dummy variables.</p>
 </div>
 </div>
 <div class="section level2">
@@ -547,6 +557,10 @@ modeling results.</p>
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-asparouhov_bootstrap_2021" class="csl-entry">
+Asparouhov, T., &amp; Muthén, B. O. (2021). <em>Bootstrap
+<em>p</em>-value computation</em>. <a href="https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf" class="external-link">https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf</a>
+</div>
 <div id="ref-cheung_improving_2022" class="csl-entry">
 Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., &amp; Vong, W.
 N. (2022). Improving an old way to measure moderation effect in
@@ -557,6 +571,11 @@ standardized units. <em>Health Psychology</em>, <em>41</em>(7), 502–505.
 Friedrich, R. J. (1982). In defense of multiplicative terms in multiple
 regression equations. <em>American Journal of Political Science</em>,
 <em>26</em>(4), 797–833. <a href="https://doi.org/10.2307/2110973" class="external-link">https://doi.org/10.2307/2110973</a>
+</div>
+<div id="ref-menard_six_2004" class="csl-entry">
+Menard, S. (2004). Six approaches to calculating standardized logistic
+regression coefficients. <em>The American Statistician</em>,
+<em>58</em>(3), 218–223. <a href="https://doi.org/10.1198/000313004X946" class="external-link">https://doi.org/10.1198/000313004X946</a>
 </div>
 <div id="ref-yuan_biases_2011" class="csl-entry">
 Yuan, K.-H., &amp; Chan, W. (2011). Biases and standard errors of
@@ -572,7 +591,7 @@ standardized regression coefficients. <em>Psychometrika</em>,
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Shu Fai Cheung.</p>
+  <p>Developed by Shu Fai Cheung, Rong Wei Sun, Florbela Chang, Sing-Hang Cheung.</p>
 </div>
 
 <div class="pkgdown-footer-right">

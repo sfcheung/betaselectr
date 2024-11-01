@@ -1,4 +1,4 @@
-#' @title Standardize Coefficients in a 'lavaan'-Model
+#' @title Betas-Select in a 'lavaan'-Model
 #'
 #' @description Can standardize selected
 #' variables in a `lavaan` model without
@@ -19,26 +19,28 @@
 #'
 #' - It does not standardize product
 #' term, which is incorrect. Instead,
-#' it compute the product term with
-#' its component variables standardized.
+#' it computes the product term with
+#' its component variables standardized
+#' first.
 #'
 #' - It can be used to generate bootstrap
 #' confidence intervals for the
-#' standardized solution. Bootstrap
+#' standardized solution (Falk, 2018). Bootstrap
 #' confidence interval is better than
 #' doing standardization *before* fitting
 #' a model because it correctly takes
 #' into account the sampling variance
 #' of the standard deviations. It is
-#' also better than delta method
+#' also better than delta-method
 #' confidence interval because it takes
 #' into account the usually asymmetric
 #' distribution of parameters after
-#' standardization.
+#' standardization, such as standardized
+#' loadings and correlations.
 #'
 #' - For comparison, it can also report
-#' delta method standard errors and
-#' confidence intervals.
+#' delta-method standard errors and
+#' confidence intervals if requested.
 #'
 #' ## Problems With Common Approaches
 #'
@@ -50,7 +52,7 @@
 #' or misleading in these conditions:
 #'
 #' - Dummy variables are standardized
-#' and can not be interpreted as the
+#' and their coefficients cannot be interpreted as the
 #' difference between two groups on the
 #' outcome variables.
 #'
@@ -66,14 +68,14 @@
 #' they are standardized (e.g., age).
 #'
 #' Moreover, the delta method is usually
-#' used, which is suboptimal for
+#' used in standardization, which is suboptimal for
 #' standardization unless the sample
-#' size is large. For example, the
+#' size is large (Falk, 2018). For example, the
 #' covariance with variables standardized
 #' is a correlation, and its sampling
 #' distribution is skewed unless its
 #' population value is zero. However,
-#' delta method confidence interval
+#' delta-method confidence interval
 #' for the correlation is necessarily
 #' symmetric around the point estimate.
 #'
@@ -92,7 +94,8 @@
 #' - Intercepts not supported.
 #'
 #' @return
-#' A data frame storing the parameter
+#' A `lav_betaselect`-class object,
+#' which is a data frame storing the parameter
 #' estimates, similar in form to the
 #' output of [lavaan::parameterEstimates()].
 #'
@@ -103,9 +106,9 @@
 #' @param to_standardize A string vector,
 #' which should be the names of the
 #' variables to be standardized.
-#' Default is `".all"`, indicating all
+#' Default is `".all."`, indicating all
 #' variables are to be standardized
-#' (but see `skip_categorical`).
+#' (but see `skip_categorical_x`).
 #'
 #' @param not_to_standardize A string
 #' vector, which should be the names
@@ -127,14 +130,15 @@
 #' `to_standardize`. That is, a
 #' categorical predictor will not be
 #' standardized even if listed in
-#' `to_standardize`, unless uses set
+#' `to_standardize`, unless users set
 #' this argument to `FALSE`.
 #'
 #' @param output The format of the
 #' output. Not used because the format
-#' of the print out is now controlled
+#' of the printout is now controlled
 #' by the `print`-method of the output
-#' of this function.
+#' of this function. Kept for backward
+#' compatibility.
 #'
 #' @param std_se String. If set to `"none"`,
 #' the default, standard errors will not
@@ -193,7 +197,7 @@
 #' output.
 #'
 #' @param delta_method The method used
-#' to compute delta method standard
+#' to compute delta-method standard
 #' errors. For internal use and should
 #' not be changed.
 #'
@@ -308,6 +312,13 @@
 #' (2022) Improving an old way to measure moderation effect in standardized
 #' units. *Health Psychology*, *41*(7), 502-505.
 #' \doi{10.1037/hea0001188}
+#'
+#' Falk, C. F. (2018). Are robust standard errors the best approach
+#' for interval estimation with nonnormal data in structural equation
+#' modeling?
+#' *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2)
+#'  244-266. \doi{10.1080/10705511.2017.1367254}
+
 #'
 #' @seealso [print.lav_betaselect()] for its print method.
 #'

@@ -4,7 +4,7 @@ url: https://sfcheung.github.io/betaselectr/
 
 template:
   bootstrap: 5
-  bootswatch: yeti
+  bootswatch: united
   theme: a11y-light
   bslib:
     # pkgdown-nav-height: 100px
@@ -12,8 +12,8 @@ template:
     fg: "#000000"
     primary: "#6478FF"
     link-color: "#0000A0"
-    base_font: {google: "PT Serif"}
-    heading_font: {google: "PT Serif"}
+    base_font: {google: "Public Sans"}
+    heading_font: {google: "Public Sans"}
     code_font: {google: "Source Code Pro"}
   includes:
     in_header: <meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ" />
@@ -56,13 +56,17 @@ reference:
   #   Section description.
 - contents:
   - std_data
-- title: Methods
+- title: Methods for lav_betaselect()
   # desc:  >
   #   Section description.
 - contents:
   - print.lav_betaselect
   - coef.lav_betaselect
   - confint.lav_betaselect
+- title: Methods for lm_betaselect() and glm_betaselect()
+  # desc:  >
+  #   Section description.
+- contents:
   - anova.lm_betaselect
   - coef.lm_betaselect
   - confint.lm_betaselect

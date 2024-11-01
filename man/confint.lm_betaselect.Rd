@@ -131,13 +131,11 @@ on the object. If bootstrapping
 was requested, by default it returns
 the percentile bootstrap confidence
 intervals. Otherwise, it returns the
-default confidence intervals
-and raises a warning for the
-standardized solution.
+default confidence intervals.
 
 Support for other type of
-confidence intervals will be
-added.
+confidence intervals may be
+added in the future.
 }
 \examples{
 

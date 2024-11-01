@@ -1,17 +1,36 @@
 Package: betaselectr
-Title: Selective Standardization in Structural Equation Models
-Version: 0.0.1.17
+Title: Betas-Select in Structural Equation Models and Linear Models
+Version: 0.0.2.0
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",
              role = c("aut", "cre"),
              email = "shufai.cheung@gmail.com",
-             comment = c(ORCID = "0000-0002-9871-9448")))
-Description: It computes Beta_Select, standardization in
-  structural equation models with only selected variables
-  standardized. It supports models with moderation, as well
-  as regression models. It can form confidence intervals
-  that takes into account the standardization appropriately.
+             comment = c(ORCID = "0000-0002-9871-9448")),
+      person(given = "Rong Wei",
+             family = "Sun",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0003-0034-1422")),
+      person(given = "Florbela",
+             family = "Chang",
+             role = c("aut"),
+             comment = c(ORCID = "0009-0003-9931-501X")),
+      person(given = "Wendie",
+             family ="Yang",
+             role = c("ctb"),
+             comment = c(ORCID = "0009-0000-8388-6481")),
+      person(given = "Sing-Hang",
+             family = "Cheung",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0001-5182-0752")))
+Description: It computes betas-select, standardization in
+  structural equation models and regression models with only
+  selected variables standardized. It supports models with
+  moderation, with product terms formed after standardization.
+  It can also form confidence intervals that takes into account
+  the standardization appropriately, such as bootstrap
+  confidence intervals proposed by Cheung, Cheung, Lau, Hui,
+  and Vong (2022) <doi:10.1037/hea0001188>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

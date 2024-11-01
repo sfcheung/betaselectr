@@ -2,7 +2,7 @@
 % Please edit documentation in R/confint_lav_betaselect.R
 \name{confint.lav_betaselect}
 \alias{confint.lav_betaselect}
-\title{Confidence Interval for a
+\title{Confidence Intervals for a
 'lav_betaselect'-Class Object}
 \usage{
 \method{confint}{lav_betaselect}(object, parm, level = 0.95, ...)
@@ -33,9 +33,11 @@ intervals of betas-select in the
 output of \code{\link[=lav_betaselect]{lav_betaselect()}}.
 }
 \details{
-Details
-(Include subjects for verbs.)
-(Use 3rd person forms for verbs.)
+The type of
+confidence intervals depends
+on the call to \code{\link[=lav_betaselect]{lav_betaselect()}}.
+This function does not recompute
+the confidence interval.
 }
 \examples{
 

@@ -6,7 +6,7 @@
 \alias{print.lm_betaselect}
 \alias{print.glm_betaselect}
 \alias{raw_output}
-\title{Standardize Coefficients in a
+\title{Betas-Select in a
 Regression Model}
 \usage{
 lm_betaselect(
@@ -70,8 +70,7 @@ other methods.}
 which should be the names of the
 variables to be standardized.
 Default is \code{NULL}, indicating all
-variables are to be standardized
-(but see \code{skip_categorical}).}
+variables are to be standardized.}
 
 \item{not_to_standardize}{A string
 vector, which should be the names
@@ -114,7 +113,7 @@ generator. Default is \code{NULL}.}
 parallel processing will be used to
 do bootstrapping. Default is \code{FALSE}
 because bootstrapping for models fitted
-by \code{\link[=lm]{lm()}} or \code{\link[=glm]{glm()}} is rarely slow.
+by \code{\link[stats:lm]{stats::lm()}} or \code{\link[stats:glm]{stats::glm()}} is rarely slow.
 Actually, if both \code{parallel} and
 \code{progress} are set to \code{TRUE}, the
 speed may even be slower than serial
@@ -241,7 +240,7 @@ The solution may be uninterpretable
 or misleading in these conditions:
 \itemize{
 \item Dummy variables are standardized
-and cannot be interpreted as the
+and their coefficients cannot be interpreted as the
 difference between two groups on the
 outcome variables.
 \item Product terms (interaction terms)

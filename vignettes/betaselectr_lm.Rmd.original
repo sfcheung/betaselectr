@@ -30,7 +30,7 @@ format_str <- function(x, digits = 3) {
 
 This article demonstrates how to use
 `lm_betaselect()` from the package
-`betaselectr`
+[`betaselectr`](https://sfcheung.github.io/betaselectr/)
 to standardize
 selected variables in a model fitted
 by `lm()` and forming confidence
@@ -118,14 +118,16 @@ printCoefmat(lm_std_common_summary$coefficients,
 However, for this model, there are several
 problems:
 
-- The product term, `iv:mod`, is also
-  standardized. This is inappropriate.
+- The product term is also
+  standardized (`iv_x_mod`, computed
+  using the standard deviations of
+  `dv` and `iv:mod`). This is inappropriate [@hayes_introduction_2022].
   One simple but underused solution is
   standardizing the variables *before*
   forming the product term [@friedrich_defense_1982].
 
 - The confidence intervals are formed using
-  the ordinary least squares (OLS), which does not
+  ordinary least squares (OLS), which does not
   take into account the sampling variation
   of the standardizers (the sample standard
   deviations used in standardization) and
@@ -152,7 +154,8 @@ problems:
   are usually represented by dummy variables,
   each of them having only two possible
   values (0 or 1). It is not meaningful
-  to standardize the dummy variables.
+  to standardize the dummy variables
+  [@darlington_regression_2016].
 
 # Beta-Select by `lm_betaselect()`
 
@@ -171,7 +174,7 @@ to solve these problems by:
   into account selected standardization.
 
 We call the coefficients computed by
-this kind of standardization *beta*s-Select
+this kind of standardization *beta*s-select
 ($\beta{s}_{Select}$, $\beta_{Select}$
 in singular form),
 to differentiate them from coefficients
@@ -189,11 +192,11 @@ are standardized.
 
 ```{r, results = FALSE}
 lm_beta_select <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
-                               data = data_test_mod_cat2,
-                               do_boot = FALSE)
+                                data = data_test_mod_cat2,
+                                do_boot = FALSE)
 ```
 
-The function `lm_beta_iv_mod()` can be
+The function `lm_betaselect()` can be
 used as `lm()`, with applicable arguments
 such as the model formula and `data` passed
 to `lm()`.
@@ -208,7 +211,7 @@ string variables) will not be standardized.
 
 Bootstrapping is done by default. In this
 illustration, `do_boot = FALSE` is added
-to disabled it because we only want to
+to disable it because we only want to
 address the first problem. We will do bootstrapping when
 addressing the issue with confidence intervals.
 
@@ -235,7 +238,7 @@ term standardized, the coefficient of
 `r format_str(b_select["iv:mod"])`. As shown by
 @cheung_improving_2022, the coefficient
 of *standardized* product term (`iv:mod`)
-can be a severely biased estimate of the
+can be substantially different from the
 properly standardized product term
 (the product of standardized `iv` and
 standardized `mod`).
@@ -244,11 +247,15 @@ standardized `mod`).
 
 Suppose we want to address
 both the first and the second problems,
-with the product
-term computed after `iv`, `mod`, and `dv` are
-standardized and bootstrap confidence
-interval used, we can call `lm_betaselect()`
-again, with additional arguments
+with
+
+- the product term computed after `iv`,
+  `mod`, and `dv` are standardized, and
+
+- bootstrap confidence interval used.
+
+We can call `lm_betaselect()` again, with
+additional arguments
 set:
 
 ```{r results = FALSE}
@@ -265,10 +272,9 @@ These are the additional arguments:
   be set to 5000 or even 10000.
 
 - `iseed`: The seed for the random number
-  generator used for bootstrapping. Set
+  generator used in bootstrapping. Set
   this to an integer to make the results
   reproducible.
-
 
 ```{r, echo = FALSE}
 tmp <- capture.output(suppressWarnings(print(summary(lm_beta_select_boot))))
@@ -284,7 +290,7 @@ By default, 95% percentile bootstrap
 confidence intervals are printed
 (`CI.Lower` and `CI.Upper`). The *p*-values
 (`Pr(Boot)`) are asymmetric bootstrap
-*p*-values.
+*p*-values [@asparouhov_bootstrap_2021].
 
 ## Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
 
@@ -295,13 +301,13 @@ done using either `to_standardize`
 or `not_to_standardize`.
 
 - Use `to_standardize` when
-the variables to standardize
-is much fewer than the variables
+the number of variables to standardize
+is much fewer than number of the variables
 not to standardize.
 
 - Use `not_to_standardize`
-when the variables to standardize
-is much more than the
+when the number of variables to standardize
+is much more than the number of
 variables not to standardize.
 
 For example, suppose we only
@@ -350,11 +356,7 @@ This can be done in table notes.
 
 When calling `lm_betaselect()`,
 categorical variables (factors and
-string variables) will not be standardized
-by default.
-This can be overriden by setting
-`skip_categorical_x` to `FALSE`, though
-not recommended.
+string variables) will never be standardized.
 
 In the example above, the coefficients
 of the two dummy variables when both
@@ -374,7 +376,7 @@ printCoefmat(lm_std_common_summary$coefficients[5:6, ],
 
 These two values are not interpretable
 because it does not make sense to talk
-about a one-SD change in the dummy variables.
+about a "one-SD change" in the dummy variables.
 
 The *beta*s-*Select* of the dummy variables,
 with only the outcome variable standardized,

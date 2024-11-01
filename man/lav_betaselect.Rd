@@ -2,7 +2,7 @@
 % Please edit documentation in R/lav_betaselect.R
 \name{lav_betaselect}
 \alias{lav_betaselect}
-\title{Standardize Coefficients in a 'lavaan'-Model}
+\title{Betas-Select in a 'lavaan'-Model}
 \usage{
 lav_betaselect(
   object,
@@ -37,9 +37,9 @@ as \code{\link[lavaan:sem]{lavaan::sem()}} and \code{\link[lavaan:cfa]{lavaan::c
 \item{to_standardize}{A string vector,
 which should be the names of the
 variables to be standardized.
-Default is \code{".all"}, indicating all
+Default is \code{".all."}, indicating all
 variables are to be standardized
-(but see \code{skip_categorical}).}
+(but see \code{skip_categorical_x}).}
 
 \item{not_to_standardize}{A string
 vector, which should be the names
@@ -61,14 +61,15 @@ overrides the argument
 \code{to_standardize}. That is, a
 categorical predictor will not be
 standardized even if listed in
-\code{to_standardize}, unless uses set
+\code{to_standardize}, unless users set
 this argument to \code{FALSE}.}
 
 \item{output}{The format of the
 output. Not used because the format
-of the print out is now controlled
+of the printout is now controlled
 by the \code{print}-method of the output
-of this function.}
+of this function. Kept for backward
+compatibility.}
 
 \item{std_se}{String. If set to \code{"none"},
 the default, standard errors will not
@@ -222,7 +223,7 @@ which will be use to generate the
 output.}
 
 \item{delta_method}{The method used
-to compute delta method standard
+to compute delta-method standard
 errors. For internal use and should
 not be changed.}
 
@@ -232,7 +233,8 @@ solution. For internal use and should
 not be changed.}
 }
 \value{
-A data frame storing the parameter
+A \code{lav_betaselect}-class object,
+which is a data frame storing the parameter
 estimates, similar in form to the
 output of \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}}.
 }
@@ -256,24 +258,26 @@ which has only two unique values,
 assuming that they are dummy variables.
 \item It does not standardize product
 term, which is incorrect. Instead,
-it compute the product term with
-its component variables standardized.
+it computes the product term with
+its component variables standardized
+first.
 \item It can be used to generate bootstrap
 confidence intervals for the
-standardized solution. Bootstrap
+standardized solution (Falk, 2018). Bootstrap
 confidence interval is better than
 doing standardization \emph{before} fitting
 a model because it correctly takes
 into account the sampling variance
 of the standard deviations. It is
-also better than delta method
+also better than delta-method
 confidence interval because it takes
 into account the usually asymmetric
 distribution of parameters after
-standardization.
+standardization, such as standardized
+loadings and correlations.
 \item For comparison, it can also report
-delta method standard errors and
-confidence intervals.
+delta-method standard errors and
+confidence intervals if requested.
 }
 \subsection{Problems With Common Approaches}{
 
@@ -285,7 +289,7 @@ The solution may be uninterpretable
 or misleading in these conditions:
 \itemize{
 \item Dummy variables are standardized
-and can not be interpreted as the
+and their coefficients cannot be interpreted as the
 difference between two groups on the
 outcome variables.
 \item Product terms (interaction terms)
@@ -300,14 +304,14 @@ they are standardized (e.g., age).
 }
 
 Moreover, the delta method is usually
-used, which is suboptimal for
+used in standardization, which is suboptimal for
 standardization unless the sample
-size is large. For example, the
+size is large (Falk, 2018). For example, the
 covariance with variables standardized
 is a correlation, and its sampling
 distribution is skewed unless its
 population value is zero. However,
-delta method confidence interval
+delta-method confidence interval
 for the correlation is necessarily
 symmetric around the point estimate.
 }
@@ -368,6 +372,12 @@ Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N.
 (2022) Improving an old way to measure moderation effect in standardized
 units. \emph{Health Psychology}, \emph{41}(7), 502-505.
 \doi{10.1037/hea0001188}
+
+Falk, C. F. (2018). Are robust standard errors the best approach
+for interval estimation with nonnormal data in structural equation
+modeling?
+\emph{Structural Equation Modeling: A Multidisciplinary Journal, 25}(2)
+244-266. \doi{10.1080/10705511.2017.1367254}
 }
 \seealso{
 \code{\link[=print.lav_betaselect]{print.lav_betaselect()}} for its print method.

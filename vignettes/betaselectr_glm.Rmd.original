@@ -30,11 +30,13 @@ format_str <- function(x, digits = 3) {
 
 This article demonstrates how to use
 `glm_betaselect()` from the package
-`betaselectr`
+[`betaselectr`](https://sfcheung.github.io/betaselectr/)
 to standardize
 selected variables in a model fitted
 by `glm()` and forming confidence
 intervals for the parameters.
+Logistic regression is used in this
+illustration.
 
 # Data and Model
 
@@ -47,7 +49,7 @@ library(betaselectr)
 head(data_test_mod_cat_binary)
 ```
 
-This is the regression model, fitted by
+This is the logistic regression model, fitted by
 `glm()`:
 
 ```{r}
@@ -71,7 +73,8 @@ summary(glm_out)
 # Problems With Standardization
 
 In logistic regression, there are several
-ways to do standardization. We use the
+ways to do standardization [@menard_six_2004].
+We use the
 same approach in linear regression and
 standardize all variables, except for the
 binary response variable.
@@ -123,20 +126,22 @@ However, for this model, there are several
 problems:
 
 - The product term, `iv:mod`, is also
-  standardized (`iv_x_mod` in this model).
+  standardized (`iv_x_mod`, computed
+  using the standard deviations of
+  `dv` and `iv:mod`).
   This is inappropriate.
   One simple but underused solution is
   standardizing the variables *before*
   forming the product term [see @friedrich_defense_1982
   on the case of linear regression].
 
-- The confidence intervals are formed using
+- The default confidence intervals are formed using
   profiling in `glm()`. It does allow for
   asymmetry. However, it does not
   take into account the sampling variation
   of the standardizers (the sample standard
   deviations used in standardization).
-  It is not clear whether it will be
+  It is unclear whether it will be
   biased, as in the case of OLS standard
   error [@yuan_biases_2011].
 
@@ -170,7 +175,7 @@ to solve these problems by:
   into account selected standardization.
 
 We call the coefficients computed by
-this kind of standardization *beta*s-Select
+this kind of standardization *beta*s-select
 ($\beta{s}_{Select}$, $\beta_{Select}$
 in singular form),
 to differentiate them from coefficients
@@ -219,7 +224,7 @@ string variables) will not be standardized.
 
 Bootstrapping is done by default. In this
 illustration, `do_boot = FALSE` is added
-to disabled it because we only want to
+to disable it because we only want to
 address the first problem. We will do bootstrapping when
 addressing the issue with confidence intervals.
 
@@ -243,7 +248,7 @@ term standardized, the coefficient of
 to the case of linear regression
 [@cheung_improving_2022], the coefficient
 of *standardized* product term (`iv:mod`)
-can be very different from the
+can be substantially different from the
 properly standardized product term
 (the product of standardized `iv` and
 standardized `mod`).
@@ -252,10 +257,14 @@ standardized `mod`).
 
 Suppose we want to address
 both the first and the second problems,
-with the product
-term computed after `iv` and `mod` are
-standardized and bootstrap confidence
-interval used, we can call `glm_betaselect()`
+with
+
+- the product term computed after `iv` and `mod` are
+standardized, and
+
+- bootstrap confidence interval used.
+
+We can call `glm_betaselect()`
 again, with additional arguments
 set:
 
@@ -289,7 +298,7 @@ By default, 95% percentile bootstrap
 confidence intervals are printed
 (`CI.Lower` and `CI.Upper`). The *p*-values
 (`Pr(Boot)`) are asymmetric bootstrap
-*p*-values.
+*p*-values [@asparouhov_bootstrap_2021].
 
 ## Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
 
@@ -300,13 +309,13 @@ done using either `to_standardize`
 or `not_to_standardize`.
 
 - Use `to_standardize` when
-the variables to standardize
-is much fewer than the variables
-not to standardize.
+the number of variables to standardize
+is much fewer than number of the variables
+not to standardize
 
 - Use `not_to_standardize`
-when the variables to standardize
-is much more than the
+when the number of variables to standardize
+is much more than the number of
 variables not to standardize.
 
 For example, suppose we only
@@ -327,14 +336,15 @@ glm_beta_select_boot_1 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
 ```
 
 If we want to standardize all
-variables except for `dv`, `mod`, we can use
+variables except for `mod` (`dv`
+is skipped by `skip_response`) we can use
 this call, and set
-`not_to_standardize` to `c("dv", "mod")`:
+`not_to_standardize` to `"mod"`:
 
 ```{r, results = FALSE}
 glm_beta_select_boot_2 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                          data = data_test_mod_cat_binary,
-                                         not_to_standardize = c("dv", "mod"),
+                                         not_to_standardize = c("mod"),
                                          skip_response = TRUE,
                                          family = binomial(),
                                          bootstrap = 5000,
@@ -358,11 +368,7 @@ This can be done in table notes.
 
 When calling `glm_betaselect()`,
 categorical variables (factors and
-string variables) will not be standardized
-by default.
-This can be overriden by setting
-`skip_categorical_x` to `FALSE`, though
-not recommended.
+string variables) will never be standardized.
 
 In the example above, the coefficients
 of the two dummy variables when both
@@ -382,7 +388,7 @@ printCoefmat(glm_std_common_summary$coefficients[5:6, ],
 
 These two values are not interpretable
 because it does not make sense to talk
-about a one-SD change in the dummy variables.
+about a "one-SD change" in the dummy variables.
 
 # Conclusion
 

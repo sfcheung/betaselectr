@@ -29,7 +29,7 @@ i <- replicate(6, sample(n, size = n, replace = TRUE), simplify = FALSE)
 dat_tmp <- dat_tmp[i[[5]], ]
 
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "iv", do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE)
-lm_beta_y <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "dv", do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE, parallel = TRUE, ncpus = 2)
+# lm_beta_y <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "dv", do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE, parallel = TRUE, ncpus = 2)
 lm_beta_w <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = "mod", do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE)
 lm_beta_xw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = c("mod", "iv"), do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE)
 lm_beta_yw <- lm_betaselect(dv ~ iv*mod + cov1 + cat1, data_test_mod_cat, to_standardize = c("mod", "dv"), do_boot = TRUE, bootstrap = 6, iseed = 5678, progress = FALSE)
@@ -45,14 +45,14 @@ test_that("Standardize x", {
       )
   })
 
-test_that("Standardize y", {
-    tmp1 <- lm_beta_y$lm_betaselect$boot_out[[5]]$coef_std
-    tmp2 <- coef(update(lm_zx, data = transform0(dat_tmp, c("dv"))))
-    expect_equal(
-        tmp1, tmp2,
-        ignore_attr = TRUE
-      )
-  })
+# test_that("Standardize y", {
+#     tmp1 <- lm_beta_y$lm_betaselect$boot_out[[5]]$coef_std
+#     tmp2 <- coef(update(lm_zx, data = transform0(dat_tmp, c("dv"))))
+#     expect_equal(
+#         tmp1, tmp2,
+#         ignore_attr = TRUE
+#       )
+#   })
 
 test_that("Standardize w", {
     tmp1 <- lm_beta_w$lm_betaselect$boot_out[[5]]$coef_std

@@ -1,4 +1,4 @@
-# betaselectr 0.0.1.19
+# betaselectr 0.0.2.0
 
 - Added `lm_betaselect()` and related
   methods and helper functions.

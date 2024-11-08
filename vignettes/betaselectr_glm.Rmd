@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: Logistic Regression by `glm()`"
-date: "2024-10-31"
+date: "2024-11-08"
 output:
   rmarkdown::html_vignette:
     number_sections: true

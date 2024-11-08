@@ -145,7 +145,7 @@ problems:
   biased, as in the case of OLS standard
   error [@yuan_biases_2011].
 
-- There are cases in which some variabLes
+- There are cases in which some variables
   are measured by meaningful units and
   do not need to be standardized. for
   example, if `cov1` is age measured by

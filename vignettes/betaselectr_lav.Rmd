@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: SEM by 'lavaan'"
-date: "2024-10-31"
+date: "2024-11-08"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -147,7 +147,7 @@ problems:
 - The product term, `iv:mod`, is also
   standardized. This is inappropriate.
   One simple but underused solution is
-  standardized the variables *before*
+  to standardize the variables *before*
   forming the product term [@friedrich_defense_1982].
 
 - The confidence intervals are formed using
@@ -164,7 +164,7 @@ problems:
   it is still safe to at least try both
   methods and compare the results.
 
-- There are cases in which some variabLes
+- There are cases in which some variables
   are measured by meaningful units and
   do not need to be standardized. for
   example, if `cov1` is age measured by

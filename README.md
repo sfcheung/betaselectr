@@ -7,14 +7,15 @@
 [![R-CMD-check](https://github.com/sfcheung/betaselectr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/betaselectr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# betaselectr: Do selective standardization in structural equation models and regression models
+# betaselectr: Do Selective Standardization in Structural Equation Models and Regression Models
 
-(Version 0.0.2.0, updated on 2024-11-02, [release history](https://sfcheung.github.io/betaselectr/news/index.html))
+(Version 0.1.0, updated on 2024-11-08, [release history](https://sfcheung.github.io/betaselectr/news/index.html))
 
-It computes *beta*-select, standardization
+It computes *beta*s-select, coefficients
+(*beta*s) after standardization
 in structural equation models and
 regression models with only
-selected variables standardized. It
+*select*ed variables standardized. It
 supports models with moderation, with
 product terms formed appropriately
 (formed *after* standardization). It can also form

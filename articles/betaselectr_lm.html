@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 
       <h1>Beta-Select Demonstration: Regression by `lm()`</h1>
             
-            <h4 data-toc-skip class="date">2024-10-31</h4>
+            <h4 data-toc-skip class="date">2024-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lm.Rmd" class="external-link"><code>vignettes/betaselectr_lm.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lm.Rmd</code></div>
@@ -88,7 +88,7 @@ and forming confidence intervals for the parameters.</p>
 <h2 id="data-and-model">Data and Model<a class="anchor" aria-label="anchor" href="#data-and-model"></a>
 </h2>
 <p>The sample dataset from the package <code>betaselectr</code> will be
-used for in this demonstration:</p>
+used for this demonstration:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/betaselectr/">betaselectr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data_test_mod_cat2</span><span class="op">)</span></span>
@@ -217,7 +217,7 @@ extreme), it is recommended to use bootstrap confidence intervals when
 computation cost is low <span class="citation">(Jones &amp; Waller,
 2013)</span>.</p></li>
 <li><p>There are cases in which some variabLes are measured by
-meaningful units and do not need to be standardized. for example, if
+meaningful units and do not need to be standardized. For example, if
 <code>cov1</code> is age measured by year, then age is more meaningful
 than “standardized age”.</p></li>
 <li><p>In regression models, categorical variables are usually

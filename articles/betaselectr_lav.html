@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@
 
       <h1>Beta-Select Demonstration: SEM by 'lavaan'</h1>
             
-            <h4 data-toc-skip class="date">2024-10-31</h4>
+            <h4 data-toc-skip class="date">2024-11-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lav.Rmd" class="external-link"><code>vignettes/betaselectr_lav.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lav.Rmd</code></div>
@@ -187,8 +187,8 @@ effect from <code>iv</code> to <code>med</code>. The product term is
 <p>However, for this model, there are several problems:</p>
 <ul>
 <li><p>The product term, <code>iv:mod</code>, is also standardized. This
-is inappropriate. One simple but underused solution is standardized the
-variables <em>before</em> forming the product term <span class="citation">(Friedrich, 1982)</span>.</p></li>
+is inappropriate. One simple but underused solution is to standardize
+the variables <em>before</em> forming the product term <span class="citation">(Friedrich, 1982)</span>.</p></li>
 <li><p>The confidence intervals are formed using the delta-method, which
 has been found to be inferior to methods such as nonparametric
 percentile bootstrap confidence interval for the standardized solution
@@ -197,7 +197,7 @@ situations in which the delta-method confidence and the nonparametric
 percentile bootstrap confidences can be similar (e.g., sample size is
 large and the sample estimates are not extreme), it is still safe to at
 least try both methods and compare the results.</p></li>
-<li><p>There are cases in which some variabLes are measured by
+<li><p>There are cases in which some variables are measured by
 meaningful units and do not need to be standardized. for example, if
 <code>cov1</code> is age measured by year, then age is more meaningful
 than “standardized age”.</p></li>

@@ -23,11 +23,12 @@ Authors@R:
              family = "Cheung",
              role = c("aut"),
              comment = c(ORCID = "0000-0001-5182-0752")))
-Description: Computes beta-selection, standardization in structural equation models and regression
-  models, standardizing only selected variables. Supports models with moderation, with product
-  terms formed after standardization. Offers confidence intervals that account for standardization,
-  including bootstrap confidence intervals as proposed by Cheung et al. (2022)
-  <doi:10.1037/hea0001188>.
+Description: It computes betas-select, coefficients after standardization in
+  structural equation models and regression models, standardizing only selected
+  variables. Supports models with moderation, with product terms formed after
+  standardization. It also offers confidence intervals that account for
+  standardization, including bootstrap confidence intervals as proposed by
+  Cheung et al. (2022) <doi:10.1037/hea0001188>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -39,7 +39,7 @@ intervals for the parameters.
 # Data and Model
 
 The sample dataset from the package
-`betaselectr` will be used for in this
+`betaselectr` will be used for this
 demonstration:
 
 ```{r}
@@ -145,7 +145,7 @@ problems:
 
 - There are cases in which some variabLes
   are measured by meaningful units and
-  do not need to be standardized. for
+  do not need to be standardized. For
   example, if `cov1` is age measured by
   year, then age is more
   meaningful than "standardized age".

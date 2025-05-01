@@ -42,6 +42,9 @@ the confidence interval.
 \examples{
 
 library(lavaan)
+# Need to mean-center iv and mod
+data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
+data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
 mod <-
 "
 med ~ iv + mod + iv:mod

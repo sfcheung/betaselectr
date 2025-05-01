@@ -986,3 +986,26 @@ find_k <- function(x,
       }
     return(TRUE)
   }
+
+#' @noRd
+
+check_centered <- function(object,
+                           prods = list()) {
+  if (length(prods) == 0) {
+    return(NULL)
+  }
+  all_x_w <- lapply(prods,
+                    function(xx) c(xx$x, xx$w))
+  all_x_w <- unique(unlist(all_x_w))
+  dat <- lavaan::lavInspect(object,
+                            what = "data",
+                            drop.list.single.group = FALSE)
+  all_means <- lapply(dat,
+                      colMeans,
+                      na.rm = TRUE)
+  all_x_w_zero_mean <- sapply(all_means,
+                              function(xx) {
+                                all(xx[all_x_w] < sqrt(.Machine$double.eps))
+                              })
+  return(all_x_w_zero_mean)
+}

@@ -10,6 +10,8 @@ library(manymome)
 data(data_test_medmod)
 library(lavaan)
 dat <- data_test_medmod
+dat$iv <- dat$iv - mean(dat$iv)
+dat$mod <- dat$mod - mean(dat$mod)
 dat$iv_mod <- dat$iv * dat$mod
 head(dat)
 

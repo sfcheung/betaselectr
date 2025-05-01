@@ -325,6 +325,9 @@
 #' @examples
 #'
 #' library(lavaan)
+#' # Need to mean-center iv and mod
+#' data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
+#' data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
 #' mod <-
 #' "
 #' med ~ iv + mod + iv:mod
@@ -406,6 +409,19 @@ lav_betaselect <- function(object,
       } else {
         prods <- list()
       }
+    # if the model has at least one product term
+    if (length(prods) != 0) {
+      tmp <- check_centered(object,
+                            prods = prods)
+      if (!tmp) {
+        msg <- paste("The model has at least one product term",
+                     "but the variables involved are not mean-centered.",
+                     "Though mean-centering is not necessary for moderation,",
+                     "beta-select computation without mean-centering is not yet supported.",
+                     "Please mean-center the involved variables first.")
+        stop(msg)
+      }
+    }
     to_standardize <- fix_to_standardize(object = object,
                                          to_standardize = to_standardize,
                                          not_to_standardize = not_to_standardize,

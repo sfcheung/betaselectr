@@ -47,6 +47,20 @@ library(betaselectr)
 head(data_test_medmod)
 ```
 
+Although mean-centering is not
+necessary for testing an interaction,
+the computation of the standardized
+coefficients of variables involved
+in an interaction requires that they
+are mean-centered, for now.
+
+We mean-center `iv` and `mod` first:
+
+```{r}
+data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
+data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
+```
+
 This is the path model, fitted by
 `lavaan::sem()`:
 

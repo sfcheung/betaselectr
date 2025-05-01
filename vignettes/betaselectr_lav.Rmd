@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: SEM by 'lavaan'"
-date: "2024-11-08"
+date: "2025-05-01"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -45,6 +45,21 @@ head(data_test_medmod)
 #> 6  6.846435 12.00819 25.22163 35.46051 30.85914 22.35444
 ```
 
+Although mean-centering is not
+necessary for testing an interaction,
+the computation of the standardized
+coefficients of variables involved
+in an interaction requires that they
+are mean-centered, for now.
+
+We mean-center `iv` and `mod` first:
+
+
+``` r
+data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
+data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
+```
+
 This is the path model, fitted by
 `lavaan::sem()`:
 
@@ -71,7 +86,7 @@ These are the results:
 
 ``` r
 summary(fit)
-#> lavaan 0.6-19 ended normally after 2 iterations
+#> lavaan 0.6-19 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -92,23 +107,23 @@ summary(fit)
 #>   Information saturated (h1) model          Structured
 #> 
 #> Regressions:
-#>                    Estimate   Std.Err  z-value  P(>|z|)
-#>   med ~                                                
-#>     iv                -6.373    0.985   -6.473    0.000
-#>     mod               -3.899    0.614   -6.346    0.000
-#>     iv:mod             0.286    0.039    7.340    0.000
-#>     cov1              -0.093    0.070   -1.327    0.185
-#>     cov2               0.242    0.133    1.823    0.068
-#>   dv ~                                                 
-#>     med                0.092    0.011    8.098    0.000
-#>     iv                 0.227    0.038    5.896    0.000
-#>     cov1              -0.006    0.013   -0.454    0.650
-#>     cov2               0.030    0.025    1.230    0.219
+#>                    Estimate  Std.Err  z-value  P(>|z|)
+#>   med ~                                               
+#>     iv                0.626    0.215    2.909    0.004
+#>     mod               0.329    0.129    2.560    0.010
+#>     iv:mod            0.286    0.039    7.340    0.000
+#>     cov1             -0.093    0.070   -1.327    0.185
+#>     cov2              0.242    0.133    1.823    0.068
+#>   dv ~                                                
+#>     med               0.092    0.011    8.098    0.000
+#>     iv                0.227    0.038    5.896    0.000
+#>     cov1             -0.006    0.013   -0.454    0.650
+#>     cov2              0.030    0.025    1.230    0.219
 #> 
 #> Variances:
-#>                    Estimate   Std.Err  z-value  P(>|z|)
-#>    .med               60.292    6.029   10.000    0.000
-#>    .dv                 2.087    0.209   10.000    0.000
+#>                    Estimate  Std.Err  z-value  P(>|z|)
+#>    .med              60.292    6.029   10.000    0.000
+#>    .dv                2.087    0.209   10.000    0.000
 ```
 
 # Problems With Standardization
@@ -124,9 +139,9 @@ standardizedSolution(fit,
 #> Regressions:
 #>                     est.std  Std.Err  z-value  P(>|z|) ci.lower ci.upper
 #>   med ~                                                                 
-#>     iv               -1.855    0.259   -7.158    0.000   -2.363   -1.347
-#>     mod              -1.956    0.280   -6.988    0.000   -2.504   -1.407
-#>     iv:mod            3.588    0.428    8.390    0.000    2.750    4.426
+#>     iv                0.182    0.062    2.964    0.003    0.062    0.303
+#>     mod               0.165    0.064    2.597    0.009    0.040    0.290
+#>     iv:mod            0.432    0.051    8.390    0.000    0.331    0.533
 #>     cov1             -0.077    0.058   -1.332    0.183   -0.189    0.036
 #>     cov2              0.105    0.057    1.836    0.066   -0.007    0.218
 #>   dv ~                                                                  
@@ -239,8 +254,8 @@ default options:
 #> Regressions:
 #>            BetaSelect
 #>  med ~               
-#>   iv           -1.855
-#>   mod          -1.956
+#>   iv            0.182
+#>   mod           0.165
 #>   iv:mod        0.400
 #>   cov1         -0.077
 #>   cov2          0.105
@@ -263,7 +278,7 @@ default options:
 Compared to the solution with the product
 term standardized, the coefficient of
 `iv:mod` changed substantially from
-3.588 to
+0.432 to
 0.286. As shown by
 @cheung_improving_2022, the coefficient
 of *standardized* product term (`iv:mod`)
@@ -361,18 +376,18 @@ fit_beta
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>            BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
-#>  med ~                                                             
-#>   iv           -1.855 0.248 -7.490   0.000 *** -2.307 -1.332   Sig.
-#>   mod          -1.956 0.281 -6.950   0.000 *** -2.453 -1.348   Sig.
-#>   iv:mod        0.400 0.047  8.565   0.000 ***  0.298  0.481   Sig.
-#>   cov1         -0.077 0.057 -1.353   0.185     -0.186  0.038   n.s.
-#>   cov2          0.105 0.061  1.725   0.094   . -0.019  0.219   n.s.
-#>  dv ~                                                              
-#>   med           0.459 0.052  8.828   0.000 ***  0.348  0.553   Sig.
-#>   iv            0.331 0.051  6.480   0.000 ***  0.229  0.431   Sig.
-#>   cov1         -0.024 0.058 -0.418   0.686     -0.137  0.090   n.s.
-#>   cov2          0.066 0.058  1.139   0.259     -0.050  0.178   n.s.
+#>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig
+#>  med ~                                                            
+#>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.
+#>   mod           0.165 0.069  2.389   0.015   *  0.028 0.303   Sig.
+#>   iv:mod        0.400 0.047  8.565   0.000 ***  0.298 0.481   Sig.
+#>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.
+#>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.
+#>  dv ~                                                             
+#>   med           0.459 0.052  8.828   0.000 ***  0.348 0.553   Sig.
+#>   iv            0.331 0.051  6.480   0.000 ***  0.229 0.431   Sig.
+#>   cov1         -0.024 0.058 -0.418   0.686     -0.137 0.090   n.s.
+#>   cov2          0.066 0.058  1.139   0.259     -0.050 0.178   n.s.
 #> 
 #> Footnote:
 #> - Variable(s) standardized: cov1, cov2, dv, iv, med, mod
@@ -475,18 +490,18 @@ fit_beta_select_2
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>            BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
-#>  med ~                                                             
-#>   iv           -1.855 0.248 -7.490   0.000 *** -2.307 -1.332   Sig.
-#>   mod          -0.407 0.059 -6.950   0.000 *** -0.510 -0.280   Sig.
-#>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062  0.100   Sig.
-#>   cov1         -0.077 0.057 -1.353   0.185     -0.186  0.038   n.s.
-#>   cov2          0.105 0.061  1.725   0.094   . -0.019  0.219   n.s.
-#>  dv ~                                                              
-#>   med           0.878 0.116  7.567   0.000 ***  0.635  1.092   Sig.
-#>   iv            0.634 0.100  6.337   0.000 ***  0.430  0.826   Sig.
-#>   cov1         -0.047 0.112 -0.418   0.686     -0.265  0.168   n.s.
-#>   cov2          0.126 0.111  1.137   0.259     -0.093  0.345   n.s.
+#>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig
+#>  med ~                                                            
+#>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.
+#>   mod           0.034 0.014  2.389   0.015   *  0.006 0.063   Sig.
+#>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062 0.100   Sig.
+#>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.
+#>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.
+#>  dv ~                                                             
+#>   med           0.878 0.116  7.567   0.000 ***  0.635 1.092   Sig.
+#>   iv            0.634 0.100  6.337   0.000 ***  0.430 0.826   Sig.
+#>   cov1         -0.047 0.112 -0.418   0.686     -0.265 0.168   n.s.
+#>   cov2          0.126 0.111  1.137   0.259     -0.093 0.345   n.s.
 #> 
 #> Footnote:
 #> - Variable(s) standardized: cov1, cov2, iv, med
@@ -527,18 +542,18 @@ print(fit_beta_select_2,
 
 ```
 #> Regressions:
-#>            BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig  Selected
-#>  med ~                                                                       
-#>   iv           -1.855 0.248 -7.490   0.000 *** -2.307 -1.332   Sig.    iv,med
-#>   mod          -0.407 0.059 -6.950   0.000 *** -0.510 -0.280   Sig.       med
-#>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062  0.100   Sig.    iv,med
-#>   cov1         -0.077 0.057 -1.353   0.185     -0.186  0.038   n.s.  cov1,med
-#>   cov2          0.105 0.061  1.725   0.094   . -0.019  0.219   n.s.  cov2,med
-#>  dv ~                                                                        
-#>   med           0.878 0.116  7.567   0.000 ***  0.635  1.092   Sig.       med
-#>   iv            0.634 0.100  6.337   0.000 ***  0.430  0.826   Sig.        iv
-#>   cov1         -0.047 0.112 -0.418   0.686     -0.265  0.168   n.s.      cov1
-#>   cov2          0.126 0.111  1.137   0.259     -0.093  0.345   n.s.      cov2
+#>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig  Selected
+#>  med ~                                                                      
+#>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.    iv,med
+#>   mod           0.034 0.014  2.389   0.015   *  0.006 0.063   Sig.       med
+#>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062 0.100   Sig.    iv,med
+#>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.  cov1,med
+#>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.  cov2,med
+#>  dv ~                                                                       
+#>   med           0.878 0.116  7.567   0.000 ***  0.635 1.092   Sig.       med
+#>   iv            0.634 0.100  6.337   0.000 ***  0.430 0.826   Sig.        iv
+#>   cov1         -0.047 0.112 -0.418   0.686     -0.265 0.168   n.s.      cov1
+#>   cov2          0.126 0.111  1.137   0.259     -0.093 0.345   n.s.      cov2
 #> 
 #> Footnote:
 #> - Variable(s) standardized: cov1, cov2, iv, med

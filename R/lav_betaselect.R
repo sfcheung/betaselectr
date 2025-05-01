@@ -85,6 +85,13 @@
 #' interaction terms, and only support
 #' two-way interactions.
 #'
+#' - Though mean-centering is not
+#' necessary for testing an interaction,
+#' the computation of the standardized
+#' coefficients of variables involved
+#' in an interaction requires that they
+#' are mean-centered, for now.
+#'
 #' - It does not support multilevel
 #' models.
 #'

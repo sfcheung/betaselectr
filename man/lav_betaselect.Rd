@@ -321,6 +321,12 @@ symmetric around the point estimate.
 \item It only supports observed variable
 interaction terms, and only support
 two-way interactions.
+\item Though mean-centering is not
+necessary for testing an interaction,
+the computation of the standardized
+coefficients of variables involved
+in an interaction requires that they
+are mean-centered, for now.
 \item It does not support multilevel
 models.
 \item It only supports models fitted to

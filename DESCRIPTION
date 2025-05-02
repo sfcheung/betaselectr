@@ -1,6 +1,6 @@
 Package: betaselectr
 Title: Betas-Select in Structural Equation Models and Linear Models
-Version: 0.1.1
+Version: 0.1.2
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",

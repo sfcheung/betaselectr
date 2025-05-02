@@ -1,4 +1,9 @@
-# betaselectr 0.1.1
+# betaselectr 0.1.2
+
+## Miscellaneous
+
+- Added a few more tests for one-IV
+  models. (0.1.2)
 
 ## Bug Fixes
 

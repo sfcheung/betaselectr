@@ -1,4 +1,36 @@
 #' @noRd
+recenter_cond <- function(std_out_i,
+                          prods) {
+  out <- list(m_i = NULL,
+              b_i = NULL)
+  lhs <- std_out_i$lhs
+  rhs <- std_out_i$rhs
+  op <- std_out_i$op
+  if (op != "~") return(out)
+  all_y <- sapply(prods,
+                  function(x) x$y)
+  all_x <- sapply(prods,
+                  function(x) x$x)
+  all_w <- sapply(prods,
+                  function(x) x$w)
+  if (isFALSE(lhs %in% all_y)) return(out)
+  if (rhs %in% all_x) {
+    prod_i <- prods[[match(rhs, all_x)]]
+    m_i <- prod_i$w
+    b_i <- prod_i$b
+  } else if (rhs %in% all_w) {
+    prod_i <- prods[[match(rhs, all_w)]]
+    m_i <- prod_i$x
+    b_i <- prod_i$b
+  } else {
+    return(out)
+  }
+  out$m_i <- m_i
+  out$b_i <- b_i
+  out
+}
+
+#' @noRd
 
 def_std <- function(std,
                     ptable,
@@ -644,6 +676,8 @@ gen_std_i_internal <- function(fit,
     n_w_p <- 1
     d_x_p <- 1
     d_w_p <- 1
+    m_i <- NULL
+    b_i <- 0
 
     if (op == "~") {
         if (lhs %in% prod_names) {
@@ -681,6 +715,11 @@ gen_std_i_internal <- function(fit,
                 n_x_s <- rhs
                 n_x_p <- 1
               }
+            tmp <- recenter_cond(
+                      std_out_i = std_out_i,
+                      prods = prods)
+            m_i <- tmp$m_i
+            b_i <- tmp$b_i
           }
         std_by <- c(std_by,
                     n_x_s,
@@ -781,7 +820,8 @@ gen_std_i_internal <- function(fit,
 
     std_by <- unique(std_by)
     out_fct <- function(std_out_i,
-                        fit_sd_all) {
+                        fit_sd_all,
+                        fit_m_all = NULL) {
         # Just in case ...
         force(n_x_s)
         force(n_w_s)
@@ -792,6 +832,8 @@ gen_std_i_internal <- function(fit,
         force(d_x_p)
         force(d_w_p)
         force(prods)
+        force(m_i)
+        force(b_i)
         a <- ifelse(is.null(n_x_s),
                     1,
                     fit_sd_all[n_x_s]^n_x_p) *
@@ -805,6 +847,10 @@ gen_std_i_internal <- function(fit,
                     1,
                     fit_sd_all[d_w_s]^d_w_p)
         out0 <- std_out_i$est * a
+        # m_0 <- ifelse(is.null(m_i),
+        #               0,
+        #               fit_m_all[m_i] * b_i)
+        # out0 <- (std_out_i$est + m_0) * a
         attr(out0, "std_by") <- std_by
         out0
       }

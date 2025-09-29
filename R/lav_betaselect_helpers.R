@@ -549,6 +549,36 @@ gen_std_vector <- function(fit,
                                     function(x) {
                                         fit_sd_all[[x]]
                                       })
+        if (slot_opt1$meanstructure) {
+          fit_m_all_lv <- lavaan::lavInspect(
+                          fit_new,
+                          what = "mean.lv",
+                          drop.list.single.group = FALSE)
+          fit_m_all_ov <- lavaan::lavInspect(
+                          fit_new,
+                          what = "mean.ov",
+                          drop.list.single.group = FALSE)
+          fit_m_all <- mapply(function(x, y) {c(x, y)},
+                              x = fit_m_all_lv,
+                              y = fit_m_all_ov,
+                              SIMPLIFY = FALSE,
+                              USE.NAMES = FALSE)
+          fit_m_all_list <- lapply(i_group_vector,
+                                    function(x) {
+                                        fit_m_all[[x]]
+                              })
+        } else {
+          dat0 <- lavaan::lavInspect(
+                    fit_new,
+                    what = "data",
+                    drop.list.single.group = FALSE)
+          fit_m_all <- lapply(dat0,
+                              function(x) colMeans(x, na.rm = TRUE))
+          fit_m_all_list <- lapply(i_group_vector,
+                                    function(x) {
+                                        fit_m_all[[x]]
+                              })
+        }
         # fit_sd_all <- fit_sd_all[[i_group]]
         # std_out_i <- lavaan::parameterTable(fit_new)[i, ]
         ptable_new <- lavaan::parameterTable(fit_new)
@@ -558,7 +588,8 @@ gen_std_vector <- function(fit,
                                       })
         out0 <- lapply(seq_along(std_fct_vector), function(x) {
                     std_fct_vector[[x]](std_out_i = std_out_i_list[[x]],
-                                        fit_sd_all = fit_sd_all_list[[x]])
+                                        fit_sd_all = fit_sd_all_list[[x]],
+                                        fit_m_all = fit_m_all_list[[x]])
                   })
         out1 <- unlist(out0)
         attr(out1, "std_by") <- lapply(out0,
@@ -846,11 +877,11 @@ gen_std_i_internal <- function(fit,
              ifelse(is.null(d_w_s),
                     1,
                     fit_sd_all[d_w_s]^d_w_p)
-        out0 <- std_out_i$est * a
-        # m_0 <- ifelse(is.null(m_i),
-        #               0,
-        #               fit_m_all[m_i] * b_i)
-        # out0 <- (std_out_i$est + m_0) * a
+        # out0 <- std_out_i$est * a
+        m_0 <- ifelse(is.null(m_i),
+                      0,
+                      fit_m_all[m_i] * b_i)
+        out0 <- (std_out_i$est + m_0) * a
         attr(out0, "std_by") <- std_by
         out0
       }

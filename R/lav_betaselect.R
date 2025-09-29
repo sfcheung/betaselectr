@@ -308,6 +308,12 @@
 #' will automatically identify product
 #' terms, if any.
 #'
+#' @param check_mean_centering Logical.
+#' If `TRUE`, it will check whether
+#' variables involved in a product term
+#' has been mean-centered. If not,
+#' an error will be raised.
+#'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -390,7 +396,8 @@ lav_betaselect <- function(object,
                            find_product_terms = TRUE,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
-                           vector_form = TRUE) {
+                           vector_form = TRUE,
+                           check_mean_centering = TRUE) {
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE
@@ -417,7 +424,8 @@ lav_betaselect <- function(object,
         prods <- list()
       }
     # if the model has at least one product term
-    if (length(prods) != 0) {
+    if ((length(prods) != 0) &&
+        check_mean_centering) {
       tmp <- check_centered(object,
                             prods = prods)
       if (!tmp) {

@@ -79,7 +79,14 @@ test_that("Coefficient of the component terms", {
   expect_error(out <- lav_betaselect(fit,
                                      standardized = TRUE,
                                      not_to_standardize = c("dv", "cov2"),
-                                     progress = FALSE))
+                                     progress = FALSE,
+                                     check_mean_centering = TRUE))
+  expect_no_error(out <- lav_betaselect(fit,
+                                     standardized = TRUE,
+                                     not_to_standardize = c("dv", "cov2"),
+                                     progress = FALSE,
+                                     check_mean_centering = FALSE))
+
   out_c <- lav_betaselect(fit_c,
                           standardized = TRUE,
                           not_to_standardize = c("dv", "cov2"),

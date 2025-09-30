@@ -503,6 +503,20 @@ lav_betaselect <- function(object,
                          function(x) {paste0(x, collapse = ",")})
     std[i, "std.p"] <- est_std
     std[i, "std.p.by"] <- est_std_by
+    if (length(prods) > 0) {
+      centered <- check_centered(
+              object,
+              prods = prods)
+      if (!centered) {
+        # ---- No cov/var for product term if no mean-centering ----
+        prod_names <- names(prods)
+        i_tmp <- (std$op == "~~") &
+                ((std$lhs %in% prod_names) |
+                  (std$rhs %in% prod_names))
+        std[i_tmp, "std.p"] <- NA
+        std[i_tmp, "std.p.by"] <- ""
+      }
+    }
 
     # User-parameters
     def.function <- object@Model@def.function

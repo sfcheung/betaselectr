@@ -314,6 +314,11 @@
 #' has been mean-centered. If not,
 #' an error will be raised.
 #'
+#' @param std_intercept Logical.
+#' If `TRUE`, intercepts of `y` variables
+#' will also be computed based on
+#' the variables standardized.
+#'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -395,6 +400,7 @@ lav_betaselect <- function(object,
                            iseed = NULL,
                            find_product_terms = TRUE,
                            check_mean_centering = TRUE,
+                           std_intercept = FALSE,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
                            vector_form = TRUE) {
@@ -469,7 +475,8 @@ lav_betaselect <- function(object,
                        i = i,
                        to_standardize = to_standardize,
                        prods = prods,
-                       internal_only = vector_form)
+                       internal_only = vector_form,
+                       std_intercept = std_intercept)
     if (vector_form) {
         std_fct_v <- gen_std_vector(fit = object,
                                     i_vector = i,

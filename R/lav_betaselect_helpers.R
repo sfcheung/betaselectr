@@ -453,7 +453,8 @@ pt_id_2_est_id <- function(est_table,
 
 #' @noRd
 
-std_rows <- function(object) {
+std_rows <- function(object,
+                     std_intercept = FALSE) {
   ptable <- lavaan::parameterTable(object)
   std <- lavaan::standardizedSolution(object,
                                       se = TRUE,
@@ -461,8 +462,11 @@ std_rows <- function(object) {
                                       pvalue = TRUE,
                                       ci = FALSE,
                                       partable = ptable)
-  out <- which(!is.na(std$z) &
-              (std$op != "~1"))
+  i <- !is.na(std$z)
+  if (std_intercept) {
+    i <- i & (std$op != "~1")
+  }
+  out <- which(i)
   out
 }
 
@@ -472,9 +476,11 @@ gen_std <- function(object,
                     i = NULL,
                     to_standardize = ".all.",
                     prods = NULL,
-                    internal_only = FALSE) {
+                    internal_only = FALSE,
+                    std_intercept = FALSE) {
     if (is.null(i)) {
-        i <- std_rows(object)
+        i <- std_rows(object,
+                      std_intercept = std_intercept)
       }
     if (is.null(prods)) {
         prods <- find_all_products(object)

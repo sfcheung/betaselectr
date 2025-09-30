@@ -394,10 +394,10 @@ lav_betaselect <- function(object,
                            cl = NULL,
                            iseed = NULL,
                            find_product_terms = TRUE,
+                           check_mean_centering = TRUE,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
-                           vector_form = TRUE,
-                           check_mean_centering = TRUE) {
+                           vector_form = TRUE) {
     if (!isTRUE(requireNamespace("pbapply", quietly = TRUE)) ||
         !interactive()) {
         progress <- FALSE

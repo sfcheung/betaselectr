@@ -463,7 +463,7 @@ std_rows <- function(object,
                                       ci = FALSE,
                                       partable = ptable)
   i <- !is.na(std$z)
-  if (std_intercept) {
+  if (!std_intercept) {
     i <- i & (std$op != "~1")
   }
   out <- which(i)
@@ -854,6 +854,20 @@ gen_std_i_internal <- function(fit,
                     d_x_s,
                     d_w_s)
       }
+
+    # ---- Intercepts ----
+    if (op == "~1") {
+      # Assume that a prod term does not have an intercept
+      if (lhs %in% to_standardize_i) {
+        d_x_s <- lhs
+        d_x_p <- -1
+      }
+      std_by <- c(std_by,
+                  n_x_s,
+                  n_w_s,
+                  d_x_s,
+                  d_w_s)
+    }
 
     std_by <- unique(std_by)
     out_fct <- function(std_out_i,

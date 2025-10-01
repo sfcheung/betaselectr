@@ -468,7 +468,11 @@ lav_betaselect <- function(object,
       }
     # Generate the function for each parameter with
     # a standardized solution.
-    i <- which(!(std$op %in% c("~1", "==", ":=")))
+    tmp <- std$op %in% c("==", ":=")
+    if (!std_intercept) {
+      tmp <- tmp | (std$op %in% "~1")
+    }
+    i <- which(!tmp)
     # If vector_form is TRUE:
     #   std_fct is a list of gen_std_i_internal() output
     std_fct <- gen_std(object = object,

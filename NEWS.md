@@ -1,4 +1,4 @@
-# betaselectr 0.1.2.1
+# betaselectr 0.1.2.2
 
 ## New Features
 
@@ -22,7 +22,7 @@
   The coefficient of the so-called
   "main effect" term of these variables
   will now be computed correctly even
-  without mean-centering. (0.1.2.1)
+  without mean-centering. (0.1.2.1, 0.1.2.2)
 
 ## Miscellaneous
 

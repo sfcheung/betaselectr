@@ -1,8 +1,10 @@
 #' @noRd
 recenter_cond <- function(std_out_i,
-                          prods) {
+                          prods,
+                          i_group) {
   out <- list(m_i = NULL,
-              b_i = NULL)
+              b_i = NULL,
+              prod_name_i = NULL)
   lhs <- std_out_i$lhs
   rhs <- std_out_i$rhs
   op <- std_out_i$op
@@ -17,16 +19,21 @@ recenter_cond <- function(std_out_i,
   if (rhs %in% all_x) {
     prod_i <- prods[[match(rhs, all_x)]]
     m_i <- prod_i$w
-    b_i <- prod_i$b
+    b_i <- unlist(prod_i$b,
+                   use.names = FALSE)[i_group]
+    prod_name_i <- prod_i$prod
   } else if (rhs %in% all_w) {
     prod_i <- prods[[match(rhs, all_w)]]
     m_i <- prod_i$x
-    b_i <- prod_i$b
+    b_i <- unlist(prod_i$b,
+                   use.names = FALSE)[i_group]
+    prod_name_i <- prod_i$prod
   } else {
     return(out)
   }
   out$m_i <- m_i
   out$b_i <- b_i
+  out$prod_name_i <- prod_name_i
   out
 }
 
@@ -517,6 +524,31 @@ gen_std_vector <- function(fit,
     slot_opt1$baseline <- FALSE
     slot_opt1$h1 <- FALSE
 
+    # Means should be treated as fixed when
+    # computing the conditional effects
+    if (slot_opt1$meanstructure) {
+      fit_m_all_lv <- lavaan::lavInspect(
+                      fit,
+                      what = "mean.lv",
+                      drop.list.single.group = FALSE)
+      fit_m_all_ov <- lavaan::lavInspect(
+                      fit,
+                      what = "mean.ov",
+                      drop.list.single.group = FALSE)
+      fit_m_all <- mapply(function(x, y) {c(x, y)},
+                          x = fit_m_all_lv,
+                          y = fit_m_all_ov,
+                          SIMPLIFY = FALSE,
+                          USE.NAMES = FALSE)
+    } else {
+      dat0 <- lavaan::lavInspect(
+                fit,
+                what = "data",
+                drop.list.single.group = FALSE)
+      fit_m_all <- lapply(dat0,
+                          function(x) colMeans(x, na.rm = TRUE))
+    }
+
     out <- function(par) {
         if (missing(par)) {
             par <- get(".x.", parent.frame())
@@ -531,6 +563,7 @@ gen_std_vector <- function(fit,
         force(slot_opt1)
         force(i_vector)
         force(std_fct_vector)
+        force(fit_m_all)
         slot_mod1 <- lavaan::lav_model_set_parameters(slot_mod,
                                                       par)
         slot_pat1 <- slot_pat
@@ -555,36 +588,12 @@ gen_std_vector <- function(fit,
                                     function(x) {
                                         fit_sd_all[[x]]
                                       })
-        if (slot_opt1$meanstructure) {
-          fit_m_all_lv <- lavaan::lavInspect(
-                          fit_new,
-                          what = "mean.lv",
-                          drop.list.single.group = FALSE)
-          fit_m_all_ov <- lavaan::lavInspect(
-                          fit_new,
-                          what = "mean.ov",
-                          drop.list.single.group = FALSE)
-          fit_m_all <- mapply(function(x, y) {c(x, y)},
-                              x = fit_m_all_lv,
-                              y = fit_m_all_ov,
-                              SIMPLIFY = FALSE,
-                              USE.NAMES = FALSE)
-          fit_m_all_list <- lapply(i_group_vector,
-                                    function(x) {
-                                        fit_m_all[[x]]
-                              })
-        } else {
-          dat0 <- lavaan::lavInspect(
-                    fit_new,
-                    what = "data",
-                    drop.list.single.group = FALSE)
-          fit_m_all <- lapply(dat0,
-                              function(x) colMeans(x, na.rm = TRUE))
-          fit_m_all_list <- lapply(i_group_vector,
-                                    function(x) {
-                                        fit_m_all[[x]]
-                              })
-        }
+        # Means are used to compute the conditional
+        # effects and should be fixed.
+        fit_m_all_list <- lapply(i_group_vector,
+                          function(x) {
+                              fit_m_all[[x]]
+                    })
         # fit_sd_all <- fit_sd_all[[i_group]]
         # std_out_i <- lavaan::parameterTable(fit_new)[i, ]
         ptable_new <- lavaan::parameterTable(fit_new)
@@ -592,11 +601,14 @@ gen_std_vector <- function(fit,
                                    function(x) {
                                         ptable_new[x, ]
                                       })
-        out0 <- lapply(seq_along(std_fct_vector), function(x) {
+        out0 <- lapply(seq_along(std_fct_vector), function(x,
+                                                           ptable_new) {
                     std_fct_vector[[x]](std_out_i = std_out_i_list[[x]],
                                         fit_sd_all = fit_sd_all_list[[x]],
-                                        fit_m_all = fit_m_all_list[[x]])
-                  })
+                                        fit_m_all = fit_m_all_list[[x]],
+                                        ptable_new = ptable_new)
+                  },
+                  ptable_new = ptable_new)
         out1 <- unlist(out0)
         attr(out1, "std_by") <- lapply(out0,
                                        FUN = attr,
@@ -700,6 +712,7 @@ gen_std_i_internal <- function(fit,
                                prod_names,
                                prods) {
     std_out_i <- lavaan::parameterTable(fit)[i, ]
+    i_group <- std_out_i$group
     std_by <- character(0)
     lhs <- std_out_i$lhs
     rhs <- std_out_i$rhs
@@ -715,6 +728,7 @@ gen_std_i_internal <- function(fit,
     d_w_p <- 1
     m_i <- NULL
     b_i <- 0
+    prod_name_i <- NULL
 
     if (op == "~") {
         if (lhs %in% prod_names) {
@@ -754,9 +768,11 @@ gen_std_i_internal <- function(fit,
               }
             tmp <- recenter_cond(
                       std_out_i = std_out_i,
-                      prods = prods)
+                      prods = prods,
+                      i_group = i_group)
             m_i <- tmp$m_i
             b_i <- tmp$b_i
+            prod_name_i <- tmp$prod_name_i
           }
         std_by <- c(std_by,
                     n_x_s,
@@ -872,7 +888,8 @@ gen_std_i_internal <- function(fit,
     std_by <- unique(std_by)
     out_fct <- function(std_out_i,
                         fit_sd_all,
-                        fit_m_all = NULL) {
+                        fit_m_all = NULL,
+                        ptable_new = NULL) {
         # Just in case ...
         force(n_x_s)
         force(n_w_s)
@@ -885,6 +902,8 @@ gen_std_i_internal <- function(fit,
         force(prods)
         force(m_i)
         force(b_i)
+        force(prod_name_i)
+        force(i_group)
         a <- ifelse(is.null(n_x_s),
                     1,
                     fit_sd_all[n_x_s]^n_x_p) *
@@ -898,9 +917,17 @@ gen_std_i_internal <- function(fit,
                     1,
                     fit_sd_all[d_w_s]^d_w_p)
         # out0 <- std_out_i$est * a
-        m_0 <- ifelse(is.null(m_i),
-                      0,
-                      fit_m_all[m_i] * b_i)
+        if (!is.null(m_i)) {
+          tmp_m <- fit_m_all[m_i]
+          tmp_i <- (ptable_new$rhs == prod_name_i) &
+                   (ptable_new$lhs == std_out_i$lhs) &
+                   (ptable_new$op == "~") &
+                   (ptable_new$group == i_group)
+          tmp_b <- ptable_new$est[tmp_i]
+          m_0 <- tmp_m * tmp_b
+        } else {
+          m_0 <- 0
+        }
         out0 <- (std_out_i$est + m_0) * a
         attr(out0, "std_by") <- std_by
         out0

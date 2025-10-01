@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,9 +74,9 @@
 
       <h1>Beta-Select Demonstration: SEM by 'lavaan'</h1>
             
-            <h4 data-toc-skip class="date">2025-05-01</h4>
+            <h4 data-toc-skip class="date">2025-10-01</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/v0.1.2/vignettes/betaselectr_lav.Rmd" class="external-link"><code>vignettes/betaselectr_lav.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lav.Rmd" class="external-link"><code>vignettes/betaselectr_lav.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lav.Rmd</code></div>
     </div>
 
@@ -106,18 +106,16 @@ used in this demonstration:</p>
 <span><span class="co">#&gt; 4 10.148827 15.79632 22.94451 43.96807 42.72187 15.66971</span></span>
 <span><span class="co">#&gt; 5  7.421606 14.29621 24.51562 37.10942 42.74174 21.97132</span></span>
 <span><span class="co">#&gt; 6  6.846435 12.00819 25.22163 35.46051 30.85914 22.35444</span></span></code></pre></div>
-<p>Although mean-centering is not necessary for testing an interaction,
-the computation of the standardized coefficients of variables involved
-in an interaction requires that they are mean-centered, for now.</p>
-<p>We mean-center <code>iv</code> and <code>mod</code> first:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span> <span class="op">&lt;-</span> <span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span><span class="op">)</span></span>
-<span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></code></pre></div>
+<p>The computation of the standardized coefficients of variables
+involved in an interaction does not require that these variables are
+mean-centered, since Version 0.1.2.2. If a variable is standardized, and
+so is also mean-centered, and it is involved in an interaction (e.g.,
+<code>x</code> in <code>x:w</code>), its coefficient (e.g.,
+<code>x</code>’s effect when <code>w</code> is equal to zero) will be
+recomputed accordingly.</p>
 <p>This is the path model, fitted by <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">lavaan::sem()</a></code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-19</span></span>
-<span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
 <span><span class="st">med ~ iv + mod + iv:mod + cov1 + cov2</span></span>
@@ -129,9 +127,9 @@ in an interaction requires that they are mean-centered, for now.</p>
 effect from <code>iv</code> to <code>med</code>. The product term is
 <code>iv:mod</code>.</p>
 <p>These are the results:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span><span class="co">#&gt; lavaan 0.6-20 ended normally after 2 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -152,39 +150,39 @@ effect from <code>iv</code> to <code>med</code>. The product term is
 <span><span class="co">#&gt;   Information saturated (h1) model          Structured</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions:</span></span>
-<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;   med ~                                               </span></span>
-<span><span class="co">#&gt;     iv                0.626    0.215    2.909    0.004</span></span>
-<span><span class="co">#&gt;     mod               0.329    0.129    2.560    0.010</span></span>
-<span><span class="co">#&gt;     iv:mod            0.286    0.039    7.340    0.000</span></span>
-<span><span class="co">#&gt;     cov1             -0.093    0.070   -1.327    0.185</span></span>
-<span><span class="co">#&gt;     cov2              0.242    0.133    1.823    0.068</span></span>
-<span><span class="co">#&gt;   dv ~                                                </span></span>
-<span><span class="co">#&gt;     med               0.092    0.011    8.098    0.000</span></span>
-<span><span class="co">#&gt;     iv                0.227    0.038    5.896    0.000</span></span>
-<span><span class="co">#&gt;     cov1             -0.006    0.013   -0.454    0.650</span></span>
-<span><span class="co">#&gt;     cov2              0.030    0.025    1.230    0.219</span></span>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   med ~                                                </span></span>
+<span><span class="co">#&gt;     iv                -6.373    0.985   -6.473    0.000</span></span>
+<span><span class="co">#&gt;     mod               -3.899    0.614   -6.346    0.000</span></span>
+<span><span class="co">#&gt;     iv:mod             0.286    0.039    7.340    0.000</span></span>
+<span><span class="co">#&gt;     cov1              -0.093    0.070   -1.327    0.185</span></span>
+<span><span class="co">#&gt;     cov2               0.242    0.133    1.823    0.068</span></span>
+<span><span class="co">#&gt;   dv ~                                                 </span></span>
+<span><span class="co">#&gt;     med                0.092    0.011    8.098    0.000</span></span>
+<span><span class="co">#&gt;     iv                 0.227    0.038    5.896    0.000</span></span>
+<span><span class="co">#&gt;     cov1              -0.006    0.013   -0.454    0.650</span></span>
+<span><span class="co">#&gt;     cov2               0.030    0.025    1.230    0.219</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variances:</span></span>
-<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
-<span><span class="co">#&gt;    .med              60.292    6.029   10.000    0.000</span></span>
-<span><span class="co">#&gt;    .dv                2.087    0.209   10.000    0.000</span></span></code></pre></div>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .med               60.292    6.029   10.000    0.000</span></span>
+<span><span class="co">#&gt;    .dv                 2.087    0.209   10.000    0.000</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="problems-with-standardization">Problems With Standardization<a class="anchor" aria-label="anchor" href="#problems-with-standardization"></a>
 </h2>
 <p>We can request the standardized solution using
 <code><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html" class="external-link">lavaan::standardizedSolution()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html" class="external-link">standardizedSolution</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                     output <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Regressions:</span></span>
 <span><span class="co">#&gt;                     est.std  Std.Err  z-value  P(&gt;|z|) ci.lower ci.upper</span></span>
 <span><span class="co">#&gt;   med ~                                                                 </span></span>
-<span><span class="co">#&gt;     iv                0.182    0.062    2.964    0.003    0.062    0.303</span></span>
-<span><span class="co">#&gt;     mod               0.165    0.064    2.597    0.009    0.040    0.290</span></span>
-<span><span class="co">#&gt;     iv:mod            0.432    0.051    8.390    0.000    0.331    0.533</span></span>
+<span><span class="co">#&gt;     iv               -1.855    0.259   -7.158    0.000   -2.363   -1.347</span></span>
+<span><span class="co">#&gt;     mod              -1.956    0.280   -6.988    0.000   -2.504   -1.407</span></span>
+<span><span class="co">#&gt;     iv:mod            3.588    0.428    8.390    0.000    2.750    4.426</span></span>
 <span><span class="co">#&gt;     cov1             -0.077    0.058   -1.332    0.183   -0.189    0.036</span></span>
 <span><span class="co">#&gt;     cov2              0.105    0.057    1.836    0.066   -0.007    0.218</span></span>
 <span><span class="co">#&gt;   dv ~                                                                  </span></span>
@@ -241,9 +239,9 @@ variables, including product terms.</p>
 <p>Suppose we only need to solve the first problem, with the product
 term computed after <code>iv</code> and <code>mod</code> are
 standardized:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lav_betaselect.html">lav_betaselect</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta</span></span></code></pre></div>
 <p>This is the output if printed using the default options:</p>
 <pre><code><span><span class="co">#&gt; </span></span>
@@ -278,7 +276,7 @@ standardized:</p>
 <span><span class="co">#&gt; - Product terms (iv:mod) have variables standardized before computing</span></span>
 <span><span class="co">#&gt;   them. The product term(s) is/are not standardized.</span></span></code></pre>
 <p>Compared to the solution with the product term standardized, the
-coefficient of <code>iv:mod</code> changed substantially from 0.432 to
+coefficient of <code>iv:mod</code> changed substantially from 3.588 to
 0.286. As shown by <span class="citation">Cheung et al. (2022)</span>,
 the coefficient of <em>standardized</em> product term
 (<code>iv:mod</code>) can be substantially different from the properly
@@ -302,7 +300,7 @@ deviations).</p></li>
 </ul>
 <p>We can call <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code> again, with additional
 arguments set:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lav_betaselect.html">lav_betaselect</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                           std_se <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>                           bootstrap <span class="op">=</span> <span class="fl">5000</span>,</span>
@@ -331,7 +329,7 @@ Supported values are <code>"none"</code>, <code>"snow"</code>, and
 of <em>physical</em> cores minus one.</p></li>
 </ul>
 <p>This is the output if printed with default options:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Selected Standardization:</span></span>
@@ -396,7 +394,7 @@ standardize.</p></li>
 <code>iv</code>, <code>cov1</code>, and <code>cov2</code>, this is the
 call to do this, setting <code>to_standardize</code> to
 <code>c("iv", "dv", "cov1", "cov2")</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta_select_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lav_betaselect.html">lav_betaselect</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                                    std_se <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>                                    to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"dv"</span>, <span class="st">"cov1"</span>, <span class="st">"cov2"</span><span class="op">)</span>,</span>
@@ -407,7 +405,7 @@ call to do this, setting <code>to_standardize</code> to
 <p>If we want to standardize all variables except for <code>dv</code>
 and <code>mod</code>, we can use this call, and set
 <code>not_to_standardize</code> to <code>c("mod", "dv")</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta_select_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/lav_betaselect.html">lav_betaselect</a></span><span class="op">(</span><span class="va">fit</span>,</span>
 <span>                                    std_se <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>                                    not_to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mod"</span>, <span class="st">"dv"</span><span class="op">)</span>,</span>
@@ -417,7 +415,7 @@ and <code>mod</code>, we can use this call, and set
 <span>                                    ncpus <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <p>The results of these calls are identical, and only those of the
 second version are printed:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_beta_select_2</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Selected Standardization:</span></span>
 <span><span class="co">#&gt;                                              </span></span>
@@ -468,7 +466,7 @@ done in table notes, or in a column of the parameter estimate tables.
 The output can of <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code> can be printed with
 <code>show_Bs.by</code> set to <code>TRUE</code> to demonstrate the
 second approach:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit_beta_select_2</span>,</span>
 <span>      show_Bs.by <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Regressions:</span></span>
@@ -557,7 +555,7 @@ regression equations. <em>American Journal of Political Science</em>,
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

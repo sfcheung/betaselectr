@@ -21,7 +21,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Betas-Select in a Regression Model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/v0.1.2/R/lm_betaselect.R" class="external-link"><code>R/lm_betaselect.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/R/lm_betaselect.R" class="external-link"><code>R/lm_betaselect.R</code></a></small>
       <div class="d-none name"><code>lm_betaselect.Rd</code></div>
     </div>
 
@@ -539,13 +539,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              Estimate  CI.Lower  CI.Upper Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   790.550  -616.077  2200.706    628.105   1.259     0.16    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -94.302 -1608.007  1514.014    721.336  -0.131     0.82    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            57.578    43.098    70.722      6.133   9.388   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           10.024   -10.567    33.103     10.126   0.990     0.34    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      -112.588  -276.419    57.141     76.889  -1.464     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -53.106  -217.405    90.518     77.879  -0.682     0.54    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod          8.661    -7.435    24.082      7.200   1.203     0.26    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)   790.550  -693.617  2214.680    622.804   1.269     0.20    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -94.302 -1655.711  1610.724    750.606  -0.126     0.86    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            57.578    44.197    72.901      6.016   9.570   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           10.024    -7.747    30.614     10.297   0.974     0.38    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      -112.588  -274.425    71.492     79.760  -1.412     0.18    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -53.106  -218.069    84.509     78.664  -0.675     0.56    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod          8.661    -8.379    24.381      7.510   1.153     0.28    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -605,13 +605,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.051   -0.047    0.146      0.042   1.217     0.22    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720    0.671    0.758      0.022  32.675   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269    0.228    0.325      0.025  10.584   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           0.028   -0.016    0.082      0.025   1.105     0.28    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105   -0.259    0.056      0.075  -1.393     0.12    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049   -0.191    0.088      0.065  -0.759     0.38    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040   -0.022    0.099      0.030   1.366     0.16    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.051   -0.055    0.128      0.044   1.163     0.22    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             0.720    0.671    0.756      0.021  34.072   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.269    0.230    0.325      0.026  10.384   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1           0.028   -0.017    0.081      0.025   1.123     0.28    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.105   -0.257    0.066      0.078  -1.349     0.12    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.049   -0.167    0.103      0.068  -0.731     0.44    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.040   -0.023    0.102      0.029   1.404     0.14    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -657,13 +657,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.558  -10.935      3.337  -4.856   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.603    7.538      4.062  -0.283     0.80    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.115    0.264      0.034   4.918   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.079    0.105      0.048  -0.091     0.92    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.870    0.502      0.344  -0.611     0.48    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.829    0.420      0.307  -0.616     0.60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.056    0.116      0.041   0.757     0.42    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.768  -11.609      3.201  -5.062   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.950    7.678      4.075  -0.282     0.84    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.123    0.267      0.032   5.126   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.080    0.097      0.046  -0.096     0.96    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.911    0.535      0.346  -0.609     0.50    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.834    0.448      0.311  -0.608     0.62    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.058    0.119      0.041   0.755     0.38    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -678,12 +678,12 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.000    0.000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 1946.771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.122    1.302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.924    1.111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.419    1.653</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.437    1.521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.945    1.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 2891.726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.131    1.306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.923    1.102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.403    1.710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.434    1.566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.944    1.127</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
@@ -732,13 +732,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.558  -10.935      3.337  -4.856   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.603    7.538      4.062  -0.283     0.80    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.115    0.264      0.034   4.918   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.079    0.105      0.048  -0.091     0.92    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.870    0.502      0.344  -0.611     0.48    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.829    0.420      0.307  -0.616     0.60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.056    0.116      0.041   0.757     0.42    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  -16.205  -25.768  -11.609      3.201  -5.062   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv            -1.148   -9.950    7.678      4.075  -0.282     0.84    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.165    0.123    0.267      0.032   5.126   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.004   -0.080    0.097      0.046  -0.096     0.96    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.911    0.535      0.346  -0.609     0.50    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.834    0.448      0.311  -0.608     0.62    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.031   -0.058    0.119      0.041   0.755     0.38    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -753,12 +753,12 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  0.000    0.000    0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 1946.771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.122    1.302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.924    1.111</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.419    1.653</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.437    1.521</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.945    1.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           0.317    0.000 2891.726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          1.180    1.131    1.306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.996    0.923    1.102</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.403    1.710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.434    1.566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.031    0.944    1.127</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
@@ -811,13 +811,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.280   -0.290    0.862      0.256   1.093     0.18    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv             1.941    1.626    2.430      0.202   9.603   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.827    0.499    1.223      0.158   5.229   &lt;0.001 ***</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.013   -0.232    0.229      0.116  -0.113     0.98    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -0.963    0.454      0.311  -0.677     0.32    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.866    0.496      0.329  -0.575     0.40    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.155   -0.224    0.701      0.210   0.736     0.32    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)    0.280   -0.316    0.841      0.259   1.080     0.22    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv             1.941    1.649    2.437      0.200   9.693   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod            0.827    0.467    1.202      0.161   5.144   &lt;0.001 ***</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1          -0.013   -0.237    0.223      0.118  -0.111     0.92    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2       -0.211   -1.000    0.521      0.314  -0.671     0.32    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3       -0.189   -0.928    0.488      0.339  -0.558     0.40    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod         0.155   -0.211    0.747      0.223   0.695     0.34    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -831,13 +831,13 @@ intervals for standardized regression coefficients.
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Transformed Parameter Estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             Exp(B) CI.Lower CI.Upper</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  1.323    0.748    2.373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv           6.965    5.083   11.364</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mod          2.287    1.648    3.399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.987    0.793    1.257</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.382    1.576</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.421    1.643</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.167    0.800    2.019</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (Intercept)  1.323    0.729    2.318</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv           6.965    5.204   11.440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mod          2.287    1.596    3.328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cov1         0.987    0.789    1.250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp2      0.810    0.368    1.684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cat1gp3      0.828    0.395    1.634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> iv:mod       1.167    0.810    2.117</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Results *after* standardization are reported.</span>
@@ -885,7 +885,7 @@ intervals for standardized regression coefficients.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

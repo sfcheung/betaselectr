@@ -23,7 +23,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ standardization."><meta name="google-site-verification" content="0VLBmFnW_UJFI-7
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Betas-Select in a 'lavaan'-Model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/v0.1.2/R/lav_betaselect.R" class="external-link"><code>R/lav_betaselect.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/R/lav_betaselect.R" class="external-link"><code>R/lav_betaselect.R</code></a></small>
       <div class="d-none name"><code>lav_betaselect.Rd</code></div>
     </div>
 
@@ -91,6 +91,8 @@ standardization.</p>
 <span>  cl <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iseed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  find_product_terms <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check_mean_centering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  std_intercept <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  delta_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lavaan"</span>, <span class="st">"numDeriv"</span><span class="op">)</span>,</span>
 <span>  vector_form <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -326,6 +328,21 @@ will automatically identify product
 terms, if any.</p></dd>
 
 
+<dt id="arg-check-mean-centering">check_mean_centering<a class="anchor" aria-label="anchor" href="#arg-check-mean-centering"></a></dt>
+<dd><p>Logical.
+If <code>TRUE</code>, it will check whether
+variables involved in a product term
+has been mean-centered. If not,
+an error will be raised.</p></dd>
+
+
+<dt id="arg-std-intercept">std_intercept<a class="anchor" aria-label="anchor" href="#arg-std-intercept"></a></dt>
+<dd><p>Logical.
+If <code>TRUE</code>, intercepts of <code>y</code> variables
+will also be computed based on
+the variables standardized.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Optional arguments to be
 passed to the <code><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html" class="external-link">lavaan::parameterEstimates()</a></code>,
@@ -426,17 +443,10 @@ symmetric around the point estimate.</p>
 <ul><li><p>It only supports observed variable
 interaction terms, and only support
 two-way interactions.</p></li>
-<li><p>Though mean-centering is not
-necessary for testing an interaction,
-the computation of the standardized
-coefficients of variables involved
-in an interaction requires that they
-are mean-centered, for now.</p></li>
 <li><p>It does not support multilevel
 models.</p></li>
 <li><p>It only supports models fitted to
 raw data.</p></li>
-<li><p>Intercepts not supported.</p></li>
 </ul></div>
 
     </div>
@@ -479,7 +489,7 @@ modeling?
 <span class="r-in"><span>           <span class="va">data_test_medmod</span>,</span></span>
 <span class="r-in"><span>           fixed.x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6-19 ended normally after 1 iteration</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lavaan 0.6-20 ended normally after 1 iteration</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Estimator                                         ML</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Optimization method                           NLMINB</span>
@@ -832,7 +842,7 @@ modeling?
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

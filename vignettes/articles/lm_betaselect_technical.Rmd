@@ -1,0 +1,104 @@
+---
+title: "How lm_betaselect() and glm_betaselect() Work"
+output:
+  html_document:
+    fig.align: "center"
+    toc: true
+    number_sections: false
+bibliography: references.bib
+csl: apa.csl
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Goal
+
+This technical appendix describes how a
+$\beta_{Select}$ is computed in
+`lm_betaselect()` and `glm_betaselect()`
+from the package
+[betaselectr](https://sfcheung.github.io/betaselectr/).
+
+# Beta-Select ($\beta_{Select}$)
+
+Suppose this is the linear regression
+model:
+
+$$
+y = B_0 + B_1x_1 + B_2x_2 + B_3w + B_4x_2w + e
+$$
+
+If only some of the variables are
+selected to be standardized, then only
+the two functions will simply standardize
+the selected variables using sample means
+and SDs, and refit the model.
+
+For example, if only $y$ and $x_2$ are
+standardized, then both `lm_betaselect()`
+and `glm_betaselect()` will standardize
+$y$ and $x_2$, and then fit the model
+as usual. The coefficients in the
+resulting model is then the $\beta{s}_{Select}$
+requested.
+
+For a model to be fitted by `glm()`,
+such as a logistic regression model, the outcome
+variable should not be standardized.
+
+# Standard Error, $p$-Values, and Confidence Interval
+
+Although formulas for delta method standard errors
+[@rao_large_1973; @pesigan_betadelta_2023]
+for standardized coefficients in
+multiple regression are available, they
+assumes that *all* variables are standardized.
+To our knowledge, formulas are not yet
+available for coefficients with only
+selected variables standardized, and
+for the coefficients of product terms.
+Therefore, for now, only nonparametric
+bootstrapping is supported.
+
+## Nonparametric Bootstrapping
+
+If nonparametric bootstrapping [@efron_introduction_1993]
+is used to compute the standard error
+of a $\beta_{Select}$, then $R$ bootstrap
+samples will be drawn, selected variables
+standardized, and then the model is fitted
+using `lm()` or `glm()`. The
+standard error is the standard deviation
+of the $R$ bootstrap estimates of
+the regression model. The $p$-value is
+computed using the method proposed
+by @asparouhov_bootstrap_2021. The
+confidence interval can be formed by
+either the percentile method (the default)
+or the bias-corrected method.
+
+# Miscellaneous
+
+If missing
+data is present, listwise deletion
+will be used, using only the variables
+in the model, to determin the cases to
+be used for computing the means and
+standard deviations for the standardization.
+
+If all variables are to be standardized
+and no higher order terms such as
+product terms are present, then existing
+methods, such as those available in
+@pesigan_betadelta_2023, can also be used.
+The package `betaselectr` is for cases
+in which only some of the variables are
+to be standardized and/or the model has
+one or more product term.
+
+# References

@@ -43,6 +43,12 @@ navbar:
       - text: "<Generalized Linear Models>"
       - text: Beta-Select Demonstration - Logistic Regression by 'glm()'
         href: articles/betaselectr_glm.html
+      - text: -------
+      - text: "<Technical Appendices>"
+      - text: How 'lav_betaselectr() works'
+        href: articles/lav_betaselect_technical.html
+      - text: How 'lm_betaselectr() works'
+        href: articles/lm_betaselect_technical.html
 
 reference:
 - title: Main Functions

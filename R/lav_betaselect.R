@@ -509,7 +509,7 @@ lav_betaselect <- function(object,
       centered <- check_centered(
               object,
               prods = prods)
-      if (!centered) {
+      if (!all(centered)) {
         # ---- No cov/var for product term if no mean-centering ----
         prod_names <- names(prods)
         i_tmp <- (std$op == "~~") &

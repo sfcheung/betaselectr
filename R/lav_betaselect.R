@@ -85,20 +85,11 @@
 #' interaction terms, and only support
 #' two-way interactions.
 #'
-#' - Though mean-centering is not
-#' necessary for testing an interaction,
-#' the computation of the standardized
-#' coefficients of variables involved
-#' in an interaction requires that they
-#' are mean-centered, for now.
-#'
 #' - It does not support multilevel
 #' models.
 #'
 #' - It only supports models fitted to
 #' raw data.
-#'
-#' - Intercepts not supported.
 #'
 #' @return
 #' A `lav_betaselect`-class object,
@@ -308,6 +299,17 @@
 #' will automatically identify product
 #' terms, if any.
 #'
+#' @param check_mean_centering Logical.
+#' If `TRUE`, it will check whether
+#' variables involved in a product term
+#' has been mean-centered. If not,
+#' an error will be raised.
+#'
+#' @param std_intercept Logical.
+#' If `TRUE`, intercepts of `y` variables
+#' will also be computed based on
+#' the variables standardized.
+#'
 #'
 #' @author Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 #'
@@ -388,6 +390,8 @@ lav_betaselect <- function(object,
                            cl = NULL,
                            iseed = NULL,
                            find_product_terms = TRUE,
+                           check_mean_centering = FALSE,
+                           std_intercept = FALSE,
                            ...,
                            delta_method = c("lavaan", "numDeriv"),
                            vector_form = TRUE) {
@@ -417,7 +421,8 @@ lav_betaselect <- function(object,
         prods <- list()
       }
     # if the model has at least one product term
-    if (length(prods) != 0) {
+    if ((length(prods) != 0) &&
+        check_mean_centering) {
       tmp <- check_centered(object,
                             prods = prods)
       if (!tmp) {
@@ -454,14 +459,19 @@ lav_betaselect <- function(object,
       }
     # Generate the function for each parameter with
     # a standardized solution.
-    i <- which(!(std$op %in% c("~1", "==", ":=")))
+    tmp <- std$op %in% c("==", ":=")
+    if (!std_intercept) {
+      tmp <- tmp | (std$op %in% "~1")
+    }
+    i <- which(!tmp)
     # If vector_form is TRUE:
     #   std_fct is a list of gen_std_i_internal() output
     std_fct <- gen_std(object = object,
                        i = i,
                        to_standardize = to_standardize,
                        prods = prods,
-                       internal_only = vector_form)
+                       internal_only = vector_form,
+                       std_intercept = std_intercept)
     if (vector_form) {
         std_fct_v <- gen_std_vector(fit = object,
                                     i_vector = i,
@@ -495,6 +505,20 @@ lav_betaselect <- function(object,
                          function(x) {paste0(x, collapse = ",")})
     std[i, "std.p"] <- est_std
     std[i, "std.p.by"] <- est_std_by
+    if (length(prods) > 0) {
+      centered <- check_centered(
+              object,
+              prods = prods)
+      if (!all(centered)) {
+        # ---- No cov/var for product term if no mean-centering ----
+        prod_names <- names(prods)
+        i_tmp <- (std$op == "~~") &
+                ((std$lhs %in% prod_names) |
+                  (std$rhs %in% prod_names))
+        std[i_tmp, "std.p"] <- NA
+        std[i_tmp, "std.p.by"] <- ""
+      }
+    }
 
     # User-parameters
     def.function <- object@Model@def.function

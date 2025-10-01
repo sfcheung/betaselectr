@@ -78,6 +78,14 @@ test_that("All est", {
                ignore_attr = TRUE)
 })
 
+test_that("Intercepts", {
+  out <- lav_betaselect(fit, standardized = TRUE, skip_categorical_x = FALSE, std_intercept = TRUE)
+  i <- out$op %in% c("~1")
+  expect_equal(out$std.all[i],
+               out$std.p[i],
+               ignore_attr = TRUE)
+})
+
 # (which(std_nox$est.std != std$est.std))
 #  4  5  6 11 12 13 14 15 16 20 21 22 27 28 29 34 35 36 37 38 39 43 44 45
 

@@ -47,16 +47,19 @@ library(betaselectr)
 head(data_test_medmod)
 ```
 
-Although mean-centering is not
-necessary for testing an interaction,
-the computation of the standardized
+The computation of the standardized
 coefficients of variables involved
-in an interaction requires that they
-are mean-centered, for now.
+in an interaction does not require that these
+variables are mean-centered, since Version 0.1.2.2.
+If a variable is standardized, and so
+is also mean-centered, and it is involved
+in an interaction (e.g., `x` in `x:w`),
+its coefficient (e.g., `x`'s effect when
+`w` is equal to zero) will be recomputed
+accordingly.
 
-We mean-center `iv` and `mod` first:
-
-```{r}
+```{r eval = FALSE, echo = FALSE}
+# We mean-center `iv` and `mod` first:
 data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
 data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
 ```

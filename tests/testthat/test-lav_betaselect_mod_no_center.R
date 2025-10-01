@@ -1,8 +1,4 @@
 skip_on_cran()
-# Parallel processing
-# Long test
-
-# testthat::test_file("./tests/testthat/test_std_selected_lavaan_mod_boot_1.R")
 
 library(manymome)
 
@@ -55,18 +51,6 @@ std_c <- setNames(std_c$est.std, lav_partable_labels(std_c))
 std_z <- standardizedSolution(fit_z)
 std_z <- setNames(std_z$est.std, lav_partable_labels(std_z))
 
-test_that("Check variables are centered", {
-  prods <- find_all_products(fit_c,
-                             parallel = FALSE,
-                             progress = FALSE)
-  expect_false(check_centered(fit,
-                              prods = prods))
-  expect_true(check_centered(fit_c,
-                             prods = prods))
-  expect_true(check_centered(fit_z,
-                             prods = prods))
-})
-
 test_that("Coefficient of the component terms", {
 
   chk_names <- c("med~mod", "med~iv", "med~iv_mod")
@@ -76,25 +60,25 @@ test_that("Coefficient of the component terms", {
   coef(fit_z)[chk_names]
   std_z[chk_names]
 
-  expect_error(out <- lav_betaselect(fit,
-                                     standardized = TRUE,
-                                     not_to_standardize = c("dv", "cov2"),
-                                     progress = FALSE,
-                                     check_mean_centering = TRUE))
-  expect_no_error(out <- lav_betaselect(fit,
-                                     standardized = TRUE,
-                                     not_to_standardize = c("dv", "cov2"),
-                                     progress = FALSE,
-                                     check_mean_centering = FALSE))
-
-  out_c <- lav_betaselect(fit_c,
-                          standardized = TRUE,
-                          not_to_standardize = c("dv", "cov2"),
-                          progress = FALSE)
-
+  out_c1 <- lav_betaselect(
+                fit,
+                standardized = TRUE,
+                not_to_standardize = c("dv", "cov2"),
+                progress = FALSE,
+                check_mean_centering = FALSE)
+  out_c2 <- lav_betaselect(
+                fit_c,
+                standardized = TRUE,
+                not_to_standardize = c("dv", "cov2"),
+                progress = FALSE,
+                check_mean_centering = TRUE)
 
   # Should be equal
-  expect_equal(coef(out_c)[chk_names],
+  cbind(coef(out_c1),
+        coef(out_c2))
+  expect_equal(coef(out_c1)[chk_names],
+               coef(out_c2)[chk_names])
+  expect_equal(coef(out_c1)[chk_names],
                coef(fit_z)[chk_names])
 
 })

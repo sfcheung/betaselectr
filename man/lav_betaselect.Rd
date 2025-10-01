@@ -24,6 +24,8 @@ lav_betaselect(
   cl = NULL,
   iseed = NULL,
   find_product_terms = TRUE,
+  check_mean_centering = FALSE,
+  std_intercept = FALSE,
   ...,
   delta_method = c("lavaan", "numDeriv"),
   vector_form = TRUE
@@ -217,6 +219,17 @@ Default is \code{TRUE}, and the function
 will automatically identify product
 terms, if any.}
 
+\item{check_mean_centering}{Logical.
+If \code{TRUE}, it will check whether
+variables involved in a product term
+has been mean-centered. If not,
+an error will be raised.}
+
+\item{std_intercept}{Logical.
+If \code{TRUE}, intercepts of \code{y} variables
+will also be computed based on
+the variables standardized.}
+
 \item{...}{Optional arguments to be
 passed to the \code{\link[lavaan:parameterEstimates]{lavaan::parameterEstimates()}},
 which will be use to generate the
@@ -321,17 +334,10 @@ symmetric around the point estimate.
 \item It only supports observed variable
 interaction terms, and only support
 two-way interactions.
-\item Though mean-centering is not
-necessary for testing an interaction,
-the computation of the standardized
-coefficients of variables involved
-in an interaction requires that they
-are mean-centered, for now.
 \item It does not support multilevel
 models.
 \item It only supports models fitted to
 raw data.
-\item Intercepts not supported.
 }
 }
 }

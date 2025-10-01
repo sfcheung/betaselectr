@@ -35,7 +35,7 @@ apply(dat_z,
 
 mod <-
 "
-med ~ iv + mod + iv_mod + cov1
+med ~ iv + mod + iv:mod + cov1
 dv ~ med + cov2
 "
 fit <- sem(mod,
@@ -69,7 +69,7 @@ test_that("Check variables are centered", {
 
 test_that("Coefficient of the component terms", {
 
-  chk_names <- c("med~mod", "med~iv", "med~iv_mod")
+  chk_names <- c("med~mod", "med~iv", "med~iv:mod")
 
   coef(fit)[chk_names]
   coef(fit_c)[chk_names]

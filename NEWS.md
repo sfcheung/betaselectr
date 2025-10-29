@@ -1,4 +1,4 @@
-# betaselectr 0.1.2.2
+# betaselectr 0.1.3
 
 ## New Features
 

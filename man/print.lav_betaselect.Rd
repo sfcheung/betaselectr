@@ -11,7 +11,7 @@
   output = c("lavaan.printer", "table"),
   standardized_only = TRUE,
   show_Bs.by = FALSE,
-  show_ustd = TRUE,
+  show_ustd = !show_Bs.by,
   by_group = TRUE,
   na_str = " ",
   sig_stars = TRUE,

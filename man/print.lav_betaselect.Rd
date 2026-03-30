@@ -11,6 +11,7 @@
   output = c("lavaan.printer", "table"),
   standardized_only = TRUE,
   show_Bs.by = FALSE,
+  show_ustd = !show_Bs.by,
   by_group = TRUE,
   na_str = " ",
   sig_stars = TRUE,
@@ -60,6 +61,13 @@ indicating, for each parameter, the
 variables standardized.
 This column is not shown if \code{output}
 is not \code{"lavaan.printer"}.}
+
+\item{show_ustd}{Logical. If \code{TRUE},
+then a column will be added to indicate
+whether a parameter is \emph{unstandardized}.
+That is, its estimate is equal to
+that in the original unstandardized
+solution.}
 
 \item{by_group}{If \code{TRUE}, the
 default, and the model has more than

@@ -1,5 +1,12 @@
 # Changelog
 
+## betaselectr 0.1.3.1
+
+- The `print` method of the output of
+  [`lav_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lav_betaselect.md)
+  has a column to indicate whether a parameter is unstandardized.
+  (0.1.3.1)
+
 ## betaselectr 0.1.3
 
 CRAN release: 2025-10-29

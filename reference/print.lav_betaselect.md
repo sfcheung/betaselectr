@@ -14,6 +14,7 @@ print(
   output = c("lavaan.printer", "table"),
   standardized_only = TRUE,
   show_Bs.by = FALSE,
+  show_ustd = !show_Bs.by,
   by_group = TRUE,
   na_str = " ",
   sig_stars = TRUE,
@@ -61,6 +62,12 @@ print(
   `"Bs.by"` is shown, indicating, for each parameter, the variables
   standardized. This column is not shown if `output` is not
   `"lavaan.printer"`.
+
+- show_ustd:
+
+  Logical. If `TRUE`, then a column will be added to indicate whether a
+  parameter is *unstandardized*. That is, its estimate is equal to that
+  in the original unstandardized solution.
 
 - by_group:
 
@@ -176,35 +183,38 @@ fit_beta
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          BetaSelect
-#>  med ~             
-#>   iv          1.845
-#>   mod         0.325
-#>   iv:mod      0.797
-#>  dv ~              
-#>   med         0.049
-#>   iv          0.333
+#>          BetaSelect UStd
+#>  med ~                  
+#>   iv          1.845     
+#>   mod         0.325    U
+#>   iv:mod      0.797     
+#>  dv ~                   
+#>   med         0.049     
+#>   iv          0.333     
 #> 
 #> Covariances:
-#>          BetaSelect
-#>  iv ~~             
-#>   mod         1.894
-#>   iv:mod      0.630
-#>  mod ~~            
-#>   iv:mod      5.733
+#>          BetaSelect UStd
+#>  iv ~~                  
+#>   mod         1.894     
+#>   iv:mod      0.630     
+#>  mod ~~                 
+#>   iv:mod      5.733     
 #> 
 #> Variances:
-#>          BetaSelect
-#>  .med        61.851
-#>  .dv          0.574
-#>   iv          1.000
-#>   mod        23.129
-#>   iv:mod     27.015
+#>          BetaSelect UStd
+#>  .med        61.851    U
+#>  .dv          0.574     
+#>   iv          1.000     
+#>   mod        23.129    U
+#>   iv:mod     27.015     
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
 #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
 #>   original estimates and betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 print(fit_beta)
@@ -220,35 +230,38 @@ print(fit_beta)
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          BetaSelect
-#>  med ~             
-#>   iv          1.845
-#>   mod         0.325
-#>   iv:mod      0.797
-#>  dv ~              
-#>   med         0.049
-#>   iv          0.333
+#>          BetaSelect UStd
+#>  med ~                  
+#>   iv          1.845     
+#>   mod         0.325    U
+#>   iv:mod      0.797     
+#>  dv ~                   
+#>   med         0.049     
+#>   iv          0.333     
 #> 
 #> Covariances:
-#>          BetaSelect
-#>  iv ~~             
-#>   mod         1.894
-#>   iv:mod      0.630
-#>  mod ~~            
-#>   iv:mod      5.733
+#>          BetaSelect UStd
+#>  iv ~~                  
+#>   mod         1.894     
+#>   iv:mod      0.630     
+#>  mod ~~                 
+#>   iv:mod      5.733     
 #> 
 #> Variances:
-#>          BetaSelect
-#>  .med        61.851
-#>  .dv          0.574
-#>   iv          1.000
-#>   mod        23.129
-#>   iv:mod     27.015
+#>          BetaSelect UStd
+#>  .med        61.851    U
+#>  .dv          0.574     
+#>   iv          1.000     
+#>   mod        23.129    U
+#>   iv:mod     27.015     
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
 #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
 #>   original estimates and betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 print(fit_beta, show_Bs.by = TRUE)

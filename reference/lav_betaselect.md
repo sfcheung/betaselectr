@@ -370,35 +370,38 @@ fit_beta
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          BetaSelect
-#>  med ~             
-#>   iv          1.845
-#>   mod         0.325
-#>   iv:mod      0.797
-#>  dv ~              
-#>   med         0.049
-#>   iv          0.333
+#>          BetaSelect UStd
+#>  med ~                  
+#>   iv          1.845     
+#>   mod         0.325    U
+#>   iv:mod      0.797     
+#>  dv ~                   
+#>   med         0.049     
+#>   iv          0.333     
 #> 
 #> Covariances:
-#>          BetaSelect
-#>  iv ~~             
-#>   mod         1.894
-#>   iv:mod      0.630
-#>  mod ~~            
-#>   iv:mod      5.733
+#>          BetaSelect UStd
+#>  iv ~~                  
+#>   mod         1.894     
+#>   iv:mod      0.630     
+#>  mod ~~                 
+#>   iv:mod      5.733     
 #> 
 #> Variances:
-#>          BetaSelect
-#>  .med        61.851
-#>  .dv          0.574
-#>   iv          1.000
-#>   mod        23.129
-#>   iv:mod     27.015
+#>          BetaSelect UStd
+#>  .med        61.851    U
+#>  .dv          0.574     
+#>   iv          1.000     
+#>   mod        23.129    U
+#>   iv:mod     27.015     
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
 #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
 #>   original estimates and betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 print(fit_beta, standardized_only = FALSE)
@@ -414,30 +417,30 @@ print(fit_beta, standardized_only = FALSE)
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect
-#>  med ~                                                      
-#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845
-#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325
-#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797
-#>  dv ~                                                       
-#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049
-#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect UStd
+#>  med ~                                                           
+#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845     
+#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325    U
+#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797     
+#>  dv ~                                                            
+#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049     
+#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333     
 #> 
 #> Covariances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect
-#>  iv ~~                                                      
-#>   mod       5.287                                      1.894
-#>   iv:mod    4.908                                      0.630
-#>  mod ~~                                                     
-#>   iv:mod   16.006                                      5.733
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect UStd
+#>  iv ~~                                                           
+#>   mod       5.287                                      1.894     
+#>   iv:mod    4.908                                      0.630     
+#>  mod ~~                                                          
+#>   iv:mod   16.006                                      5.733     
 #> 
 #> Variances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect
-#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851
-#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574
-#>   iv        7.795                                      1.000
-#>   mod      23.129                                     23.129
-#>   iv:mod  210.572                                     27.015
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect UStd
+#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851    U
+#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574     
+#>   iv        7.795                                      1.000     
+#>   mod      23.129                                     23.129    U
+#>   iv:mod  210.572                                     27.015     
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
@@ -445,6 +448,9 @@ print(fit_beta, standardized_only = FALSE)
 #> - Column(s) prefixed by 'BS.*' are for betas-select.
 #> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only
 #>   betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 
@@ -473,30 +479,30 @@ fit_beta_boot
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
-#>  med ~                                                           
-#>   iv          1.845 0.592  3.115   0.000 ***  0.813  3.047   Sig.
-#>   mod         0.325 0.149  2.185   0.020   *  0.034  0.621   Sig.
-#>   iv:mod      0.797 0.114  6.987   0.000 ***  0.567  1.018   Sig.
-#>  dv ~                                                            
-#>   med         0.049 0.005 10.592   0.000 ***  0.038  0.057   Sig.
-#>   iv          0.333 0.046  7.179   0.000 ***  0.226  0.412   Sig.
+#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
+#>  med ~                                                                
+#>   iv          1.845 0.592  3.115   0.000 ***  0.813  3.047   Sig.     
+#>   mod         0.325 0.149  2.185   0.020   *  0.034  0.621   Sig.    U
+#>   iv:mod      0.797 0.114  6.987   0.000 ***  0.567  1.018   Sig.     
+#>  dv ~                                                                 
+#>   med         0.049 0.005 10.592   0.000 ***  0.038  0.057   Sig.     
+#>   iv          0.333 0.046  7.179   0.000 ***  0.226  0.412   Sig.     
 #> 
 #> Covariances:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
-#>  iv ~~                                                           
-#>   mod         1.894                       --                     
-#>   iv:mod      0.630                       --                     
-#>  mod ~~                                                          
-#>   iv:mod      5.733                       --                     
+#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
+#>  iv ~~                                                                
+#>   mod         1.894                       --                          
+#>   iv:mod      0.630                       --                          
+#>  mod ~~                                                               
+#>   iv:mod      5.733                       --                          
 #> 
 #> Variances:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig
-#>  .med        61.851 5.836 10.598   0.000 *** 48.732 72.713   Sig.
-#>  .dv          0.574 0.054 10.695   0.000 ***  0.441  0.684   Sig.
-#>   iv          1.000                       --                     
-#>   mod        23.129                       --                     
-#>   iv:mod     27.015                       --                     
+#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
+#>  .med        61.851 5.836 10.598   0.000 *** 48.732 72.713   Sig.    U
+#>  .dv          0.574 0.054 10.695   0.000 ***  0.441  0.684   Sig.     
+#>   iv          1.000                       --                          
+#>   mod        23.129                       --                         U
+#>   iv:mod     27.015                       --                          
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
@@ -507,6 +513,9 @@ fit_beta_boot
 #>   by the method of Asparouhov and Muthén (2021).
 #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
 #>   original estimates and betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 print(fit_beta_boot, standardized_only = FALSE)
@@ -533,14 +542,14 @@ print(fit_beta_boot, standardized_only = FALSE)
 #>  dv ~                                                                          
 #>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000
 #>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>                                    
-#>     ***    0.813    3.047      Sig.
-#>       *    0.034    0.621      Sig.
-#>     ***    0.567    1.018      Sig.
-#>                                    
-#>     ***    0.038    0.057      Sig.
-#>     ***    0.226    0.412      Sig.
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                         
+#>     ***    0.813    3.047      Sig.     
+#>       *    0.034    0.621      Sig.    U
+#>     ***    0.567    1.018      Sig.     
+#>                                         
+#>     ***    0.038    0.057      Sig.     
+#>     ***    0.226    0.412      Sig.     
 #> 
 #> Covariances:
 #>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
@@ -549,12 +558,12 @@ print(fit_beta_boot, standardized_only = FALSE)
 #>   iv:mod    4.908                                      0.630                   
 #>  mod ~~                                                                        
 #>   iv:mod   16.006                                      5.733                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>                                    
-#>      --                            
-#>      --                            
-#>                                    
-#>      --                            
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                         
+#>      --                                 
+#>      --                                 
+#>                                         
+#>      --                                 
 #> 
 #> Variances:
 #>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
@@ -563,12 +572,12 @@ print(fit_beta_boot, standardized_only = FALSE)
 #>   iv        7.795                                      1.000                   
 #>   mod      23.129                                     23.129                   
 #>   iv:mod  210.572                                     27.015                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>     ***   48.732   72.713      Sig.
-#>     ***    0.441    0.684      Sig.
-#>      --                            
-#>      --                            
-#>      --                            
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>     ***   48.732   72.713      Sig.    U
+#>     ***    0.441    0.684      Sig.     
+#>      --                                 
+#>      --                                U
+#>      --                                 
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
@@ -581,6 +590,9 @@ print(fit_beta_boot, standardized_only = FALSE)
 #> - Column(s) prefixed by 'BS.*' are for betas-select.
 #> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only
 #>   betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 
@@ -610,14 +622,14 @@ print(fit_beta_boot,
 #>  dv ~                                                                          
 #>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000
 #>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>                                    
-#>     ***    0.813    3.047      Sig.
-#>       *    0.034    0.621      Sig.
-#>     ***    0.567    1.018      Sig.
-#>                                    
-#>     ***    0.038    0.057      Sig.
-#>     ***    0.226    0.412      Sig.
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                         
+#>     ***    0.813    3.047      Sig.     
+#>       *    0.034    0.621      Sig.    U
+#>     ***    0.567    1.018      Sig.     
+#>                                         
+#>     ***    0.038    0.057      Sig.     
+#>     ***    0.226    0.412      Sig.     
 #> 
 #> Covariances:
 #>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
@@ -626,12 +638,12 @@ print(fit_beta_boot,
 #>   iv:mod    4.908                                      0.630                   
 #>  mod ~~                                                                        
 #>   iv:mod   16.006                                      5.733                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>                                    
-#>      --                            
-#>      --                            
-#>                                    
-#>      --                            
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                         
+#>      --                                 
+#>      --                                 
+#>                                         
+#>      --                                 
 #> 
 #> Variances:
 #>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
@@ -640,12 +652,12 @@ print(fit_beta_boot,
 #>   iv        7.795                                      1.000                   
 #>   mod      23.129                                     23.129                   
 #>   iv:mod  210.572                                     27.015                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig
-#>     ***   48.732   72.713      Sig.
-#>     ***    0.441    0.684      Sig.
-#>      --                            
-#>      --                            
-#>      --                            
+#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>     ***   48.732   72.713      Sig.    U
+#>     ***    0.441    0.684      Sig.     
+#>      --                                 
+#>      --                                U
+#>      --                                 
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
@@ -658,6 +670,9 @@ print(fit_beta_boot,
 #> - Column(s) prefixed by 'BS.*' are for betas-select.
 #> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only
 #>   betas-select.
+#> - 'U' in the column 'UStd' denotes that a parameter is the original one
+#>   (unstandardized). That is, no variables related to it are
+#>   standardized.
 #> - Product terms (iv:mod) have variables standardized before computing
 #>   them. The product term(s) is/are not standardized.
 

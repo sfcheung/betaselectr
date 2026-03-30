@@ -1,0 +1,546 @@
+# Beta-Select Demonstration: Logistic Regression by \`glm()\`
+
+## Introduction
+
+This article demonstrates how to use
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+from the package
+[`betaselectr`](https://sfcheung.github.io/betaselectr/) to standardize
+selected variables in a model fitted by
+[`glm()`](https://rdrr.io/r/stats/glm.html) and forming confidence
+intervals for the parameters. Logistic regression is used in this
+illustration.
+
+## Data and Model
+
+The sample dataset from the package `betaselectr` will be used for in
+this demonstration:
+
+``` r
+library(betaselectr)
+head(data_test_mod_cat_binary)
+#>   dv    iv   mod  cov1 cat1
+#> 1  1 16.67 51.76 18.38  gp2
+#> 2  1 17.36 56.85 21.52  gp3
+#> 3  1 14.50 46.49 21.52  gp2
+#> 4  0 16.16 48.25 16.28  gp3
+#> 5  0  9.61 42.95 15.89  gp1
+#> 6  0 13.14 48.65 21.03  gp3
+```
+
+This is the logistic regression model, fitted by
+[`glm()`](https://rdrr.io/r/stats/glm.html):
+
+``` r
+glm_out <- glm(dv ~ iv * mod + cov1 + cat1,
+               data = data_test_mod_cat_binary,
+               family = binomial())
+```
+
+The model has a moderator, `mod`, posited to moderate the effect from
+`iv` to `med`. The product term is `iv:mod`. The variable `cat1` is a
+categorical variable with three groups: `gp1`, `gp2`, `gp3`.
+
+These are the results:
+
+``` r
+summary(glm_out)
+#> 
+#> Call:
+#> glm(formula = dv ~ iv * mod + cov1 + cat1, family = binomial(), 
+#>     data = data_test_mod_cat_binary)
+#> 
+#> Coefficients:
+#>             Estimate Std. Error z value Pr(>|z|)    
+#> (Intercept) 24.36566    9.83244   2.478 0.013209 *  
+#> iv          -1.83370    0.67576  -2.714 0.006657 ** 
+#> mod         -0.52322    0.19848  -2.636 0.008385 ** 
+#> cov1        -0.02286    0.06073  -0.376 0.706562    
+#> cat1gp2      0.89002    0.36257   2.455 0.014100 *  
+#> cat1gp3      1.28291    0.34448   3.724 0.000196 ***
+#> iv:mod       0.03815    0.01364   2.797 0.005163 ** 
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance: 415.03  on 299  degrees of freedom
+#> Residual deviance: 390.91  on 293  degrees of freedom
+#> AIC: 404.91
+#> 
+#> Number of Fisher Scoring iterations: 4
+```
+
+## Problems With Standardization
+
+In logistic regression, there are several ways to do standardization
+(Menard, 2004). We use the same approach in linear regression and
+standardize all variables, except for the binary response variable.
+
+First, all variables in the model, including the product term and dummy
+variables, are computed:
+
+``` r
+data_test_mod_cat_binary_z <- data_test_mod_cat_binary
+data_test_mod_cat_binary_z$iv_x_mod <- data_test_mod_cat_binary_z$iv *
+                                       data_test_mod_cat_binary_z$mod
+data_test_mod_cat_binary_z$cat_gp2 <- as.numeric(data_test_mod_cat_binary_z$cat1 == "gp2")
+data_test_mod_cat_binary_z$cat_gp3 <- as.numeric(data_test_mod_cat_binary_z$cat1 == "gp3")
+head(data_test_mod_cat_binary_z)
+#>   dv    iv   mod  cov1 cat1 iv_x_mod cat_gp2 cat_gp3
+#> 1  1 16.67 51.76 18.38  gp2 862.8392       1       0
+#> 2  1 17.36 56.85 21.52  gp3 986.9160       0       1
+#> 3  1 14.50 46.49 21.52  gp2 674.1050       1       0
+#> 4  0 16.16 48.25 16.28  gp3 779.7200       0       1
+#> 5  0  9.61 42.95 15.89  gp1 412.7495       0       0
+#> 6  0 13.14 48.65 21.03  gp3 639.2610       0       1
+```
+
+All the variables are then standardized:
+
+``` r
+data_test_mod_cat_binary_z <- data.frame(scale(data_test_mod_cat_binary_z[, -5]))
+data_test_mod_cat_binary_z$dv <- data_test_mod_cat_binary$dv
+head(data_test_mod_cat_binary_z)
+#>   dv         iv        mod       cov1   iv_x_mod    cat_gp2    cat_gp3
+#> 1  1  0.8347403  0.4632131 -0.7895117  0.8142500  1.4553064 -0.9591663
+#> 2  1  1.1648852  1.6757589  0.7727941  1.6887948 -0.6848501  1.0390968
+#> 3  1 -0.2035415 -0.7922125  0.7727941 -0.5160269  1.4553064 -0.9591663
+#> 4  0  0.5907202 -0.3729432 -1.8343660  0.2283915 -0.6848501  1.0390968
+#> 5  0 -2.5432642 -1.6355154 -2.0284103 -2.3581688 -0.6848501 -0.9591663
+#> 6  0 -0.8542619 -0.2776547  0.5289948 -0.7616218 -0.6848501  1.0390968
+```
+
+The logistic regression model is then fitted to the standardized
+variables:
+
+``` r
+glm_std_common <- glm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
+                      data = data_test_mod_cat_binary_z,
+                      family = binomial())
+```
+
+The “betas” commonly reported are the coefficients in this model:
+
+``` r
+glm_std_common_summary <- summary(glm_std_common)
+printCoefmat(glm_std_common_summary$coefficients,
+             digits = 5,
+             zap.ind = 1,
+             P.values = TRUE,
+             has.Pvalue = TRUE,
+             signif.stars = TRUE)
+#>             Estimate Std. Error z value Pr(>|z|)    
+#> (Intercept) -0.11220    0.12083 -0.9284 0.353184    
+#> iv          -3.83240    1.41234 -2.7135 0.006657 ** 
+#> mod         -2.19640    0.83316 -2.6362 0.008385 ** 
+#> cov1        -0.04600    0.12206 -0.3765 0.706562    
+#> cat_gp2      0.41590    0.16942  2.4547 0.014100 *  
+#> cat_gp3      0.64200    0.17239  3.7242 0.000196 ***
+#> iv_x_mod     5.41270    1.93542  2.7967 0.005163 ** 
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+However, for this model, there are several problems:
+
+- The product term, `iv:mod`, is also standardized (`iv_x_mod`, computed
+  using the standard deviations of `dv` and `iv:mod`). This is
+  inappropriate. One simple but underused solution is standardizing the
+  variables *before* forming the product term (see Friedrich, 1982 on
+  the case of linear regression).
+
+- The default confidence intervals are formed using profiling in
+  [`glm()`](https://rdrr.io/r/stats/glm.html). It does allow for
+  asymmetry. However, it does not take into account the sampling
+  variation of the standardizers (the sample standard deviations used in
+  standardization). It is unclear whether it will be biased, as in the
+  case of OLS standard error (Yuan & Chan, 2011).
+
+- There are cases in which some variables are measured by meaningful
+  units and do not need to be standardized. for example, if `cov1` is
+  age measured by year, then age is more meaningful than “standardized
+  age”.
+
+- In regression models, categorical variables are usually represented by
+  dummy variables, each of them having only two possible values (0 or
+  1). It is not meaningful to standardize the dummy variables.
+
+## Beta-Select by `glm_betaselect()`
+
+The function
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+can be used to solve these problems by:
+
+- standardizing variables before product terms are formed,
+
+- standardizing only variables for which standardization can facilitate
+  interpretation, and
+
+- forming bootstrap confidence intervals that take into account selected
+  standardization.
+
+We call the coefficients computed by this kind of standardization
+*beta*s-select (\\\beta{s}\_{Select}\\, \\\beta\_{Select}\\ in singular
+form), to differentiate them from coefficients computed by standardizing
+all variables, including product terms.
+
+### Estimates Only
+
+Suppose we only need to solve the first problem, standardizing all
+numeric variables except for the response variable (which is binary),
+with the product term computed after `iv` and `mod` are standardized.
+
+``` r
+glm_beta_select <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                  data = data_test_mod_cat_binary,
+                                  skip_response = TRUE,
+                                  family = binomial(),
+                                  do_boot = FALSE)
+```
+
+The function `glm_beta_iv_mod()` can be used as
+[`glm()`](https://rdrr.io/r/stats/glm.html), with applicable arguments
+such as the model formula and `data` passed to
+[`glm()`](https://rdrr.io/r/stats/glm.html).
+
+By default, *all* numeric variables will be standardized before fitting
+the models. Terms such as product terms are created *after*
+standardization.
+
+For [`glm()`](https://rdrr.io/r/stats/glm.html), standardizing the
+outcome variable (`dv` in this example) may not be meaningful or may
+even be not allowed. In the case of logistic regression, the outcome
+variable need to be 0 or 1 only. Therefore, `skip_response` is set to
+`TRUE`, to request that the response (outcome) variable is *not*
+standardized.
+
+Moreover, categorical variables (factors and string variables) will not
+be standardized.
+
+Bootstrapping is done by default. In this illustration,
+`do_boot = FALSE` is added to disable it because we only want to address
+the first problem. We will do bootstrapping when addressing the issue
+with confidence intervals.
+
+The [`summary()`](https://rdrr.io/r/base/summary.html) method can be
+used ont the output of
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md):
+
+``` r
+summary(glm_beta_select)
+#> Waiting for profiling to be done...
+#> Call to glm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, 
+#>     do_boot = FALSE, model_call = "glm")
+#> 
+#> Variable(s) standardized: iv, mod, cov1 
+#> 
+#> Call:
+#> stats::glm(formula = dv ~ iv * mod + cov1 + cat1, family = binomial(), 
+#>     data = betaselectr::std_data(data = data_test_mod_cat_binary, 
+#>         to_standardize = c("iv", "mod", "cov1")))
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error z value Pr(>|z|)    
+#> (Intercept)   -1.158   -1.783   -0.584      0.304  -3.807  < 0.001 ***
+#> iv             0.140   -0.125    0.409      0.136   1.027  0.30449    
+#> mod            0.194   -0.080    0.474      0.141   1.376  0.16878    
+#> cov1          -0.046   -0.287    0.193      0.122  -0.376  0.70656    
+#> cat1gp2        0.890    0.193    1.620      0.363   2.455  0.01410 *  
+#> cat1gp3        1.283    0.625    1.981      0.344   3.724  < 0.001 ***
+#> iv:mod         0.335    0.108    0.578      0.120   2.797  0.00516 ** 
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance: 415.03  on 299  degrees of freedom
+#> Residual deviance: 390.91  on 293  degrees of freedom
+#> AIC: 404.9
+#> 
+#> Number of Fisher Scoring iterations: 4
+#> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.314    0.168    0.558
+#> iv           1.150    0.882    1.506
+#> mod          1.214    0.923    1.607
+#> cov1         0.955    0.751    1.213
+#> cat1gp2      2.435    1.213    5.052
+#> cat1gp3      3.607    1.868    7.251
+#> iv:mod       1.398    1.114    1.782
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Standard errors are least-squares standard errors.
+#> - Z values are computed by 'Estimate / Std. Error'.
+#> - P-values are usual z-test p-values.
+#> - Default standard errors, z values, p-values, and confidence intervals
+#>   (if reported) should not be used for coefficients involved in
+#>   standardization.
+#> - Default 95.0% confidence interval reported.
+```
+
+Compared to the solution with the product term standardized, the
+coefficient of `iv:mod` changed substantially from 5.413 to 0.335.
+Similar to the case of linear regression (Cheung et al., 2022), the
+coefficient of *standardized* product term (`iv:mod`) can be
+substantially different from the properly standardized product term (the
+product of standardized `iv` and standardized `mod`).
+
+### Estimates and Bootstrap Confidence Interval
+
+Suppose we want to address both the first and the second problems, with
+
+- the product term computed after `iv` and `mod` are standardized, and
+
+- bootstrap confidence interval used.
+
+We can call
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+again, with additional arguments set:
+
+``` r
+glm_beta_select_boot <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                       data = data_test_mod_cat_binary,
+                                       family = binomial(),
+                                       skip_response = TRUE,
+                                       bootstrap = 5000,
+                                       iseed = 4567)
+```
+
+These are the additional arguments:
+
+- `bootstrap`: The number of bootstrap samples to draw. Default is 100.
+  It should be set to 5000 or even 10000.
+
+- `iseed`: The seed for the random number generator used for
+  bootstrapping. Set this to an integer to make the results
+  reproducible.
+
+This is the output of [`summary()`](https://rdrr.io/r/base/summary.html)
+
+``` r
+summary(glm_beta_select_boot)
+#> Call to glm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     family = binomial(), data = data_test_mod_cat_binary, skip_response = TRUE, 
+#>     bootstrap = 5000, iseed = 4567, model_call = "glm")
+#> 
+#> Variable(s) standardized: iv, mod, cov1 
+#> 
+#> Call:
+#> stats::glm(formula = dv ~ iv * mod + cov1 + cat1, family = binomial(), 
+#>     data = betaselectr::std_data(data = data_test_mod_cat_binary, 
+#>         to_standardize = c("iv", "mod", "cov1")))
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    
+#> (Intercept)   -1.158   -1.869   -0.598      0.322  -3.598   <0.001 ***
+#> iv             0.140   -0.134    0.420      0.142   0.982    0.336    
+#> mod            0.194   -0.083    0.486      0.145   1.337    0.169    
+#> cov1          -0.046   -0.287    0.193      0.122  -0.376    0.699    
+#> cat1gp2        0.890    0.193    1.722      0.386   2.306    0.012 *  
+#> cat1gp3        1.283    0.644    2.063      0.362   3.542   <0.001 ***
+#> iv:mod         0.335    0.109    0.597      0.124   2.700    0.004 ** 
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance: 415.03  on 299  degrees of freedom
+#> Residual deviance: 390.91  on 293  degrees of freedom
+#> AIC: 404.9
+#> 
+#> Number of Fisher Scoring iterations: 4
+#> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.314    0.154    0.550
+#> iv           1.150    0.875    1.521
+#> mod          1.214    0.920    1.625
+#> cov1         0.955    0.750    1.213
+#> cat1gp2      2.435    1.213    5.596
+#> cat1gp3      3.607    1.904    7.867
+#> iv:mod       1.398    1.115    1.816
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Nonparametric bootstrapping conducted.
+#> - The number of bootstrap samples is 5000.
+#> - Standard errors are bootstrap standard errors.
+#> - Z values are computed by 'Estimate / Std. Error'.
+#> - The bootstrap p-values are asymmetric p-values by Asparouhov and
+#>   Muthén (2021).
+#> - Percentile bootstrap 95.0% confidence interval reported.
+```
+
+By default, 95% percentile bootstrap confidence intervals are printed
+(`CI.Lower` and `CI.Upper`). The *p*-values (`Pr(Boot)`) are asymmetric
+bootstrap *p*-values (Asparouhov & Muthén, 2021).
+
+### Estimates and Bootstrap Confidence Intervals, With Only Selected Variables Standardized
+
+Suppose we want to address also the the third issue, and standardize
+only some of the variables. This can be done using either
+`to_standardize` or `not_to_standardize`.
+
+- Use `to_standardize` when the number of variables to standardize is
+  much fewer than number of the variables not to standardize
+
+- Use `not_to_standardize` when the number of variables to standardize
+  is much more than the number of variables not to standardize.
+
+For example, suppose we only need to standardize `iv` and `cov1`, this
+is the call to do this, setting `to_standardize` to `c("iv", "cov1")`:
+
+``` r
+glm_beta_select_boot_1 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                         data = data_test_mod_cat_binary,
+                                         to_standardize = c("iv", "cov1"),
+                                         skip_response = TRUE,
+                                         family = binomial(),
+                                         bootstrap = 5000,
+                                         iseed = 4567)
+```
+
+If we want to standardize all variables except for `mod` (`dv` is
+skipped by `skip_response`) we can use this call, and set
+`not_to_standardize` to `"mod"`:
+
+``` r
+glm_beta_select_boot_2 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
+                                         data = data_test_mod_cat_binary,
+                                         not_to_standardize = c("mod"),
+                                         skip_response = TRUE,
+                                         family = binomial(),
+                                         bootstrap = 5000,
+                                         iseed = 4567)
+```
+
+The results of these calls are identical, and only those of the first
+version are printed:
+
+``` r
+summary(glm_beta_select_boot_1)
+#> Call to glm_betaselect():
+#> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
+#>     family = binomial(), data = data_test_mod_cat_binary, to_standardize = c("iv", 
+#>         "cov1"), skip_response = TRUE, bootstrap = 5000, iseed = 4567, 
+#>     model_call = "glm")
+#> 
+#> Variable(s) standardized: iv, cov1 
+#> 
+#> Call:
+#> stats::glm(formula = dv ~ iv * mod + cov1 + cat1, family = binomial(), 
+#>     data = betaselectr::std_data(data = data_test_mod_cat_binary, 
+#>         to_standardize = c("iv", "cov1")))
+#> 
+#> Coefficients:
+#>             Estimate CI.Lower CI.Upper Std. Error z value Pr(Boot)    
+#> (Intercept)   -3.460   -7.063   -0.061      1.798  -1.924   0.0460 *  
+#> iv            -3.832   -6.807   -1.171      1.431  -2.678   0.0044 ** 
+#> mod            0.046   -0.020    0.115      0.035   1.339   0.1692    
+#> cov1          -0.046   -0.287    0.193      0.122  -0.376   0.6988    
+#> cat1gp2        0.890    0.193    1.722      0.386   2.306   0.0120 *  
+#> cat1gp3        1.283    0.644    2.063      0.362   3.542   <0.001 ***
+#> iv:mod         0.080    0.027    0.140      0.029   2.767   0.0040 ** 
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> (Dispersion parameter for binomial family taken to be 1)
+#> 
+#>     Null deviance: 415.03  on 299  degrees of freedom
+#> Residual deviance: 390.91  on 293  degrees of freedom
+#> AIC: 404.9
+#> 
+#> Number of Fisher Scoring iterations: 4
+#> 
+#> Transformed Parameter Estimates:
+#>             Exp(B) CI.Lower CI.Upper
+#> (Intercept)  0.031    0.001    0.941
+#> iv           0.022    0.001    0.310
+#> mod          1.047    0.980    1.122
+#> cov1         0.955    0.750    1.213
+#> cat1gp2      2.435    1.213    5.596
+#> cat1gp3      3.607    1.904    7.867
+#> iv:mod       1.083    1.027    1.150
+#> 
+#> Note:
+#> - Results *after* standardization are reported.
+#> - Nonparametric bootstrapping conducted.
+#> - The number of bootstrap samples is 5000.
+#> - Standard errors are bootstrap standard errors.
+#> - Z values are computed by 'Estimate / Std. Error'.
+#> - The bootstrap p-values are asymmetric p-values by Asparouhov and
+#>   Muthén (2021).
+#> - Percentile bootstrap 95.0% confidence interval reported.
+```
+
+For *beta*s-*select*, researchers need to state which variables are
+standardized and which are not. This can be done in table notes.
+
+### Categorical Variables
+
+When calling
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md),
+categorical variables (factors and string variables) will never be
+standardized.
+
+In the example above, the coefficients of the two dummy variables when
+both the dummy variables and the outcome variables are standardized are
+0.416 and 0.642:
+
+``` r
+printCoefmat(glm_std_common_summary$coefficients[5:6, ],
+             digits = 5,
+             zap.ind = 1,
+             P.values = TRUE,
+             has.Pvalue = TRUE,
+             signif.stars = TRUE)
+#>         Estimate Std. Error z value Pr(>|z|)    
+#> cat_gp2  0.41587    0.16941  2.4547 0.014100 *  
+#> cat_gp3  0.64201    0.17239  3.7242 0.000196 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+These two values are not interpretable because it does not make sense to
+talk about a “one-SD change” in the dummy variables.
+
+## Conclusion
+
+In generalized linear modeling, there are many situations in which
+standardizing all variables is not appropriate, or when standardization
+needs to be done before forming product terms. We are not aware of tools
+that can do appropriate standardization *and* form confidence intervals
+that takes into account the selective standardization. By promoting the
+use of *beta*s-*select* using
+[`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md),
+we hope to make it easier for researchers to do appropriate
+standardization when reporting generalized linear modeling results.
+
+## References
+
+Asparouhov, T., & Muthén, B. O. (2021). *Bootstrap *p*-value
+computation*.
+<https://www.statmodel.com/download/FAQ-Bootstrap%20-%20Pvalue.pdf>
+
+Cheung, S. F., Cheung, S.-H., Lau, E. Y. Y., Hui, C. H., & Vong, W. N.
+(2022). Improving an old way to measure moderation effect in
+standardized units. *Health Psychology*, *41*(7), 502–505.
+<https://doi.org/10.1037/hea0001188>
+
+Friedrich, R. J. (1982). In defense of multiplicative terms in multiple
+regression equations. *American Journal of Political Science*, *26*(4),
+797–833. <https://doi.org/10.2307/2110973>
+
+Menard, S. (2004). Six approaches to calculating standardized logistic
+regression coefficients. *The American Statistician*, *58*(3), 218–223.
+<https://doi.org/10.1198/000313004X946>
+
+Yuan, K.-H., & Chan, W. (2011). Biases and standard errors of
+standardized regression coefficients. *Psychometrika*, *76*(4), 670–690.
+<https://doi.org/10.1007/s11336-011-9224-6>

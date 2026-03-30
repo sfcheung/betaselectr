@@ -1,0 +1,124 @@
+# betaselectr: Do Selective Standardization in Structural Equation Models and Regression Models
+
+(Version 0.1.3, updated on 2025-10-29, [release
+history](https://sfcheung.github.io/betaselectr/news/index.html))
+
+It computes *beta*s-select, coefficients (*beta*s) after standardization
+in structural equation models and regression models with only *select*ed
+variables standardized. It supports models with moderation, with product
+terms formed appropriately (formed *after* standardization). It can also
+form confidence intervals that takes into account the standardization
+appropriately.
+
+For more information on this package, please visit its GitHub page:
+
+<https://sfcheung.github.io/betaselectr/>
+
+# Installation
+
+The latest developmental version of this package can be installed by
+`remotes::install_github`:
+
+``` r
+remotes::install_github("sfcheung/betaselectr")
+```
+
+# Issues
+
+If you have any suggestions and found any bugs, please feel feel to open
+a GitHub issue. Thanks.
+
+<https://github.com/sfcheung/betaselectr/issues>
+
+# Package index
+
+## Main Functions
+
+- [`lav_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lav_betaselect.md)
+  : Betas-Select in a 'lavaan'-Model
+- [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  [`print(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  [`print(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  [`raw_output()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  : Betas-Select in a Regression Model
+
+## Helper Functions
+
+- [`std_data()`](https://sfcheung.github.io/betaselectr/reference/std_data.md)
+  : Standardize Selected Variables
+
+## Methods for lav_betaselect()
+
+- [`print(`*`<lav_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/print.lav_betaselect.md)
+  : Print a 'lav_betaselect' Object
+- [`coef(`*`<lav_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/coef.lav_betaselect.md)
+  : Coefficients of a 'lav_betaselect'-Class Object
+- [`confint(`*`<lav_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/confint.lav_betaselect.md)
+  : Confidence Intervals for a 'lav_betaselect'-Class Object
+
+## Methods for lm_betaselect() and glm_betaselect()
+
+- [`anova(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/anova.lm_betaselect.md)
+  [`anova(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/anova.lm_betaselect.md)
+  : ANOVA Tables For 'lm_betaselect' and 'glm_betaselect' Objects
+
+- [`coef(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/coef.lm_betaselect.md)
+  [`coef(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/coef.lm_betaselect.md)
+  : Coefficients of Beta-Select in Linear Models
+
+- [`confint(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/confint.lm_betaselect.md)
+  [`confint(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/confint.lm_betaselect.md)
+  : Confidence Interval for 'lm_betaselect' or 'glm_betaselect' Objects
+
+- [`getCall(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/getCall.lm_betaselect.md)
+  [`getCall(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/getCall.lm_betaselect.md)
+  : Call in an 'lm_betaselect' or 'glm_betaselect' Object
+
+- [`predict(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/predict.lm_betaselect.md)
+  : Predict Method for an 'lm_betaselect' Object
+
+- [`summary(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/summary.lm_betaselect.md)
+  [`print(`*`<summary.lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/summary.lm_betaselect.md)
+  : Summary of an 'lm_betaselect'-Class Object
+
+- [`vcov(`*`<lm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/vcov.lm_betaselect.md)
+  [`vcov(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/vcov.lm_betaselect.md)
+  :
+
+  The 'vcov' Method for 'lm_betaselect' and `glm_betaselect` Objects
+
+- [`predict(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/predict.glm_betaselect.md)
+  : Predict Method for a 'glm_betaselect' Object
+
+- [`summary(`*`<glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/summary.glm_betaselect.md)
+  [`print(`*`<summary.glm_betaselect>`*`)`](https://sfcheung.github.io/betaselectr/reference/summary.glm_betaselect.md)
+  : Summary of an 'glm_betaselect'-Class Object
+
+## Datasets
+
+Datasets used in examples.
+
+- [`data_test_medmod`](https://sfcheung.github.io/betaselectr/reference/data_test_medmod.md)
+  : Test Dataset with Moderator and Mediator
+- [`data_test_mod_cat`](https://sfcheung.github.io/betaselectr/reference/data_test_mod_cat.md)
+  : Test Dataset with Moderator and Categorical Variables
+- [`data_test_mod_cat2`](https://sfcheung.github.io/betaselectr/reference/data_test_mod_cat2.md)
+  : Test Dataset with Moderator and Categorical Variables (Version 2)
+- [`data_test_mod_cat_binary`](https://sfcheung.github.io/betaselectr/reference/data_test_mod_cat_binary.md)
+  : Test Dataset with a Binary Outcome Variable
+
+# Articles
+
+### All vignettes
+
+- [Beta-Select Demonstration: Logistic Regression by
+  \`glm()\`](https://sfcheung.github.io/betaselectr/articles/betaselectr_glm.md):
+- [Beta-Select Demonstration: SEM by
+  'lavaan'](https://sfcheung.github.io/betaselectr/articles/betaselectr_lav.md):
+- [Beta-Select Demonstration: Regression by
+  \`lm()\`](https://sfcheung.github.io/betaselectr/articles/betaselectr_lm.md):
+- [How lav_betaselect()
+  Works](https://sfcheung.github.io/betaselectr/articles/lav_betaselect_technical.md):
+- [How lm_betaselect() and glm_betaselect()
+  Work](https://sfcheung.github.io/betaselectr/articles/lm_betaselect_technical.md):

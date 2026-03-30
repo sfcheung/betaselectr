@@ -1,0 +1,18 @@
+{
+  "cSpell.words": [
+    "Multigroup"
+  ]
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#2e42c2",
+    "titleBar.inactiveBackground": "#a8b3fa",
+    "editor.background": "#171c3a",
+    "sideBar.background": "#171c3a",
+    "activityBar.background": "#171c3a",
+    "statusBar.background": "#171c3a",
+    // "editor.snippetTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetTabstopHighlightBorder": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBackground": "#2d2306",
+    // "editor.snippetFinalTabstopHighlightBorder": "#2d2306"
+
+  }
+}

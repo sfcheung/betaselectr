@@ -66,6 +66,13 @@
 #' This column is not shown if `output`
 #' is not `"lavaan.printer"`.
 #'
+#' @param show_ustd Logical. If `TRUE`,
+#' then a column will be added to indicate
+#' whether a parameter is *unstandardized*.
+#' That is, its estimate is equal to
+#' that in the original unstandardized
+#' solution.
+#'
 #' @param by_group If `TRUE`, the
 #' default, and the model has more than
 #' one group, sections will be grouped
@@ -128,6 +135,7 @@ print.lav_betaselect <- function(x,
                                  output = c("lavaan.printer", "table"),
                                  standardized_only = TRUE,
                                  show_Bs.by = FALSE,
+                                 show_ustd = !show_Bs.by,
                                  by_group = TRUE,
                                  na_str = " ",
                                  sig_stars = TRUE,
@@ -338,6 +346,14 @@ print.lav_betaselect <- function(x,
             out0 <- c(out0,
                       tmp)
           }
+        if (show_ustd) {
+            tmp <- paste("- 'U' in the column 'UStd' denotes",
+                         "that a parameter is the original one",
+                         "(unstandardized). That is, no variables related to it",
+                         "are standardized.")
+            out0 <- c(out0,
+                      tmp)
+          }
         if (length(prods) > 0) {
             tmp <- paste0("- Product terms (",
                           paste0(names(prods), collapse = ", "),
@@ -370,6 +386,13 @@ print.lav_betaselect <- function(x,
         out0
       }
 
+    if (show_ustd) {
+      est1$ustd <- ifelse(
+                      est1$std.p.by == "",
+                      yes = "U",
+                      no = "")
+    }
+
     if (!show_Bs.by) {
         est1$std.p.by <- NULL
       }
@@ -385,7 +408,8 @@ print.lav_betaselect <- function(x,
                                   "std.p.ci.lower" = "BS.CI.Lo",
                                   "std.p.ci.upper" = "BS.CI.Hi",
                                   "std.p.ci.sig" = "BS.CI.Sig",
-                                  "std.p.by" = "Selected"),
+                                  "std.p.by" = "Selected",
+                                  "ustd" = "UStd"),
                   header_funs = list(hdr_select),
                   footer_funs = list(ftr_select))
         lavaan.printer::print_parameterEstimates_table_list(out,
@@ -413,7 +437,8 @@ print.lav_betaselect <- function(x,
                                   "std.p.ci.lower" = "CI.Lo",
                                   "std.p.ci.upper" = "CI.Hi",
                                   "std.p.ci.sig" = "CI.Sig",
-                                  "std.p.by" = "Selected"),
+                                  "std.p.by" = "Selected",
+                                  "ustd" = "UStd"),
                   header_funs = list(hdr_select),
                   footer_funs = list(ftr_select))
         lavaan.printer::print_parameterEstimates_table_list(out,

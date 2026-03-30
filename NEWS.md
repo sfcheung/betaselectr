@@ -1,3 +1,10 @@
+# betaselectr 0.1.3.1
+
+- The `print` method of the output
+  of `lav_betaselect()` has a column
+  to indicate whether a parameter is
+  unstandardized. (0.1.3.1)
+
 # betaselectr 0.1.3
 
 ## New Features

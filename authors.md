@@ -21,12 +21,12 @@ Source:
 
 Cheung S, Sun R, Chang F, Yang W, Cheung S (2026). *betaselectr:
 Betas-Select in Structural Equation Models and Linear Models*. R package
-version 0.1.3.1, <https://sfcheung.github.io/betaselectr/>.
+version 0.1.3.2, <https://sfcheung.github.io/betaselectr/>.
 
     @Manual{,
       title = {betaselectr: Betas-Select in Structural Equation Models and Linear Models},
       author = {Shu Fai Cheung and Rong Wei Sun and Florbela Chang and Wendie Yang and Sing-Hang Cheung},
       year = {2026},
-      note = {R package version 0.1.3.1},
+      note = {R package version 0.1.3.2},
       url = {https://sfcheung.github.io/betaselectr/},
     }

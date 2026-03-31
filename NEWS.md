@@ -1,9 +1,13 @@
-# betaselectr 0.1.3.1
+# betaselectr 0.1.3.2
 
 - The `print` method of the output
   of `lav_betaselect()` has a column
   to indicate whether a parameter is
   unstandardized. (0.1.3.1)
+
+- The computation of the standardized
+  solution with bootstrapping now supports
+  parallel processing. (0.1.3.2)
 
 # betaselectr 0.1.3
 

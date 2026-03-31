@@ -184,6 +184,9 @@ std_boot <- function(object,
                                                 what = "boot"),
                             error = function(e) e)
         if (inherits(boot_est, "error")) {
+            if (progress) {
+              cat("Generating bootstrap estimates ...\n")
+            }
             # stop("Bootstrap SEs/CIs requested but bootstrap not used when fitting the model.")
             boot_est <- lavaan::bootstrapLavaan(object,
                                                 R = bootstrap,
@@ -197,12 +200,29 @@ std_boot <- function(object,
             boot_est <- boot_est[-boot_est_err, ]
           }
       }
+    # ---- Create a cluster ----
+    # TODO:
+    # - Support multicore
+    if ((parallel == "snow") &&
+        vector_form &&
+        is.null(cl)) {
+      cl <- parallel::makeCluster(ncpus)
+      on.exit(try(parallel::stopCluster(cl)), add = TRUE)
+    } else if (parallel == "no") {
+      cl <- NULL
+    }
     if (progress) {
-        cat("\nCompute bootstrapping standardized solution:\n")
+        cat("Compute bootstrapping standardized solution:\n")
+        pbopt_old <- pbapply::pboptions(nout = 10)
+        on.exit(pbapply::pboptions(pbopt_old), add = TRUE)
         if (vector_form) {
             est_std_boot <- pbapply::pbsapply(asplit(boot_est, 1),
                               std_fct_v,
-                              simplify = TRUE)
+                              simplify = TRUE,
+                              cl = cl)
+            # est_std_boot <- pbapply::pbsapply(asplit(boot_est, 1),
+            #                   std_fct_v,
+            #                   simplify = TRUE)
           } else {
             est_std_boot <- pbapply::pbsapply(asplit(boot_est, 1),
                               function(yy) {
@@ -212,9 +232,17 @@ std_boot <- function(object,
           }
       } else {
         if (vector_form) {
-            est_std_boot <- sapply(asplit(boot_est, 1),
-                              std_fct_v,
-                              simplify = TRUE)
+            if (!is.null(cl)) {
+              est_std_boot <- parallel::parSapply(
+                                cl = cl,
+                                asplit(boot_est, 1),
+                                std_fct_v,
+                                simplify = TRUE)
+            } else {
+              est_std_boot <- sapply(asplit(boot_est, 1),
+                                std_fct_v,
+                                simplify = TRUE)
+            }
           } else {
             est_std_boot <- sapply(asplit(boot_est, 1),
                               function(yy) {

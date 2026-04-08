@@ -1,6 +1,10 @@
 # Changelog
 
-## betaselectr 0.1.3.2
+## betaselectr 0.1.4
+
+CRAN release: 2026-04-07
+
+### Improvement
 
 - The `print` method of the output of
   [`lav_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lav_betaselect.md)

@@ -38,6 +38,8 @@ This is the path model, fitted by
 
 ``` r
 library(lavaan)
+#> This is lavaan 0.6-21
+#> lavaan is FREE software! Please report any bugs.
 mod <-
 "
 med ~ iv + mod + iv:mod + cov1 + cov2
@@ -54,7 +56,7 @@ These are the results:
 
 ``` r
 summary(fit)
-#> lavaan 0.6-20 ended normally after 2 iterations
+#> lavaan 0.6-21 ended normally after 2 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -193,23 +195,26 @@ This is the output if printed using the default options:
     #>  Information saturated (h1) model: Structured
     #> 
     #> Regressions:
-    #>            BetaSelect
-    #>  med ~               
-    #>   iv            0.182
-    #>   mod           0.165
-    #>   iv:mod        0.400
-    #>   cov1         -0.077
-    #>   cov2          0.105
-    #>  dv ~                
-    #>   med           0.459
-    #>   iv            0.331
-    #>   cov1         -0.024
-    #>   cov2          0.066
+    #>            BetaSelect UStd
+    #>  med ~                    
+    #>   iv            0.182     
+    #>   mod           0.165     
+    #>   iv:mod        0.400     
+    #>   cov1         -0.077     
+    #>   cov2          0.105     
+    #>  dv ~                     
+    #>   med           0.459     
+    #>   iv            0.331     
+    #>   cov1         -0.024     
+    #>   cov2          0.066     
     #> 
     #> Footnote:
     #> - Variable(s) standardized: cov1, cov2, dv, iv, med, mod
     #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
     #>   original estimates and betas-select.
+    #> - 'U' in the column 'UStd' denotes that a parameter is the original one
+    #>   (unstandardized). That is, no variables related to it are
+    #>   standardized.
     #> - Product terms (iv:mod) have variables standardized before computing
     #>   them. The product term(s) is/are not standardized.
 
@@ -245,7 +250,7 @@ fit_beta <- lav_betaselect(fit,
                            ncpus = 20)
 #> Finding product terms in the model ...
 #> Finished finding product terms.
-#> 
+#> Generating bootstrap estimates ...
 #> Compute bootstrapping standardized solution:
 ```
 
@@ -289,18 +294,18 @@ fit_beta
     #>  Information saturated (h1) model: Structured
     #> 
     #> Regressions:
-    #>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig
-    #>  med ~                                                            
-    #>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.
-    #>   mod           0.165 0.069  2.389   0.015   *  0.028 0.303   Sig.
-    #>   iv:mod        0.400 0.047  8.565   0.000 ***  0.298 0.481   Sig.
-    #>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.
-    #>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.
-    #>  dv ~                                                             
-    #>   med           0.459 0.052  8.828   0.000 ***  0.348 0.553   Sig.
-    #>   iv            0.331 0.051  6.480   0.000 ***  0.229 0.431   Sig.
-    #>   cov1         -0.024 0.058 -0.418   0.686     -0.137 0.090   n.s.
-    #>   cov2          0.066 0.058  1.139   0.259     -0.050 0.178   n.s.
+    #>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig UStd
+    #>  med ~                                                                 
+    #>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.     
+    #>   mod           0.165 0.069  2.389   0.015   *  0.028 0.303   Sig.     
+    #>   iv:mod        0.400 0.047  8.565   0.000 ***  0.298 0.481   Sig.     
+    #>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.     
+    #>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.     
+    #>  dv ~                                                                  
+    #>   med           0.459 0.052  8.828   0.000 ***  0.348 0.553   Sig.     
+    #>   iv            0.331 0.051  6.480   0.000 ***  0.229 0.431   Sig.     
+    #>   cov1         -0.024 0.058 -0.418   0.686     -0.137 0.090   n.s.     
+    #>   cov2          0.066 0.058  1.139   0.259     -0.050 0.178   n.s.     
     #> 
     #> Footnote:
     #> - Variable(s) standardized: cov1, cov2, dv, iv, med, mod
@@ -311,8 +316,8 @@ fit_beta
     #>   by the method of Asparouhov and Muthén (2021).
     #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
     #>   original estimates and betas-select.
-    #> - Product terms (iv:mod) have variables standardized before computing
-    #>   them. The product term(s) is/are not standardized.
+    #> - 'U' in the column 'UStd' denotes that a parameter is the original one
+    #>   (unstandardized). That is, no variables related to it are
 
 In this dataset, with 200 cases, the delta-method confidence intervals
 are close to the bootstrap confidence intervals, except obviously for
@@ -379,18 +384,18 @@ fit_beta_select_2
     #>  Information saturated (h1) model: Structured
     #> 
     #> Regressions:
-    #>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig
-    #>  med ~                                                            
-    #>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.
-    #>   mod           0.034 0.014  2.389   0.015   *  0.006 0.063   Sig.
-    #>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062 0.100   Sig.
-    #>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.
-    #>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.
-    #>  dv ~                                                             
-    #>   med           0.878 0.116  7.567   0.000 ***  0.635 1.092   Sig.
-    #>   iv            0.634 0.100  6.337   0.000 ***  0.430 0.826   Sig.
-    #>   cov1         -0.047 0.112 -0.418   0.686     -0.265 0.168   n.s.
-    #>   cov2          0.126 0.111  1.137   0.259     -0.093 0.345   n.s.
+    #>            BetaSelect    SE      Z p-value Sig  CI.Lo CI.Hi CI.Sig UStd
+    #>  med ~                                                                 
+    #>   iv            0.182 0.061  2.992   0.005  **  0.063 0.300   Sig.     
+    #>   mod           0.034 0.014  2.389   0.015   *  0.006 0.063   Sig.     
+    #>   iv:mod        0.083 0.010  8.565   0.000 ***  0.062 0.100   Sig.     
+    #>   cov1         -0.077 0.057 -1.353   0.185     -0.186 0.038   n.s.     
+    #>   cov2          0.105 0.061  1.725   0.094   . -0.019 0.219   n.s.     
+    #>  dv ~                                                                  
+    #>   med           0.878 0.116  7.567   0.000 ***  0.635 1.092   Sig.     
+    #>   iv            0.634 0.100  6.337   0.000 ***  0.430 0.826   Sig.     
+    #>   cov1         -0.047 0.112 -0.418   0.686     -0.265 0.168   n.s.     
+    #>   cov2          0.126 0.111  1.137   0.259     -0.093 0.345   n.s.     
     #> 
     #> Footnote:
     #> - Variable(s) standardized: cov1, cov2, iv, med
@@ -401,8 +406,8 @@ fit_beta_select_2
     #>   by the method of Asparouhov and Muthén (2021).
     #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
     #>   original estimates and betas-select.
-    #> - Product terms (iv:mod) have variables standardized before computing
-    #>   them. The product term(s) is/are not standardized.
+    #> - 'U' in the column 'UStd' denotes that a parameter is the original one
+    #>   (unstandardized). That is, no variables related to it are
 
 The footnotes show that, by specifying that `dv` and `mod` are not
 standardized, all the other four variables are standardized: `iv`,

@@ -1,4 +1,6 @@
-# betaselectr 0.1.3.2
+# betaselectr 0.1.4
+
+## Improvement
 
 - The `print` method of the output
   of `lav_betaselect()` has a column

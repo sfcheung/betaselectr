@@ -26,7 +26,7 @@ out <- lav_betaselect(
 out
 
 tmp <- capture.output(print(out, show_Bs.by = TRUE, show_ustd = TRUE))
-tmp2 <- grepv("U$", tmp)
+tmp2 <- grep("U$", tmp, value = TRUE)
 i <- regexpr(" Selected ", tmp)
 i2 <- max(i)
 i3 <- max(attr(i, "match.length"))

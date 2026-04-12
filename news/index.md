@@ -1,5 +1,11 @@
 # Changelog
 
+## betaselectr 0.1.4.1
+
+### Miscellaneous
+
+- Updated the `pkgdown` site. (0.1.4.1)
+
 ## betaselectr 0.1.4
 
 CRAN release: 2026-04-07

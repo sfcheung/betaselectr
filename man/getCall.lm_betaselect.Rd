@@ -71,7 +71,7 @@ getCall(lm_beta_x, what = "raw")
 }
 \seealso{
 \code{\link[=lm_betaselect]{lm_betaselect()}},
-\code{\link[=glm_betaselect]{glm_betaselect()}}, and \code{\link[stats:update]{stats::getCall()}}
+\code{\link[=glm_betaselect]{glm_betaselect()}}, and \code{\link[stats:getCall]{stats::getCall()}}
 }
 \author{
 Shu Fai Cheung \url{https://orcid.org/0000-0002-9871-9448}

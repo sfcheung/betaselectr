@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: SEM by 'lavaan'"
-date: "2026-04-07"
+date: "2026-06-06"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -21,6 +21,7 @@ csl: apa.csl
 This article demonstrates how to use
 `lav_betaselect()` from the package
 [`betaselectr`](https://sfcheung.github.io/betaselectr/)
+[@sun_betaselectr_2026]
 to standardize
 selected variables in a model fitted
 by `lavaan` and forming confidence
@@ -64,7 +65,7 @@ This is the path model, fitted by
 
 ``` r
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-1.2680
 #> lavaan is FREE software! Please report any bugs.
 mod <-
 "
@@ -84,7 +85,7 @@ These are the results:
 
 ``` r
 summary(fit)
-#> lavaan 0.6-21 ended normally after 2 iterations
+#> lavaan 0.7-1.2680 ended normally after 2 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

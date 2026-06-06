@@ -1,6 +1,6 @@
 ---
 title: "Beta-Select Demonstration: Regression by `lm()`"
-date: "2026-04-07"
+date: "2026-06-06"
 output:
   rmarkdown::html_vignette:
     number_sections: true
@@ -21,6 +21,7 @@ csl: apa.csl
 This article demonstrates how to use
 `lm_betaselect()` from the package
 [`betaselectr`](https://sfcheung.github.io/betaselectr/)
+[@sun_betaselectr_2026]
 to standardize
 selected variables in a model fitted
 by `lm()` and forming confidence

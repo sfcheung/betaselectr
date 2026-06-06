@@ -31,6 +31,7 @@ format_str <- function(x, digits = 3) {
 This article demonstrates how to use
 `lav_betaselect()` from the package
 [`betaselectr`](https://sfcheung.github.io/betaselectr/)
+[@sun_betaselectr_2026]
 to standardize
 selected variables in a model fitted
 by `lavaan` and forming confidence

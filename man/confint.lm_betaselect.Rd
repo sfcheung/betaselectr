@@ -93,12 +93,12 @@ Ignored.}
 
 \item{trace}{Logical. Whether profiling
 will be traced. See
-\code{\link[stats:confint]{stats::confint.glm()}} for details.
+\code{\link[stats:confint.glm]{stats::confint.glm()}} for details.
 ignored if \code{method} is \code{"boot"} or
 \code{"bootstrap"}.}
 
 \item{test}{The test used for
-profiling. See \link[stats:confint]{stats::confint.glm}
+profiling. See \link[stats:confint.glm]{stats::confint.glm}
 for details.
 ignored if \code{method} is \code{"boot"} or
 \code{"bootstrap"}.}

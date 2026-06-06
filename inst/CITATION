@@ -1,0 +1,16 @@
+citHeader("To cite the 'betaselectr' package in publications use:")
+
+bibentry(
+  bibtype = "Article",
+	title = "{betaselectr}: Selective (and proper) standardization in structural equation models.",
+	url = "https://doi.org/10.1080/00273171.2026.2672692",
+	doi = "10.1080/00273171.2026.2672692",
+	language = "en",
+  journal = "Multivariate Behavioral Research",
+	author = c(as.person("R. wei. Sun"),
+             as.person("F. Chang"),
+             as.person("W. Yang"),
+             as.person("S. F. Cheung"),
+             as.person("S.-H. Cheung")),
+	year = "2026",
+)

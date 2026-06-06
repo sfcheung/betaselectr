@@ -327,7 +327,15 @@
 #' modeling?
 #' *Structural Equation Modeling: A Multidisciplinary Journal, 25*(2)
 #'  244-266. \doi{10.1080/10705511.2017.1367254}
-
+#'
+#' Sun, R. wei, Chang, F., Yang, W.,
+#' Cheung, S. F., & Cheung, S.-H. (2026).
+#' `betaselectr`: Selective (and proper)
+#' standardization in structural equation
+#' models.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' \doi{10.1080/00273171.2026.2672692}
 #'
 #' @seealso [print.lav_betaselect()] for its print method.
 #'
@@ -338,10 +346,8 @@
 #' data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
 #' data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
 #' mod <-
-#' "
-#' med ~ iv + mod + iv:mod
-#' dv ~ med + iv
-#' "
+#' "med ~ iv + mod + iv:mod
+#'  dv ~ med + iv"
 #' fit <- sem(mod,
 #'            data_test_medmod,
 #'            fixed.x = TRUE)

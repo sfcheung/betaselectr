@@ -63,13 +63,13 @@ profiling will be traced when forming
 the confidence interval if
 \code{se_method} is \code{"default"}, \code{"z"}, or
 \code{"glm"}. Ignored if \code{ci} is \code{FALSE}.
-See \code{\link[stats:confint]{stats::confint.glm()}} for
+See \code{\link[stats:confint.glm]{stats::confint.glm()}} for
 details.}
 
 \item{test}{The test used for
 \code{se_method} is \code{"default"}, \code{"z"}, or
 \code{"glm"}. Ignored if \code{ci} is \code{FALSE}.
-See \code{\link[stats:confint]{stats::confint.glm()}} for
+See \code{\link[stats:confint.glm]{stats::confint.glm()}} for
 details.}
 
 \item{se_method}{The method used to

@@ -1,6 +1,7 @@
 # testthat::test_file("./tests/testthat/test_std_selected_lavaan_user_2.R")
 
-skip_on_cran("Need to run in serial")
+# Need to run in serial
+skip_on_cran()
 
 library(testthat)
 library(lavaan)

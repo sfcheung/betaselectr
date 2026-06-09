@@ -1,4 +1,4 @@
-# betaselectr 0.2.0
+# betaselectr 0.2.1
 
 ## Miscellaneous
 

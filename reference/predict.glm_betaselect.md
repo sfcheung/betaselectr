@@ -76,6 +76,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ## Examples
 
 ``` r
+
 data_test_mod_cat$p <- scale(data_test_mod_cat$dv)[, 1]
 data_test_mod_cat$p <- ifelse(data_test_mod_cat$p > 0,
                               yes = 1,

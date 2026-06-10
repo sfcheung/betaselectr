@@ -36,6 +36,7 @@ A data frame with 300 rows and five variables:
 ## Examples
 
 ``` r
+
 glm_out <- glm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat_binary, family = binomial())
 summary(glm_out)
 #> 

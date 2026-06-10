@@ -5,8 +5,8 @@
 This article demonstrates how to use
 [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
 from the package
-[`betaselectr`](https://sfcheung.github.io/betaselectr/) to standardize
-selected variables in a model fitted by
+[`betaselectr`](https://sfcheung.github.io/betaselectr/) (Sun et al.,
+2026) to standardize selected variables in a model fitted by
 [`lm()`](https://rdrr.io/r/stats/lm.html) and forming confidence
 intervals for the parameters.
 
@@ -16,6 +16,7 @@ The sample dataset from the package `betaselectr` will be used for this
 demonstration:
 
 ``` r
+
 library(betaselectr)
 head(data_test_mod_cat2)
 #>      dv    iv   mod  cov1 cat1
@@ -31,6 +32,7 @@ This is the regression model, fitted by
 [`lm()`](https://rdrr.io/r/stats/lm.html):
 
 ``` r
+
 lm_out <- lm(dv ~ iv * mod + cov1 + cat1,
              data = data_test_mod_cat2)
 ```
@@ -42,6 +44,7 @@ categorical variable with three groups: `gp1`, `gp2`, `gp3`.
 These are the results:
 
 ``` r
+
 summary(lm_out)
 #> 
 #> Call:
@@ -77,6 +80,7 @@ First, all variables in the model, including the product term and dummy
 variables, are computed:
 
 ``` r
+
 data_test_mod_cat2_z <- data_test_mod_cat2
 data_test_mod_cat2_z$iv_x_mod <- data_test_mod_cat2_z$iv *
                                 data_test_mod_cat2_z$mod
@@ -95,6 +99,7 @@ head(data_test_mod_cat2_z)
 All the variables are then standardized:
 
 ``` r
+
 data_test_mod_cat2_z <- data.frame(scale(data_test_mod_cat2_z[, -5]))
 head(data_test_mod_cat2_z)
 #>           dv          iv         mod         cov1    iv_x_mod   cat_gp2
@@ -116,6 +121,7 @@ head(data_test_mod_cat2_z)
 The regression model is then fitted to the standardized variables:
 
 ``` r
+
 lm_std_common <- lm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
                     data = data_test_mod_cat2_z)
 ```
@@ -123,6 +129,7 @@ lm_std_common <- lm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
 The “betas” commonly reported are the coefficients in this model:
 
 ``` r
+
 lm_std_common_summary <- summary(lm_std_common)
 printCoefmat(lm_std_common_summary$coefficients,
              digits = 5,
@@ -195,6 +202,7 @@ numeric variables, with the product term computed after `iv`, `mod`, and
 `dv` are standardized.
 
 ``` r
+
 lm_beta_select <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                 data = data_test_mod_cat2,
                                 do_boot = FALSE)
@@ -223,6 +231,7 @@ used ont the output of
 [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md):
 
 ``` r
+
 summary(lm_beta_select)
 #> Call to lm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -288,6 +297,7 @@ We can call
 again, with additional arguments set:
 
 ``` r
+
 lm_beta_select_boot <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                      data = data_test_mod_cat2,
                                      bootstrap = 5000,
@@ -306,6 +316,7 @@ These are the additional arguments:
 This is the output of [`summary()`](https://rdrr.io/r/base/summary.html)
 
 ``` r
+
 summary(lm_beta_select_boot)
 #> Call to lm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -370,6 +381,7 @@ For example, suppose we only need to standardize `dv` and `iv`, this is
 the call to do this, setting `to_standardize` to `c("iv", "dv")`:
 
 ``` r
+
 lm_beta_select_boot_1 <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                        data = data_test_mod_cat2,
                                        to_standardize = c("dv", "iv"),
@@ -381,6 +393,7 @@ If we want to standardize all variables except for `mod` and `cov1`, we
 can use this call, and set `not_to_standardize` to `c("mod", "cov1")`:
 
 ``` r
+
 lm_beta_select_boot_2 <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                        data = data_test_mod_cat2,
                                        not_to_standardize = c("mod", "cov1"),
@@ -392,6 +405,7 @@ The results of these calls are identical, and only those of the first
 version are printed:
 
 ``` r
+
 summary(lm_beta_select_boot_1)
 #> Call to lm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -452,6 +466,7 @@ both the dummy variables and the outcome variables are standardized are
 0.116 and 0.175:
 
 ``` r
+
 printCoefmat(lm_std_common_summary$coefficients[5:6, ],
              digits = 5,
              zap.ind = 1,
@@ -472,6 +487,7 @@ The *beta*s-*Select* of the dummy variables, with only the outcome
 variable standardized, are 0.241 and 0.349.
 
 ``` r
+
 lm_beta_select_boot_summary <- summary(lm_beta_select_boot)
 printCoefmat(lm_beta_select_boot_summary$coefficients[5:6, ],
              digits = 5,
@@ -529,6 +545,11 @@ edition). The Guilford Press.
 Jones, J. A., & Waller, N. G. (2013). Computing confidence intervals for
 standardized regression coefficients. *Psychological Methods*, *18*(4),
 435–453. <https://doi.org/10.1037/a0033269>
+
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., & Cheung, S.-H. (2026).
+Betaselectr: Selective (and proper) standardization in structural
+equation models. *Multivariate Behavioral Research*.
+<https://doi.org/10.1080/00273171.2026.2672692>
 
 Yuan, K.-H., & Chan, W. (2011). Biases and standard errors of
 standardized regression coefficients. *Psychometrika*, *76*(4), 670–690.

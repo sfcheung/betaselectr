@@ -18,8 +18,8 @@
     }
   };
 </script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,7 +82,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Beta-Select Demonstration: SEM by 'lavaan'</h1>
             
-            <h4 data-toc-skip class="date">2026-04-07</h4>
+            <h4 data-toc-skip class="date">2026-06-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/sfcheung/betaselectr/blob/main/vignettes/betaselectr_lav.Rmd" class="external-link"><code>vignettes/betaselectr_lav.Rmd</code></a></small>
       <div class="d-none name"><code>betaselectr_lav.Rmd</code></div>
@@ -95,9 +95,9 @@
 </h2>
 <p>This article demonstrates how to use <code><a href="../reference/lav_betaselect.html">lav_betaselect()</a></code>
 from the package <a href="https://sfcheung.github.io/betaselectr/"><code>betaselectr</code></a>
-to standardize selected variables in a model fitted by
-<code>lavaan</code> and forming confidence intervals for the
-parameters.</p>
+<span class="citation">(Sun et al., 2026)</span> to standardize selected
+variables in a model fitted by <code>lavaan</code> and forming
+confidence intervals for the parameters.</p>
 </div>
 <div class="section level2">
 <h2 id="data-and-model">Data and Model<a class="anchor" aria-label="anchor" href="#data-and-model"></a>
@@ -124,7 +124,7 @@ recomputed accordingly.</p>
 <p>This is the path model, fitted by <code><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">lavaan::sem()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; This is lavaan 0.6-21</span></span>
+<span><span class="co">#&gt; This is lavaan 0.7-1.2680</span></span>
 <span><span class="co">#&gt; lavaan is FREE software! Please report any bugs.</span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span></span>
 <span><span class="st">"</span></span>
@@ -139,7 +139,7 @@ effect from <code>iv</code> to <code>med</code>. The product term is
 <p>These are the results:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; lavaan 0.6-21 ended normally after 2 iterations</span></span>
+<span><span class="co">#&gt; lavaan 0.7-1.2680 ended normally after 2 iterations</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Estimator                                         ML</span></span>
 <span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
@@ -554,6 +554,12 @@ interval estimation with nonnormal data in structural equation modeling?
 Friedrich, R. J. (1982). In defense of multiplicative terms in multiple
 regression equations. <em>American Journal of Political Science</em>,
 <em>26</em>(4), 797–833. <a href="https://doi.org/10.2307/2110973" class="external-link">https://doi.org/10.2307/2110973</a>
+</div>
+<div id="ref-sun_betaselectr_2026" class="csl-entry">
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., &amp; Cheung, S.-H.
+(2026). Betaselectr: <span>Selective</span> (and proper) standardization
+in structural equation models. <em>Multivariate Behavioral
+Research</em>. <a href="https://doi.org/10.1080/00273171.2026.2672692" class="external-link">https://doi.org/10.1080/00273171.2026.2672692</a>
 </div>
 </div>
 </div>

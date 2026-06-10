@@ -5,7 +5,7 @@
       fontURL: "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/output/chtml/fonts/woff-v2"
     }
   };
-</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.10/font.css" rel="stylesheet"><link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Betas-Select in a 'lavaan'-Model — lav_betaselect"><meta name="description" content="Can standardize selected
+</script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Public_Sans-0.4.10/font.css" rel="stylesheet"><link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet"><link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet"><script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Betas-Select in a 'lavaan'-Model — lav_betaselect"><meta name="description" content="Can standardize selected
 variables in a lavaan model without
 refitting the models, can handle
 product term correctly and skip
@@ -23,7 +23,7 @@ standardization."><meta property="og:image" content="https://sfcheung.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -466,6 +466,14 @@ for interval estimation with nonnormal data in structural equation
 modeling?
 <em>Structural Equation Modeling: A Multidisciplinary Journal, 25</em>(2)
 244-266. <a href="https://doi.org/10.1080/10705511.2017.1367254" class="external-link">doi:10.1080/10705511.2017.1367254</a></p>
+<p>Sun, R. wei, Chang, F., Yang, W.,
+Cheung, S. F., &amp; Cheung, S.-H. (2026).
+<code>betaselectr</code>: Selective (and proper)
+standardization in structural equation
+models.
+<em>Multivariate Behavioral Research</em>.
+Advance online publication.
+<a href="https://doi.org/10.1080/00273171.2026.2672692" class="external-link">doi:10.1080/00273171.2026.2672692</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -484,10 +492,8 @@ modeling?
 <span class="r-in"><span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span> <span class="op">&lt;-</span> <span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">iv</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data_test_medmod</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="st">"</span></span></span>
-<span class="r-in"><span><span class="st">med ~ iv + mod + iv:mod</span></span></span>
-<span class="r-in"><span><span class="st">dv ~ med + iv</span></span></span>
-<span class="r-in"><span><span class="st">"</span></span></span>
+<span class="r-in"><span><span class="st">"med ~ iv + mod + iv:mod</span></span></span>
+<span class="r-in"><span><span class="st"> dv ~ med + iv"</span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html" class="external-link">sem</a></span><span class="op">(</span><span class="va">mod</span>,</span></span>
 <span class="r-in"><span>           <span class="va">data_test_medmod</span>,</span></span>
 <span class="r-in"><span>           fixed.x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

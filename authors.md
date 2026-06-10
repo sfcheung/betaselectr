@@ -17,16 +17,20 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/sfcheung/betaselectr/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/sfcheung/betaselectr/blob/main/inst/CITATION)
 
-Cheung S, Sun R, Chang F, Yang W, Cheung S (2026). *betaselectr:
-Betas-Select in Structural Equation Models and Linear Models*. R package
-version 0.1.4.1, <https://sfcheung.github.io/betaselectr/>.
+Sun Rw, Chang F, Yang W, Cheung SF, Cheung S (2026). “betaselectr:
+Selective (and proper) standardization in structural equation models.”
+*Multivariate Behavioral Research*.
+[doi:10.1080/00273171.2026.2672692](https://doi.org/10.1080/00273171.2026.2672692).
+<https://doi.org/10.1080/00273171.2026.2672692>.
 
-    @Manual{,
-      title = {betaselectr: Betas-Select in Structural Equation Models and Linear Models},
-      author = {Shu Fai Cheung and Rong Wei Sun and Florbela Chang and Wendie Yang and Sing-Hang Cheung},
+    @Article{,
+      title = {{betaselectr}: Selective (and proper) standardization in structural equation models.},
+      url = {https://doi.org/10.1080/00273171.2026.2672692},
+      doi = {10.1080/00273171.2026.2672692},
+      language = {en},
+      journal = {Multivariate Behavioral Research},
+      author = {R. wei. Sun and F. Chang and W. Yang and S. F. Cheung and S.-H. Cheung},
       year = {2026},
-      note = {R package version 0.1.4.1},
-      url = {https://sfcheung.github.io/betaselectr/},
     }

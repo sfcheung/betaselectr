@@ -40,6 +40,7 @@ A data frame with 200 rows and five variables:
 ## Examples
 
 ``` r
+
 library(lavaan)
 mod <-
 "

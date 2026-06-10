@@ -74,6 +74,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ## Examples
 
 ``` r
+
 data(data_test_mod_cat)
 
 lm_beta_x <- lm_betaselect(dv ~ iv*mod + cov1 + cat1,

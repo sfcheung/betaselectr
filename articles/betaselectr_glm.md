@@ -5,8 +5,8 @@
 This article demonstrates how to use
 [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
 from the package
-[`betaselectr`](https://sfcheung.github.io/betaselectr/) to standardize
-selected variables in a model fitted by
+[`betaselectr`](https://sfcheung.github.io/betaselectr/) (Sun et al.,
+2026) to standardize selected variables in a model fitted by
 [`glm()`](https://rdrr.io/r/stats/glm.html) and forming confidence
 intervals for the parameters. Logistic regression is used in this
 illustration.
@@ -17,6 +17,7 @@ The sample dataset from the package `betaselectr` will be used for in
 this demonstration:
 
 ``` r
+
 library(betaselectr)
 head(data_test_mod_cat_binary)
 #>   dv    iv   mod  cov1 cat1
@@ -32,6 +33,7 @@ This is the logistic regression model, fitted by
 [`glm()`](https://rdrr.io/r/stats/glm.html):
 
 ``` r
+
 glm_out <- glm(dv ~ iv * mod + cov1 + cat1,
                data = data_test_mod_cat_binary,
                family = binomial())
@@ -44,6 +46,7 @@ categorical variable with three groups: `gp1`, `gp2`, `gp3`.
 These are the results:
 
 ``` r
+
 summary(glm_out)
 #> 
 #> Call:
@@ -81,6 +84,7 @@ First, all variables in the model, including the product term and dummy
 variables, are computed:
 
 ``` r
+
 data_test_mod_cat_binary_z <- data_test_mod_cat_binary
 data_test_mod_cat_binary_z$iv_x_mod <- data_test_mod_cat_binary_z$iv *
                                        data_test_mod_cat_binary_z$mod
@@ -99,6 +103,7 @@ head(data_test_mod_cat_binary_z)
 All the variables are then standardized:
 
 ``` r
+
 data_test_mod_cat_binary_z <- data.frame(scale(data_test_mod_cat_binary_z[, -5]))
 data_test_mod_cat_binary_z$dv <- data_test_mod_cat_binary$dv
 head(data_test_mod_cat_binary_z)
@@ -115,6 +120,7 @@ The logistic regression model is then fitted to the standardized
 variables:
 
 ``` r
+
 glm_std_common <- glm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
                       data = data_test_mod_cat_binary_z,
                       family = binomial())
@@ -123,6 +129,7 @@ glm_std_common <- glm(dv ~ iv + mod + cov1 + cat_gp2 + cat_gp3 + iv_x_mod,
 The “betas” commonly reported are the coefficients in this model:
 
 ``` r
+
 glm_std_common_summary <- summary(glm_std_common)
 printCoefmat(glm_std_common_summary$coefficients,
              digits = 5,
@@ -192,6 +199,7 @@ numeric variables except for the response variable (which is binary),
 with the product term computed after `iv` and `mod` are standardized.
 
 ``` r
+
 glm_beta_select <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                   data = data_test_mod_cat_binary,
                                   skip_response = TRUE,
@@ -228,6 +236,7 @@ used ont the output of
 [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md):
 
 ``` r
+
 summary(glm_beta_select)
 #> Waiting for profiling to be done...
 #> Call to glm_betaselect():
@@ -303,6 +312,7 @@ We can call
 again, with additional arguments set:
 
 ``` r
+
 glm_beta_select_boot <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                        data = data_test_mod_cat_binary,
                                        family = binomial(),
@@ -323,6 +333,7 @@ These are the additional arguments:
 This is the output of [`summary()`](https://rdrr.io/r/base/summary.html)
 
 ``` r
+
 summary(glm_beta_select_boot)
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -397,6 +408,7 @@ For example, suppose we only need to standardize `iv` and `cov1`, this
 is the call to do this, setting `to_standardize` to `c("iv", "cov1")`:
 
 ``` r
+
 glm_beta_select_boot_1 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                          data = data_test_mod_cat_binary,
                                          to_standardize = c("iv", "cov1"),
@@ -411,6 +423,7 @@ skipped by `skip_response`) we can use this call, and set
 `not_to_standardize` to `"mod"`:
 
 ``` r
+
 glm_beta_select_boot_2 <- glm_betaselect(dv ~ iv*mod + cov1 + cat1,
                                          data = data_test_mod_cat_binary,
                                          not_to_standardize = c("mod"),
@@ -424,6 +437,7 @@ The results of these calls are identical, and only those of the first
 version are printed:
 
 ``` r
+
 summary(glm_beta_select_boot_1)
 #> Call to glm_betaselect():
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
@@ -494,6 +508,7 @@ both the dummy variables and the outcome variables are standardized are
 0.416 and 0.642:
 
 ``` r
+
 printCoefmat(glm_std_common_summary$coefficients[5:6, ],
              digits = 5,
              zap.ind = 1,
@@ -540,6 +555,11 @@ regression equations. *American Journal of Political Science*, *26*(4),
 Menard, S. (2004). Six approaches to calculating standardized logistic
 regression coefficients. *The American Statistician*, *58*(3), 218–223.
 <https://doi.org/10.1198/000313004X946>
+
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., & Cheung, S.-H. (2026).
+Betaselectr: Selective (and proper) standardization in structural
+equation models. *Multivariate Behavioral Research*.
+<https://doi.org/10.1080/00273171.2026.2672692>
 
 Yuan, K.-H., & Chan, W. (2011). Biases and standard errors of
 standardized regression coefficients. *Psychometrika*, *76*(4), 670–690.

@@ -53,6 +53,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ## Examples
 
 ``` r
+
 library(lavaan)
 # Need to mean-center iv and mod
 data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)

@@ -1,10 +1,10 @@
 # Changelog
 
-## betaselectr 0.1.4.1
+## betaselectr 0.2.1
 
 ### Miscellaneous
 
-- Updated the `pkgdown` site. (0.1.4.1)
+Updated the documentation with the related manuscript.
 
 ## betaselectr 0.1.4
 

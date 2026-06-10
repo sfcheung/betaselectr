@@ -330,6 +330,12 @@ Jones, J. A., & Waller, N. G. (2013). Computing confidence intervals for
 standardized regression coefficients. *Psychological Methods, 18*(4),
 435–453. [doi:10.1037/a0033269](https://doi.org/10.1037/a0033269)
 
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., & Cheung, S.-H. (2026).
+`betaselectr`: Selective (and proper) standardization in structural
+equation models. *Multivariate Behavioral Research*. Advance online
+publication.
+[doi:10.1080/00273171.2026.2672692](https://doi.org/10.1080/00273171.2026.2672692)
+
 ## See also
 
 `print.lm_betaselect()` and `print.glm_betaselect()` for the
@@ -342,6 +348,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ## Examples
 
 ``` r
+
 data(data_test_mod_cat)
 
 # Standardize only iv

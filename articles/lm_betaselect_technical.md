@@ -7,7 +7,8 @@ in
 [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
 and
 [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
-from the package [betaselectr](https://sfcheung.github.io/betaselectr/).
+from the package [betaselectr](https://sfcheung.github.io/betaselectr/)
+(Sun et al., 2026).
 
 ## Beta-Select (\\\beta\_{Select}\\)
 
@@ -81,3 +82,8 @@ coefficients in R. *Multivariate Behavioral Research*, *58*(6),
 
 Rao, C. R. (1973). *Large sample theory and methods*. John Wiley & Sons,
 Inc.
+
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., & Cheung, S.-H. (2026).
+Betaselectr: Selective (and proper) standardization in structural
+equation models. *Multivariate Behavioral Research*.
+<https://doi.org/10.1080/00273171.2026.2672692>

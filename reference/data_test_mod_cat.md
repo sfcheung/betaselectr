@@ -36,6 +36,7 @@ A data frame with 500 rows and five variables:
 ## Examples
 
 ``` r
+
 lm_out <- lm(dv ~ iv * mod + cov1 + cat1, data_test_mod_cat)
 summary(lm_out)
 #> 

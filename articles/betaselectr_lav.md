@@ -5,9 +5,9 @@
 This article demonstrates how to use
 [`lav_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lav_betaselect.md)
 from the package
-[`betaselectr`](https://sfcheung.github.io/betaselectr/) to standardize
-selected variables in a model fitted by `lavaan` and forming confidence
-intervals for the parameters.
+[`betaselectr`](https://sfcheung.github.io/betaselectr/) (Sun et al.,
+2026) to standardize selected variables in a model fitted by `lavaan`
+and forming confidence intervals for the parameters.
 
 ## Data and Model
 
@@ -15,6 +15,7 @@ The sample dataset from the package `betaselectr` will be used in this
 demonstration:
 
 ``` r
+
 library(betaselectr)
 head(data_test_medmod)
 #>          dv       iv      mod      med     cov1     cov2
@@ -37,8 +38,9 @@ This is the path model, fitted by
 [`lavaan::sem()`](https://rdrr.io/pkg/lavaan/man/sem.html):
 
 ``` r
+
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-1.2680
 #> lavaan is FREE software! Please report any bugs.
 mod <-
 "
@@ -55,8 +57,9 @@ The model has a moderator, `mod`, posited to moderate the effect from
 These are the results:
 
 ``` r
+
 summary(fit)
-#> lavaan 0.6-21 ended normally after 2 iterations
+#> lavaan 0.7-1.2680 ended normally after 2 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -102,6 +105,7 @@ We can request the standardized solution using
 [`lavaan::standardizedSolution()`](https://rdrr.io/pkg/lavaan/man/standardizedSolution.html):
 
 ``` r
+
 standardizedSolution(fit,
                      output = "text")
 #> 
@@ -174,10 +178,12 @@ Suppose we only need to solve the first problem, with the product term
 computed after `iv` and `mod` are standardized:
 
 ``` r
+
 fit_beta <- lav_betaselect(fit)
 ```
 
 ``` r
+
 fit_beta
 ```
 
@@ -242,6 +248,7 @@ We can call
 again, with additional arguments set:
 
 ``` r
+
 fit_beta <- lav_betaselect(fit,
                            std_se = "bootstrap",
                            bootstrap = 5000,
@@ -276,6 +283,7 @@ These are the additional arguments:
 This is the output if printed with default options:
 
 ``` r
+
 fit_beta
 ```
 
@@ -341,6 +349,7 @@ and `cov2`, this is the call to do this, setting `to_standardize` to
 `c("iv", "dv", "cov1", "cov2")`:
 
 ``` r
+
 fit_beta_select_1 <- lav_betaselect(fit,
                                     std_se = "bootstrap",
                                     to_standardize = c("iv", "dv", "cov1", "cov2"),
@@ -354,6 +363,7 @@ If we want to standardize all variables except for `dv` and `mod`, we
 can use this call, and set `not_to_standardize` to `c("mod", "dv")`:
 
 ``` r
+
 fit_beta_select_2 <- lav_betaselect(fit,
                                     std_se = "bootstrap",
                                     not_to_standardize = c("mod", "dv"),
@@ -367,6 +377,7 @@ The results of these calls are identical, and only those of the second
 version are printed:
 
 ``` r
+
 fit_beta_select_2
 ```
 
@@ -423,6 +434,7 @@ can be printed with `show_Bs.by` set to `TRUE` to demonstrate the second
 approach:
 
 ``` r
+
 print(fit_beta_select_2,
       show_Bs.by = TRUE)
 ```
@@ -493,3 +505,8 @@ interval estimation with nonnormal data in structural equation modeling?
 Friedrich, R. J. (1982). In defense of multiplicative terms in multiple
 regression equations. *American Journal of Political Science*, *26*(4),
 797–833. <https://doi.org/10.2307/2110973>
+
+Sun, R. wei, Chang, F., Yang, W., Cheung, S. F., & Cheung, S.-H. (2026).
+Betaselectr: Selective (and proper) standardization in structural
+equation models. *Multivariate Behavioral Research*.
+<https://doi.org/10.1080/00273171.2026.2672692>

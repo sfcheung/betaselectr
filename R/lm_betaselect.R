@@ -323,6 +323,15 @@
 #' *Psychological Methods, 18*(4), 435--453.
 #' \doi{10.1037/a0033269}
 #'
+#' Sun, R. wei, Chang, F., Yang, W.,
+#' Cheung, S. F., & Cheung, S.-H. (2026).
+#' `betaselectr`: Selective (and proper)
+#' standardization in structural equation
+#' models.
+#' *Multivariate Behavioral Research*.
+#' Advance online publication.
+#' \doi{10.1080/00273171.2026.2672692}
+#'
 #' @seealso [print.lm_betaselect()] and
 #' [print.glm_betaselect()] for the
 #' `print`-methods.

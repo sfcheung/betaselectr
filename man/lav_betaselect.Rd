@@ -91,7 +91,7 @@ when fitting the model in \code{lavaan}),
 then the stored bootstrap estimates
 will be sued. If not available,
 the bootstrapping will be conducted
-using \code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}},
+using \code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}},
 using arguments \code{bootstrap},
 \code{parallel}, \code{ncpus}, \code{cl}, and
 \code{iseed}.`}
@@ -145,7 +145,7 @@ solution.}
 \code{"bootstrap"} but bootstrapping is
 not requested when fitting the model
 and \code{boot_out} is not set,
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} will be
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} will be
 called to do bootstrapping. This
 argument is the number of bootstrap
 samples to draw. Default is 100.
@@ -167,20 +167,20 @@ will not be stored.}
 \code{"bootstrap"} but bootstrapping is
 not requested when fitting the model
 and \code{boot_out} is not set,
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} will be
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} will be
 called to do bootstrapping. This
 argument is to be passed to
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}}. Default
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}}. Default
 is \code{"no"}.}
 
 \item{ncpus}{If \code{std_se} is
 \code{"bootstrap"} but bootstrapping is
 not requested when fitting the model
 and \code{boot_out} is not set,
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} will be
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} will be
 called to do bootstrapping. This
 argument is to be passed to
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}}. Default
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}}. Default
 is \code{parallel::detectCores(logical = FALSE) - 1}.
 Ignored if \code{parallel} is \code{"no"}.}
 
@@ -188,10 +188,10 @@ Ignored if \code{parallel} is \code{"no"}.}
 \code{"bootstrap"} but bootstrapping is
 not requested when fitting the model
 and \code{boot_out} is not set,
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} will be
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} will be
 called to do bootstrapping. This
 argument is to be passed to
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}}. Default
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}}. Default
 is \code{NULL}.
 Ignored if \code{parallel} is \code{"no"}.}
 
@@ -199,10 +199,10 @@ Ignored if \code{parallel} is \code{"no"}.}
 \code{"bootstrap"} but bootstrapping is
 not requested when fitting the model
 and \code{boot_out} is not set,
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} will be
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} will be
 called to do bootstrapping. This
 argument is to be passed to
-\code{\link[lavaan:bootstrap]{lavaan::bootstrapLavaan()}} to set
+\code{\link[lavaan:bootstrapLavaan]{lavaan::bootstrapLavaan()}} to set
 the seed for the random resampling.
 Default
 is \code{NULL}. Should be set to an integer
@@ -348,10 +348,8 @@ library(lavaan)
 data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
 data_test_medmod$mod <- data_test_medmod$mod - mean(data_test_medmod$mod)
 mod <-
-"
-med ~ iv + mod + iv:mod
-dv ~ med + iv
-"
+"med ~ iv + mod + iv:mod
+ dv ~ med + iv"
 fit <- sem(mod,
            data_test_medmod,
            fixed.x = TRUE)
@@ -393,6 +391,15 @@ for interval estimation with nonnormal data in structural equation
 modeling?
 \emph{Structural Equation Modeling: A Multidisciplinary Journal, 25}(2)
 244-266. \doi{10.1080/10705511.2017.1367254}
+
+Sun, R. wei, Chang, F., Yang, W.,
+Cheung, S. F., & Cheung, S.-H. (2026).
+\code{betaselectr}: Selective (and proper)
+standardization in structural equation
+models.
+\emph{Multivariate Behavioral Research}.
+Advance online publication.
+\doi{10.1080/00273171.2026.2672692}
 }
 \seealso{
 \code{\link[=print.lav_betaselect]{print.lav_betaselect()}} for its print method.

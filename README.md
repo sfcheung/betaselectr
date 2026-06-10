@@ -12,7 +12,7 @@
 
 # betaselectr: Do Selective Standardization in Structural Equation Models and Regression Models <img src="man/figures/logo.png" align="right" height="150" />
 
-(Version 0.1.4.1, updated on 2026-04-12, [release history](https://sfcheung.github.io/betaselectr/news/index.html))
+(Version 0.2.1, updated on 2026-06-10, [release history](https://sfcheung.github.io/betaselectr/news/index.html))
 
 It computes *beta*s-select, coefficients
 (*beta*s) after standardization
@@ -25,6 +25,18 @@ product terms formed appropriately
 confidence intervals that take into
 account the standardization
 appropriately.
+
+An
+introduction to the package can be found
+in the following article:
+
+Sun, R. wei, Chang, F., Yang, W.,
+Cheung, S. F., & Cheung, S.-H. (2026).
+`betaselectr`: Selective (and proper)
+standardization in structural equation
+models. *Multivariate Behavioral Research*.
+Advance online publication.
+https://doi.org/10.1080/00273171.2026.2672692
 
 For more information on this package,
 please visit its GitHub page:
@@ -40,10 +52,11 @@ install.packages("betaselectr")
 ```
 
 The latest developmental version of this
-package can be installed by `remotes::install_github`:
+package can be installed by `pak::pkg_install`
+(please install `pak` first):
 
 ```r
-remotes::install_github("sfcheung/betaselectr")
+pak::pkg_install("sfcheung/betaselectr")
 ```
 
 # Issues

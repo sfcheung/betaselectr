@@ -21,7 +21,8 @@ knitr::opts_chunk$set(
 This technical appendix describes how a
 $\beta_{Select}$ is computed in
 `lav_betaselect()` from the package
-[betaselectr](https://sfcheung.github.io/betaselectr/).
+[betaselectr](https://sfcheung.github.io/betaselectr/)
+[@sun_betaselectr_2026].
 
 # Beta-Select ($\beta_{Select}$)
 

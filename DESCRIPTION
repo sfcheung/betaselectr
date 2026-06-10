@@ -1,6 +1,6 @@
 Package: betaselectr
 Title: Betas-Select in Structural Equation Models and Linear Models
-Version: 0.1.4.1
+Version: 0.2.1
 Authors@R:
     c(person(given = "Shu Fai",
              family = "Cheung",
@@ -28,11 +28,11 @@ Description: It computes betas-select, coefficients after standardization in
   variables. Supports models with moderation, with product terms formed after
   standardization. It also offers confidence intervals that account for
   standardization, including bootstrap confidence intervals as proposed by
-  Cheung et al. (2022) <doi:10.1037/hea0001188>.
+  Cheung et al. (2022) <doi:10.1037/hea0001188>. An introduction to the package
+  can be found in Sun et al. (2026) <doi:10.1080/00273171.2026.2672692>.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Suggests:
     testthat (>= 3.0.0),
     knitr,
@@ -55,3 +55,4 @@ BugReports: https://github.com/sfcheung/betaselectr/issues
 Depends:
     R (>= 3.5.0)
 LazyData: true
+Config/roxygen2/version: 8.0.0

@@ -1,9 +1,17 @@
+# betaselectr 0.2.2
+
+## Miscellaneous
+
+- Updated to accommodate a change in
+  a forthcoming version of `lavaan` (0.7-1).
+  (0.2.2)
+
 # betaselectr 0.2.1
 
 ## Miscellaneous
 
-Updated the documentation with
-the related manuscript.
+- Updated the documentation with
+ the related manuscript.
 
 # betaselectr 0.1.4
 

@@ -8,6 +8,8 @@ library(testthat)
 library(lavaan)
 library(manymome)
 
+lavaan_071 <- packageVersion("lavaan") >= "0.7-1"
+
 dat <- HolzingerSwineford1939
 dat$age_gp <- dat$ageyr
 dat <- dat[(dat$age_gp >= 12) & (dat$age_gp <= 15), ]
@@ -32,7 +34,11 @@ est <- parameterEstimates(fit,
                           standardized = TRUE,
                           ci = FALSE)
 std <- standardizedSolution(fit)
-std_nox <- standardizedSolution(fit, type = "std.nox")
+if (lavaan_071) {
+  std_nox <- standardizedSolution(fit, type = c("std.lv"))
+} else {
+  std_nox <- standardizedSolution(fit, type = "std.nox")
+}
 std_lv <- standardizedSolution(fit, type = "std.lv")
 
 test_that("Standardized coefficient", {
@@ -59,7 +65,11 @@ fit2 <- sem(mod,
             fixed.x = FALSE,
             group = "school")
 std2 <- standardizedSolution(fit2)
-std2_nox <- standardizedSolution(fit2, type = "std.nox")
+if (lavaan_071) {
+  std2_nox <- standardizedSolution(fit2, type = "std.lv")
+} else {
+  std2_nox <- standardizedSolution(fit2, type = "std.nox")
+}
 
 test_that("Alternate values", {
   fit_std_2 <- gen_std_i(fit = fit, i = 29)

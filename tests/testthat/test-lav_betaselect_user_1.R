@@ -29,7 +29,6 @@ est <- parameterEstimates(fit,
                           standardized = TRUE,
                           ci = FALSE)
 std <- standardizedSolution(fit)
-std_nox <- standardizedSolution(fit, type = "std.nox")
 std_lv <- standardizedSolution(fit, type = "std.lv")
 
 test_that("User parameters", {

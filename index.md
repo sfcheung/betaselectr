@@ -1,6 +1,6 @@
 # betaselectr: Do Selective Standardization in Structural Equation Models and Regression Models
 
-(Version 0.2.1, updated on 2026-06-10, [release
+(Version 0.2.2, updated on 2026-07-11, [release
 history](https://sfcheung.github.io/betaselectr/news/index.html))
 
 It computes *beta*s-select, coefficients (*beta*s) after standardization

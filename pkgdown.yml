@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   betaselectr_glm: betaselectr_glm.html
@@ -7,7 +7,7 @@ articles:
   betaselectr_lm: betaselectr_lm.html
   articles/lav_betaselect_technical: lav_betaselect_technical.html
   articles/lm_betaselect_technical: lm_betaselect_technical.html
-last_built: 2026-06-10T01:10Z
+last_built: 2026-07-11T16:03Z
 urls:
   reference: https://sfcheung.github.io/betaselectr/reference
   article: https://sfcheung.github.io/betaselectr/articles

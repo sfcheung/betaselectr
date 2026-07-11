@@ -1,10 +1,21 @@
 # Changelog
 
-## betaselectr 0.2.1
+## betaselectr 0.2.2
+
+CRAN release: 2026-07-11
 
 ### Miscellaneous
 
-Updated the documentation with the related manuscript.
+- Updated to accommodate a change in a forthcoming version of `lavaan`
+  (0.7-1). (0.2.2)
+
+## betaselectr 0.2.1
+
+CRAN release: 2026-06-09
+
+### Miscellaneous
+
+- Updated the documentation with the related manuscript.
 
 ## betaselectr 0.1.4
 

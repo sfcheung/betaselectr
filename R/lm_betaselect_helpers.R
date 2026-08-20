@@ -76,7 +76,7 @@ fix_to_standardize_lm_data <- function(object,
 
     cat_vars2 <- sapply(seq_len(k),
                        function(xx) {
-                           if (is.numeric(input_data[, xx])) {
+                           if (is.numeric(input_data[, xx, drop =  TRUE])) {
                                return(NA)
                              } else {
                                return(colnames(input_data)[xx])

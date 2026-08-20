@@ -1,3 +1,10 @@
+# betaselectr 0.2.2.1
+
+## Miscellaneous
+
+- Updated to work with `tibble`.
+  (0.2.2.1)
+
 # betaselectr 0.2.2
 
 ## Miscellaneous

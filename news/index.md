@@ -1,6 +1,20 @@
 # Changelog
 
-## betaselectr 0.2.2.1
+## betaselectr 0.2.2.2
+
+### Improvement
+
+- [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  and
+  [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  can accept the output of [`lm()`](https://rdrr.io/r/stats/lm.html) or
+  [`glm()`](https://rdrr.io/r/stats/glm.html) as the input. The call
+  stored in [`lm()`](https://rdrr.io/r/stats/lm.html) and
+  [`glm()`](https://rdrr.io/r/stats/glm.html) will be retrieved to run
+  [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  or
+  [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md).
+  (0.2.2.2)
 
 ### Miscellaneous
 

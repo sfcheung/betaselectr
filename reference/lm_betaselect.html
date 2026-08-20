@@ -21,7 +21,7 @@ standardization."><meta property="og:image" content="https://sfcheung.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,7 +128,11 @@ standardization.</p>
 these arguments will be
 passed directly to <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>. For
 <code>glm_betaselect()</code>, these arguments
-will be passed to <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>.
+will be passed to <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>. It can
+also be the output of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>,
+but it must be the only argument
+for <code>...</code>, and its call will be
+retrieved.
 For
 the <code>print</code>-method of <code>lm_betaselect</code>
 or <code>glm_betaselect</code>

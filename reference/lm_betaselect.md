@@ -62,9 +62,12 @@ raw_output(x)
   For `lm_betaselect()`. these arguments will be passed directly to
   [`lm()`](https://rdrr.io/r/stats/lm.html). For `glm_betaselect()`,
   these arguments will be passed to
-  [`glm()`](https://rdrr.io/r/stats/glm.html). For the `print`-method of
-  `lm_betaselect` or `glm_betaselect` objects, this will be passed to
-  other methods.
+  [`glm()`](https://rdrr.io/r/stats/glm.html). It can also be the output
+  of [`lm()`](https://rdrr.io/r/stats/lm.html) or
+  [`glm()`](https://rdrr.io/r/stats/glm.html), but it must be the only
+  argument for `...`, and its call will be retrieved. For the
+  `print`-method of `lm_betaselect` or `glm_betaselect` objects, this
+  will be passed to other methods.
 
 - to_standardize:
 

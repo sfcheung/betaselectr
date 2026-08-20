@@ -59,7 +59,11 @@ raw_output(x)
 these arguments will be
 passed directly to \code{\link[=lm]{lm()}}. For
 \code{\link[=glm_betaselect]{glm_betaselect()}}, these arguments
-will be passed to \code{\link[=glm]{glm()}}.
+will be passed to \code{\link[=glm]{glm()}}. It can
+also be the output of \code{\link[=lm]{lm()}} or \code{\link[=glm]{glm()}},
+but it must be the only argument
+for \code{...}, and its call will be
+retrieved.
 For
 the \code{print}-method of \code{lm_betaselect}
 or \code{glm_betaselect}

@@ -1,5 +1,11 @@
 # Changelog
 
+## betaselectr 0.2.2.1
+
+### Miscellaneous
+
+- Updated to work with `tibble`. (0.2.2.1)
+
 ## betaselectr 0.2.2
 
 CRAN release: 2026-07-11

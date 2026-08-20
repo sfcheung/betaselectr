@@ -50,7 +50,7 @@ dv ~ med + iv + cov1 + cov2
 fit <- sem(mod,
            data_test_medmod)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 2 iterations
+#> lavaan 0.7-2 ended normally after 2 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

@@ -48,7 +48,7 @@ Shu Fai Cheung <https://orcid.org/0000-0002-9871-9448>
 ``` r
 
 library(lavaan)
-#> This is lavaan 0.6-21
+#> This is lavaan 0.7-2
 #> lavaan is FREE software! Please report any bugs.
 # Need to mean-center iv and mod
 data_test_medmod$iv <- data_test_medmod$iv - mean(data_test_medmod$iv)
@@ -62,7 +62,7 @@ fit <- sem(mod,
            data_test_medmod,
            fixed.x = TRUE)
 summary(fit)
-#> lavaan 0.6-21 ended normally after 1 iteration
+#> lavaan 0.7-2 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB

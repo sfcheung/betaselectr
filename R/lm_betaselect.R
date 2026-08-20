@@ -215,7 +215,11 @@
 #' these arguments will be
 #' passed directly to [lm()]. For
 #' [glm_betaselect()], these arguments
-#' will be passed to [glm()].
+#' will be passed to [glm()]. It can
+#' also be the output of [lm()] or [glm()],
+#' but it must be the only argument
+#' for `...`, and its call will be
+#' retrieved.
 #' For
 #' the `print`-method of `lm_betaselect`
 #' or `glm_betaselect`
@@ -392,8 +396,25 @@ lm_betaselect <- function(...,
     # - Other SEs and CIs can be computed on request.
 
     # Do regression on the unstandardized input variables.
-    model_call <- match.arg(model_call)
+
     my_call <- match.call()
+
+    # ==== update mode? ====
+
+    ddd <- list(...)
+    to_update <- inherits(ddd[[1]], "lm")
+    if (to_update && (length(ddd) != 1)) {
+      stop("If the input is an lm- or glm-object, no other lm/glm arguments should be supplied")
+    }
+    if (to_update) {
+      call_old <- stats::getCall(ddd[[1]])
+      model_call <- as.character(call_old[[1]])
+      call_old1 <- as.list(call_old)[-1]
+      my_call <- as.list(match.call(expand.dots = FALSE))
+      my_call <- c(my_call[1], call_old1, my_call[-c(1, 2)])
+    } else {
+      model_call <- match.arg(model_call)
+    }
     lm_args <- as.list(my_call)[-1]
     my_formals <- names(formals())
     lm_args[my_formals] <- NULL

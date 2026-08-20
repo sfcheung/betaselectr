@@ -1,4 +1,13 @@
-# betaselectr 0.2.2.1
+# betaselectr 0.2.2.2
+
+## Improvement
+
+- `lm_betaselect()` and `glm_betaselect()`
+  can accept the output of `lm()` or
+  `glm()` as the input. The call stored
+  in `lm()` and `glm()` will be retrieved
+  to run `lm_betaselect()` or `glm_betaselect()`.
+  (0.2.2.2)
 
 ## Miscellaneous
 

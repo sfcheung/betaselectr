@@ -466,14 +466,14 @@ fit_beta_boot <- lav_betaselect(fit,
                                 to_standardize = c("iv", "dv"),
                                 std_se = "bootstrap",
                                 std_ci = TRUE,
-                                bootstrap = 100,
+                                bootstrap = 50,
                                 iseed = 1234)
 fit_beta_boot
 #> 
 #> Selected Standardization:
 #>                                              
 #>  Standard Error:      Nonparametric bootstrap
-#>  Bootstrap samples:   100                    
+#>  Bootstrap samples:   50                     
 #>  Confidence Interval: Percentile             
 #>  Level of Confidence: 95.0%                  
 #> 
@@ -484,38 +484,37 @@ fit_beta_boot
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
-#>  med ~                                                                
-#>   iv          1.845 0.592  3.115   0.000 ***  0.813  3.047   Sig.     
-#>   mod         0.325 0.149  2.185   0.020   *  0.034  0.621   Sig.    U
-#>   iv:mod      0.797 0.114  6.987   0.000 ***  0.567  1.018   Sig.     
-#>  dv ~                                                                 
-#>   med         0.049 0.005 10.592   0.000 ***  0.038  0.057   Sig.     
-#>   iv          0.333 0.046  7.179   0.000 ***  0.226  0.412   Sig.     
+#>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd
+#>  med ~                                                            
+#>   iv          1.845 0.612  3.014          0.843  3.444   Sig.     
+#>   mod         0.325 0.146  2.235         -0.033  0.545   n.s.    U
+#>   iv:mod      0.797 0.095  8.428          0.632  0.999   Sig.     
+#>  dv ~                                                             
+#>   med         0.049 0.004 11.330          0.039  0.058   Sig.     
+#>   iv          0.333 0.040  8.395          0.216  0.393   Sig.     
 #> 
 #> Covariances:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
-#>  iv ~~                                                                
-#>   mod         1.894                       --                          
-#>   iv:mod      0.630                       --                          
-#>  mod ~~                                                               
-#>   iv:mod      5.733                       --                          
+#>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd
+#>  iv ~~                                                            
+#>   mod         1.894                                               
+#>   iv:mod      0.630                                               
+#>  mod ~~                                                           
+#>   iv:mod      5.733                                               
 #> 
 #> Variances:
-#>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd
-#>  .med        61.851 5.836 10.598   0.000 *** 48.732 72.713   Sig.    U
-#>  .dv          0.574 0.054 10.695   0.000 ***  0.441  0.684   Sig.     
-#>   iv          1.000                       --                          
-#>   mod        23.129                       --                         U
-#>   iv:mod     27.015                       --                          
+#>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd
+#>  .med        61.851 5.638 10.970         52.483 75.017   Sig.    U
+#>  .dv          0.574 0.058  9.947          0.412  0.677   Sig.     
+#>   iv          1.000                                               
+#>   mod        23.129                                              U
+#>   iv:mod     27.015                                               
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
-#> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> - Standard errors, p-values, and confidence intervals are not computed
 #>   for betas-select which are fixed in the standardized solution.
-#> - P-values for betas-select are asymmetric bootstrap p-value computed
-#>   by the method of Asparouhov and Muthén (2021).
+#> - Asymmetric bootstrap p-value not computed when the number of
+#>   bootstrap samples is less than 100.
 #> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both
 #>   original estimates and betas-select.
 #> - 'U' in the column 'UStd' denotes that a parameter is the original one
@@ -528,7 +527,7 @@ print(fit_beta_boot, standardized_only = FALSE)
 #> Selected Standardization:
 #>                                              
 #>  Standard Error:      Nonparametric bootstrap
-#>  Bootstrap samples:   100                    
+#>  Bootstrap samples:   50                     
 #>  Confidence Interval: Percentile             
 #>  Level of Confidence: 95.0%                  
 #> 
@@ -539,58 +538,57 @@ print(fit_beta_boot, standardized_only = FALSE)
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  med ~                                                                         
-#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.592  3.115 0.000
-#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.149  2.185 0.020
-#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.114  6.987 0.000
-#>  dv ~                                                                          
-#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000
-#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>                                         
-#>     ***    0.813    3.047      Sig.     
-#>       *    0.034    0.621      Sig.    U
-#>     ***    0.567    1.018      Sig.     
-#>                                         
-#>     ***    0.038    0.057      Sig.     
-#>     ***    0.226    0.412      Sig.     
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  med ~                                                                        
+#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.612  3.014     
+#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.146  2.235     
+#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.095  8.428     
+#>  dv ~                                                                         
+#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.004 11.330     
+#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.040  8.395     
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                  
+#>     0.843    3.444      Sig.     
+#>    -0.033    0.545      n.s.    U
+#>     0.632    0.999      Sig.     
+#>                                  
+#>     0.039    0.058      Sig.     
+#>     0.216    0.393      Sig.     
 #> 
 #> Covariances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  iv ~~                                                                         
-#>   mod       5.287                                      1.894                   
-#>   iv:mod    4.908                                      0.630                   
-#>  mod ~~                                                                        
-#>   iv:mod   16.006                                      5.733                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>                                         
-#>      --                                 
-#>      --                                 
-#>                                         
-#>      --                                 
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  iv ~~                                                                        
+#>   mod       5.287                                      1.894                  
+#>   iv:mod    4.908                                      0.630                  
+#>  mod ~~                                                                       
+#>   iv:mod   16.006                                      5.733                  
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                  
+#>                                  
+#>                                  
+#>                                  
+#>                                  
 #> 
 #> Variances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.836 10.598 0.000
-#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.054 10.695 0.000
-#>   iv        7.795                                      1.000                   
-#>   mod      23.129                                     23.129                   
-#>   iv:mod  210.572                                     27.015                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>     ***   48.732   72.713      Sig.    U
-#>     ***    0.441    0.684      Sig.     
-#>      --                                 
-#>      --                                U
-#>      --                                 
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.638 10.970     
+#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.058  9.947     
+#>   iv        7.795                                      1.000                  
+#>   mod      23.129                                     23.129                  
+#>   iv:mod  210.572                                     27.015                  
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>    52.483   75.017      Sig.    U
+#>     0.412    0.677      Sig.     
+#>                                  
+#>                                 U
+#>                                  
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
-#> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> - Standard errors, p-values, and confidence intervals are not computed
 #>   for betas-select which are fixed in the standardized solution.
-#> - P-values for betas-select are asymmetric bootstrap p-value computed
-#>   by the method of Asparouhov and Muthén (2021).
+#> - Asymmetric bootstrap p-value not computed when the number of
+#>   bootstrap samples is less than 100.
 #> - Betas-select are shown in column 'BSelect'.
 #> - Column(s) prefixed by 'BS.*' are for betas-select.
 #> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only
@@ -608,7 +606,7 @@ print(fit_beta_boot,
 #> Selected Standardization:
 #>                                              
 #>  Standard Error:      Nonparametric bootstrap
-#>  Bootstrap samples:   100                    
+#>  Bootstrap samples:   50                     
 #>  Confidence Interval: Percentile             
 #>  Level of Confidence: 95.0%                  
 #> 
@@ -619,58 +617,57 @@ print(fit_beta_boot,
 #>  Information saturated (h1) model: Structured
 #> 
 #> Regressions:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  med ~                                                                         
-#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.592  3.115 0.000
-#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.149  2.185 0.020
-#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.114  6.987 0.000
-#>  dv ~                                                                          
-#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000
-#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>                                         
-#>     ***    0.813    3.047      Sig.     
-#>       *    0.034    0.621      Sig.    U
-#>     ***    0.567    1.018      Sig.     
-#>                                         
-#>     ***    0.038    0.057      Sig.     
-#>     ***    0.226    0.412      Sig.     
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  med ~                                                                        
+#>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.612  3.014     
+#>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.146  2.235     
+#>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.095  8.428     
+#>  dv ~                                                                         
+#>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.004 11.330     
+#>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.040  8.395     
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                  
+#>     0.843    3.444      Sig.     
+#>    -0.033    0.545      n.s.    U
+#>     0.632    0.999      Sig.     
+#>                                  
+#>     0.039    0.058      Sig.     
+#>     0.216    0.393      Sig.     
 #> 
 #> Covariances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  iv ~~                                                                         
-#>   mod       5.287                                      1.894                   
-#>   iv:mod    4.908                                      0.630                   
-#>  mod ~~                                                                        
-#>   iv:mod   16.006                                      5.733                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>                                         
-#>      --                                 
-#>      --                                 
-#>                                         
-#>      --                                 
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  iv ~~                                                                        
+#>   mod       5.287                                      1.894                  
+#>   iv:mod    4.908                                      0.630                  
+#>  mod ~~                                                                       
+#>   iv:mod   16.006                                      5.733                  
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>                                  
+#>                                  
+#>                                  
+#>                                  
+#>                                  
 #> 
 #> Variances:
-#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p
-#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.836 10.598 0.000
-#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.054 10.695 0.000
-#>   iv        7.795                                      1.000                   
-#>   mod      23.129                                     23.129                   
-#>   iv:mod  210.572                                     27.015                   
-#>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
-#>     ***   48.732   72.713      Sig.    U
-#>     ***    0.441    0.684      Sig.     
-#>      --                                 
-#>      --                                U
-#>      --                                 
+#>          Estimate  S.E.      Z P(>|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p
+#>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.638 10.970     
+#>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.058  9.947     
+#>   iv        7.795                                      1.000                  
+#>   mod      23.129                                     23.129                  
+#>   iv:mod  210.572                                     27.015                  
+#>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd
+#>    52.483   75.017      Sig.    U
+#>     0.412    0.677      Sig.     
+#>                                  
+#>                                 U
+#>                                  
 #> 
 #> Footnote:
 #> - Variable(s) standardized: dv, iv
-#> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> - Standard errors, p-values, and confidence intervals are not computed
 #>   for betas-select which are fixed in the standardized solution.
-#> - P-values for betas-select are asymmetric bootstrap p-value computed
-#>   by the method of Asparouhov and Muthén (2021).
+#> - Asymmetric bootstrap p-value not computed when the number of
+#>   bootstrap samples is less than 100.
 #> - Betas-select are shown in column 'BSelect'.
 #> - Column(s) prefixed by 'BS.*' are for betas-select.
 #> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only

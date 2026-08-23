@@ -1,6 +1,8 @@
 # Changelog
 
-## betaselectr 0.2.2.2
+## betaselectr 0.2.3
+
+CRAN release: 2026-08-23
 
 ### Improvement
 

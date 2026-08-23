@@ -23,7 +23,7 @@ standardization."><meta property="og:image" content="https://sfcheung.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -639,14 +639,14 @@ Advance online publication.
 <span class="r-in"><span>                                to_standardize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"iv"</span>, <span class="st">"dv"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                std_se <span class="op">=</span> <span class="st">"bootstrap"</span>,</span></span>
 <span class="r-in"><span>                                std_ci <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                                bootstrap <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>                                bootstrap <span class="op">=</span> <span class="fl">50</span>,</span></span>
 <span class="r-in"><span>                                iseed <span class="op">=</span> <span class="fl">1234</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit_beta_boot</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected Standardization:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Standard Error:      Nonparametric bootstrap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   100                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   50                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Confidence Interval: Percentile             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Level of Confidence: 95.0%                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -657,38 +657,37 @@ Advance online publication.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Information saturated (h1) model: Structured</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Regressions:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          1.845 0.592  3.115   0.000 ***  0.813  3.047   Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod         0.325 0.149  2.185   0.020   *  0.034  0.621   Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      0.797 0.114  6.987   0.000 ***  0.567  1.018   Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   med         0.049 0.005 10.592   0.000 ***  0.038  0.057   Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          0.333 0.046  7.179   0.000 ***  0.226  0.412   Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          1.845 0.612  3.014          0.843  3.444   Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod         0.325 0.146  2.235         -0.033  0.545   n.s.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      0.797 0.095  8.428          0.632  0.999   Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   med         0.049 0.004 11.330          0.039  0.058   Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          0.333 0.040  8.395          0.216  0.393   Sig.     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Covariances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                                </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod         1.894                       --                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      0.630                       --                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      5.733                       --                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod         1.894                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      0.630                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod      5.733                                               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value Sig  CI.Lo  CI.Hi CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .med        61.851 5.836 10.598   0.000 *** 48.732 72.713   Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv          0.574 0.054 10.695   0.000 ***  0.441  0.684   Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          1.000                       --                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod        23.129                       --                         U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod     27.015                       --                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          BetaSelect    SE      Z p-value  CI.Lo  CI.Hi CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .med        61.851 5.638 10.970         52.483 75.017   Sig.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv          0.574 0.058  9.947          0.412  0.677   Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv          1.000                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod        23.129                                              U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod     27.015                                               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Footnote:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Variable(s) standardized: dv, iv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors, p-values, and confidence intervals are not computed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   for betas-select which are fixed in the standardized solution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - P-values for betas-select are asymmetric bootstrap p-value computed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   by the method of Asparouhov and Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Asymmetric bootstrap p-value not computed when the number of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bootstrap samples is less than 100.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Call 'print()' and set 'standardized_only' to 'FALSE' to print both</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   original estimates and betas-select.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - 'U' in the column 'UStd' denotes that a parameter is the original one</span>
@@ -701,7 +700,7 @@ Advance online publication.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected Standardization:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Standard Error:      Nonparametric bootstrap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   100                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   50                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Confidence Interval: Percentile             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Level of Confidence: 95.0%                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -712,58 +711,57 @@ Advance online publication.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Information saturated (h1) model: Structured</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Regressions:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.592  3.115 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.149  2.185 0.020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.114  6.987 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.813    3.047      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       *    0.034    0.621      Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.567    1.018      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.038    0.057      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.226    0.412      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.612  3.014     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.146  2.235     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.095  8.428     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.004 11.330     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.040  8.395     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.843    3.444      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.033    0.545      n.s.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.632    0.999      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.039    0.058      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.216    0.393      Sig.     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Covariances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       5.287                                      1.894                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    4.908                                      0.630                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod   16.006                                      5.733                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       5.287                                      1.894                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    4.908                                      0.630                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod   16.006                                      5.733                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.836 10.598 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.054 10.695 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        7.795                                      1.000                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod      23.129                                     23.129                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod  210.572                                     27.015                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***   48.732   72.713      Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.441    0.684      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.638 10.970     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.058  9.947     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        7.795                                      1.000                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod      23.129                                     23.129                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod  210.572                                     27.015                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    52.483   75.017      Sig.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.412    0.677      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                 U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Footnote:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Variable(s) standardized: dv, iv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors, p-values, and confidence intervals are not computed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   for betas-select which are fixed in the standardized solution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - P-values for betas-select are asymmetric bootstrap p-value computed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   by the method of Asparouhov and Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Asymmetric bootstrap p-value not computed when the number of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bootstrap samples is less than 100.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Betas-select are shown in column 'BSelect'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Column(s) prefixed by 'BS.*' are for betas-select.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only</span>
@@ -781,7 +779,7 @@ Advance online publication.
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selected Standardization:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Standard Error:      Nonparametric bootstrap</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   100                    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Bootstrap samples:   50                     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Confidence Interval: Percentile             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Level of Confidence: 95.0%                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -792,58 +790,57 @@ Advance online publication.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Information saturated (h1) model: Structured</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Regressions:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.592  3.115 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.149  2.185 0.020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.114  6.987 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.005 10.592 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.046  7.179 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.813    3.047      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       *    0.034    0.621      Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.567    1.018      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.038    0.057      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.226    0.412      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  med ~                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.661 0.217  3.047   0.002  0.236  1.086   1.845 0.612  3.014     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       0.325 0.128  2.535   0.011  0.074  0.577   0.325 0.146  2.235     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    0.286 0.039  7.248   0.000  0.208  0.363   0.797 0.095  8.428     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  dv ~                                                                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   med       0.093 0.011  8.298   0.000  0.071  0.115   0.049 0.004 11.330     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        0.229 0.039  5.917   0.000  0.153  0.304   0.333 0.040  8.395     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.843    3.444      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    -0.033    0.545      n.s.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.632    0.999      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.039    0.058      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.216    0.393      Sig.     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Covariances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       5.287                                      1.894                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    4.908                                      0.630                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod   16.006                                      5.733                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  iv ~~                                                                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod       5.287                                      1.894                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod    4.908                                      0.630                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  mod ~~                                                                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod   16.006                                      5.733                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variances:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z  BS.p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.836 10.598 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.054 10.695 0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        7.795                                      1.000                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mod      23.129                                     23.129                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod  210.572                                     27.015                   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.Sig BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***   48.732   72.713      Sig.    U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ***    0.441    0.684      Sig.     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      --                                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Estimate  S.E.      Z P(&gt;|z|)  CI.Lo  CI.Up BSelect BS.SE   BS.Z BS.p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .med      61.851 6.185 10.000   0.000 49.728 73.974  61.851 5.638 10.970     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .dv        2.104 0.210 10.000   0.000  1.692  2.517   0.574 0.058  9.947     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv        7.795                                      1.000                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mod      23.129                                     23.129                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   iv:mod  210.572                                     27.015                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  BS.CI.Lo BS.CI.Hi BS.CI.Sig UStd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    52.483   75.017      Sig.    U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.412    0.677      Sig.     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                 U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Footnote:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Variable(s) standardized: dv, iv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Sig codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Standard errors, p-values, and confidence intervals are not computed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   for betas-select which are fixed in the standardized solution.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - P-values for betas-select are asymmetric bootstrap p-value computed</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   by the method of Asparouhov and Muthén (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Asymmetric bootstrap p-value not computed when the number of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bootstrap samples is less than 100.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Betas-select are shown in column 'BSelect'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Column(s) prefixed by 'BS.*' are for betas-select.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Call 'print()' and set 'standardized_only' to 'TRUE' to print only</span>

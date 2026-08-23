@@ -364,7 +364,7 @@
 #'                                 to_standardize = c("iv", "dv"),
 #'                                 std_se = "bootstrap",
 #'                                 std_ci = TRUE,
-#'                                 bootstrap = 100,
+#'                                 bootstrap = 50,
 #'                                 iseed = 1234)
 #' fit_beta_boot
 #' print(fit_beta_boot, standardized_only = FALSE)

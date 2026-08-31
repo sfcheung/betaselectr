@@ -443,7 +443,14 @@ lm_betaselect <- function(...,
                                 envir = parent.frame()))
     if (inherits(input_data, "error")) {
         input_data <- stats::model.frame(lm_ustd)
-      }
+    } else {
+        # Keep only columns used
+        tmp <- intersect(
+                  colnames(stats::get_all_vars(lm_ustd$terms, data = input_data)),
+                  colnames(input_data)
+                )
+        input_data <- input_data[, tmp, drop = FALSE]
+    }
     to_standardize <- fix_to_standardize_lm_data(
                         object = lm_ustd,
                         input_data = input_data,

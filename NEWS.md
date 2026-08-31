@@ -1,4 +1,4 @@
-# betaselectr 0.2.3
+# betaselectr 0.2.3.1.1
 
 ## Improvement
 
@@ -13,6 +13,18 @@
 
 - Updated to work with `tibble`.
   (0.2.2.1)
+
+- Fixed a harmless bug in
+  `lm_betaselect()` and
+  `glm_betaselect()`. Previously, if
+  `.all.`, then all numeric variables in
+  the input dataset will be
+  standardized, including those not used
+  in the model. This would not affect the
+  results because these variables are
+  used anyway. Fixed and only variables
+  used in the model will be standardized.
+  (0.2.3.1)
 
 # betaselectr 0.2.2
 

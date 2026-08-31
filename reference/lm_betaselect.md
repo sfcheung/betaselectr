@@ -450,11 +450,11 @@ summary(lm_beta_all)
 #> betaselectr::lm_betaselect(formula = dv ~ iv * mod + cov1 + cat1, 
 #>     data = data_test_mod_cat)
 #> 
-#> Variable(s) standardized: dv, iv, mod, cov1, iv_z 
+#> Variable(s) standardized: dv, iv, mod, cov1 
 #> 
 #> Call:
 #> stats::lm(formula = dv ~ iv * mod + cov1 + cat1, data = betaselectr::std_data(data = data_test_mod_cat, 
-#>     to_standardize = c("dv", "iv", "mod", "cov1", "iv_z")))
+#>     to_standardize = c("dv", "iv", "mod", "cov1")))
 #> 
 #> Residuals:
 #>      Min       1Q   Median       3Q      Max 

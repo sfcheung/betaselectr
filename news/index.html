@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">betaselectr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,14 +53,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.3.1.1" id="betaselectr-02311">betaselectr 0.2.3.1.1<a class="anchor" aria-label="anchor" href="#betaselectr-02311"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.4" id="betaselectr-024">betaselectr 0.2.4<a class="anchor" aria-label="anchor" href="#betaselectr-024"></a></h2>
 <div class="section level3">
-<h3 id="improvement-0-2-3-1-1">Improvement<a class="anchor" aria-label="anchor" href="#improvement-0-2-3-1-1"></a></h3>
+<h3 id="improvement-0-2-4">Improvement<a class="anchor" aria-label="anchor" href="#improvement-0-2-4"></a></h3>
 <ul><li>
 <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> and <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code> can accept the output of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> as the input. The call stored in <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> and <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> will be retrieved to run <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> or <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>. (0.2.2.2)</li>
 </ul></div>
 <div class="section level3">
-<h3 id="miscellaneous-0-2-3-1-1">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-2-3-1-1"></a></h3>
+<h3 id="miscellaneous-0-2-4">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-2-4"></a></h3>
 <ul><li><p>Updated to work with <code>tibble</code>. (0.2.2.1)</p></li>
 <li><p>Fixed a harmless bug in <code><a href="../reference/lm_betaselect.html">lm_betaselect()</a></code> and <code><a href="../reference/lm_betaselect.html">glm_betaselect()</a></code>. Previously, if <code>.all.</code>, then all numeric variables in the input dataset will be standardized, including those not used in the model. This would not affect the results because these variables are used anyway. Fixed and only variables used in the model will be standardized. (0.2.3.1)</p></li>
 </ul></div>

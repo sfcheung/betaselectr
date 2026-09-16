@@ -409,6 +409,9 @@ lm_betaselect <- function(...,
     if (to_update) {
       call_old <- stats::getCall(ddd[[1]])
       model_call <- as.character(call_old[[1]])
+      if (model_call[1] == "::") {
+        model_call <- model_call[3]
+      }
       call_old1 <- as.list(call_old)[-1]
       my_call <- as.list(match.call(expand.dots = FALSE))
       my_call <- c(my_call[1], call_old1, my_call[-c(1, 2)])

@@ -1,3 +1,12 @@
+# betaselectr 0.2.4.1
+
+## Improvement
+
+- Updated `lm_betaselect()` and `glm_betaselect()`
+  to work when the calls used `stats::lm()`
+  or `stats::glm()`.
+  (0.2.4.1)
+
 # betaselectr 0.2.4
 
 ## Improvement

@@ -1,6 +1,20 @@
 # Changelog
 
+## betaselectr 0.2.4.1
+
+### Improvement
+
+- Updated
+  [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  and
+  [`glm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  to work when the calls used
+  [`stats::lm()`](https://rdrr.io/r/stats/lm.html) or
+  [`stats::glm()`](https://rdrr.io/r/stats/glm.html). (0.2.4.1)
+
 ## betaselectr 0.2.4
+
+CRAN release: 2026-09-06
 
 ### Improvement
 

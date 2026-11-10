@@ -98,5 +98,12 @@ expect_equal(
   suppressWarnings(confint(lm_beta_dv2))
 )
 
+out1 <- lm_betaselect(
+  fit,
+  progress = FALSE
+)
+summary(out1)
+
+
 
 })

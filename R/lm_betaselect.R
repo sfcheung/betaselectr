@@ -399,9 +399,30 @@ lm_betaselect <- function(...,
 
     my_call <- match.call()
 
+    ddd <- list(...)
+
+    # ==== many_lm? ====
+
+    if (inherits(ddd[[1]], "lm_list_lmhelprs")) {
+      if (length(ddd) != 1L) {
+        stop("If the input is a many_lm output, no other lm/glm arguments should be supplied")
+      }
+      if (isFALSE(identical(eval(my_call[[2]]), ddd[[1]]))) {
+        stop("If the input is a many_lm output, it must be the first argument")
+      }
+      many_lm_out <- ddd[[1]]
+      out <- vector("list", length(many_lm_out))
+      call_i <- my_call
+      for (i in seq_along(many_lm_out)) {
+        call_i[[2]] <- many_lm_out[[i]]
+        out[[i]] <- eval(call_i)
+      }
+      class(out) <- class(many_lm_out)
+      return(out)
+    }
+
     # ==== update mode? ====
 
-    ddd <- list(...)
     to_update <- inherits(ddd[[1]], "lm")
     if (to_update && (length(ddd) != 1)) {
       stop("If the input is an lm- or glm-object, no other lm/glm arguments should be supplied")

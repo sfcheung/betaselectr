@@ -37,7 +37,8 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown,
-    tibble
+    tibble,
+    lmhelprs
 Imports:
     boot,
     stats,

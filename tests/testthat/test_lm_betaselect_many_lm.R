@@ -102,8 +102,11 @@ out1 <- lm_betaselect(
   fit,
   progress = FALSE
 )
-summary(out1)
 
-
+summary1 <- summary(out1)
+expect_equal(
+  summary(out1[[2]])$coefficients,
+  summary1[[2]]$coefficients
+)
 
 })

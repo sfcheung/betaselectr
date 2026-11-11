@@ -1,6 +1,6 @@
 # Changelog
 
-## betaselectr 0.2.4.1
+## betaselectr 0.2.4.2
 
 ### Improvement
 
@@ -11,6 +11,11 @@
   to work when the calls used
   [`stats::lm()`](https://rdrr.io/r/stats/lm.html) or
   [`stats::glm()`](https://rdrr.io/r/stats/glm.html). (0.2.4.1)
+
+- [`lm_betaselect()`](https://sfcheung.github.io/betaselectr/reference/lm_betaselect.md)
+  now supports the output of
+  [`lmhelprs::many_lm()`](https://sfcheung.github.io/lmhelprs/reference/many_lm.html).
+  (0.2.4.2)
 
 ## betaselectr 0.2.4
 

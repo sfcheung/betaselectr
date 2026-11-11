@@ -133,7 +133,7 @@ fit <- sem(mod,
            data_test_medmod,
            fixed.x = TRUE)
 summary(fit)
-#> lavaan 0.7-2 ended normally after 1 iteration
+#> lavaan 0.7-3 ended normally after 1 iteration
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -146,6 +146,11 @@ summary(fit)
 #>   Test statistic                                 2.685
 #>   Degrees of freedom                                 2
 #>   P-value (Chi-square)                           0.261
+#>                                                       
+#>   Browne's residual (NT model-based) test             
+#>   Test statistic                                 2.667
+#>   Degrees of freedom                                 2
+#>   P-value (Chi-square)                           0.264
 #> 
 #> Parameter Estimates:
 #> 

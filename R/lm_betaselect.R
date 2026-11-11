@@ -210,6 +210,11 @@
 #' in structure to the output of
 #' [stats::lm()] and [stats::glm()],
 #' with additional information stored.
+#' Since 0.2.4.2, if [lm_betaselect()]
+#' is called on the output of [lmhelprs::many_lm()],
+#' then the output is also of the same
+#' class, with each model updated by
+#' [lm_betaselect()].
 #'
 #' @param ... For [lm_betaselect()].
 #' these arguments will be
@@ -224,7 +229,10 @@
 #' the `print`-method of `lm_betaselect`
 #' or `glm_betaselect`
 #' objects, this will be passed to
-#' other methods.
+#' other methods. Since 0.2.4.2, this
+#' can also be the output of [lmhelprs::many_lm()].
+#' [lm_betaselect()] will be called for
+#' each model in the output.
 #'
 #' @param to_standardize A string vector,
 #' which should be the names of the
@@ -399,9 +407,29 @@ lm_betaselect <- function(...,
 
     my_call <- match.call()
 
+    ddd <- list(...)
+
+    # ==== many_lm? ====
+
+    if (inherits(ddd[[1]], "lm_list_lmhelprs")) {
+      if (length(ddd) != 1L) {
+        stop("If the input is a many_lm output, no other lm/glm arguments should be supplied")
+      }
+      many_lm_out <- ddd[[1]]
+      out <- vector("list", length(many_lm_out))
+      call_i <- my_call
+      for (i in seq_along(many_lm_out)) {
+        call_i[[2]] <- many_lm_out[[i]]
+        out[[i]] <- eval(call_i)
+      }
+      for (x in names(attributes(many_lm_out))) {
+        attr(out, x) <- attr(many_lm_out, x)
+      }
+      return(out)
+    }
+
     # ==== update mode? ====
 
-    ddd <- list(...)
     to_update <- inherits(ddd[[1]], "lm")
     if (to_update && (length(ddd) != 1)) {
       stop("If the input is an lm- or glm-object, no other lm/glm arguments should be supplied")

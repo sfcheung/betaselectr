@@ -1,4 +1,4 @@
-# betaselectr 0.2.4.1
+# betaselectr 0.2.4.2
 
 ## Improvement
 
@@ -6,6 +6,10 @@
   to work when the calls used `stats::lm()`
   or `stats::glm()`.
   (0.2.4.1)
+
+- `lm_betaselect()` now supports the output
+  of `lmhelprs::many_lm()`.
+  (0.2.4.2)
 
 # betaselectr 0.2.4
 
